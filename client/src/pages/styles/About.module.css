@@ -1,0 +1,180 @@
+.aboutPage {
+    min-height: 100vh;
+}
+
+.splitSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 80vh;
+    overflow: hidden;
+}
+
+.commsBrand,
+.filmedBrand {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 3rem 4.25vw;
+}
+
+.commsBrand {
+    color: white;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    overflow: hidden;
+}
+
+.filmedBrand {
+    color: #111111;
+    background: linear-gradient(135deg, #f8f8f8 0%, #e8e8e8 100%);
+    overflow: hidden;
+}
+
+.brandContent h2 {
+    font-family: sans-serif;
+    /* font-size: clamp(2rem, 4vw, 3rem); */
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.brandContent h5 {
+    color: var(--accent-color);
+    /* font-size: 1.2rem; */
+    font-weight: 600;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+}
+
+.brandContent p {
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+}
+
+.brandFeatures {
+    list-style: none;
+    /* margin-top: 2rem; */
+}
+
+.brandFeatures li {
+    padding: 0.5rem 0;
+    font-weight: 400;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.brandFeatures li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+.brandPattern {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    opacity: 0.2;
+    background: radial-gradient(circle, var(--accent-color) 2px, transparent 2px);
+    background-size: 20px 20px;
+}
+
+.storySection {
+    padding: 2rem 0;
+    text-align: center;
+    background-color: var(--bg-colorg);
+}
+
+.storyContent {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.storyGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3vw;
+    margin-top: 2rem;
+}
+
+.storyCard {
+    padding: 2rem;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+}
+
+.storyCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.storyCard h2 {
+    font-family: sans-serif;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+    /* font-size: 1.3rem; */
+    letter-spacing: 1px;
+}
+
+.storyCard p {
+    font-size: 1rem;
+    line-height: 1.6;
+    opacity: 0.8;
+}
+
+.teamSection {
+    padding: 6rem 0;
+    background-color: var(--bg-color);
+}
+
+.teamContent {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    text-align: center;
+}
+
+.teamTitle {
+    font-family: sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: 1px;
+}
+
+.teamBio {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    opacity: 0.8;
+    margin-bottom: 3rem;
+}
+
+@media (max-width: 768px) {
+    .splitSection {
+        grid-template-columns: 1fr;
+    }
+
+    .commsBrand,
+    .filmedBrand {
+        padding: 3rem 2rem;
+        min-height: 50vh;
+    }
+
+    .storyGrid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .storyCard {
+        padding: 2rem 1.5rem;
+    }
+
+    .teamContent {
+        padding: 0 1rem;
+    }
+}

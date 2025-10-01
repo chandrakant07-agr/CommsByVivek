@@ -1,0 +1,145 @@
+.notFoundPage {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    background-color: var(--bg-color);
+    overflow: hidden;
+}
+
+.notFoundPage::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="%23d4af37" opacity="0.05"/></svg>') repeat;
+    background-size: 100px 100px;
+    animation: float 30s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    33% {
+        transform: translate(30px, -30px) rotate(120deg);
+    }
+
+    66% {
+        transform: translate(-20px, 20px) rotate(240deg);
+    }
+}
+
+.notFoundContent {
+    position: relative;
+    /* max-width: 600px; */
+    margin: 0 auto;
+    z-index: 1;
+}
+
+.filmStrip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.02;
+    background: repeating-linear-gradient(90deg,
+            transparent 0px,
+            transparent 40px,
+            var(--accent-color) 40px,
+            var(--accent-color) 50px);
+    animation: filmRoll 20s linear infinite;
+}
+
+.errorCode {
+    margin-bottom: 1rem;
+    font-family: sans-serif;
+    font-size: clamp(8rem, 20vw, 12rem);
+    color: var(--accent-color);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: 2px;
+    line-height: 0.8;
+}
+
+.errorTitle {
+    font-family: sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 1.5rem;
+    letter-spacing: 2px;
+}
+
+.errorActions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.errorButton {
+    display: inline-block;
+    padding: 1em 2em;
+    font-size: 1rem;
+    font-family: sans-serif;
+    border: none;
+    border-radius: 0.5rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.primaryButton {
+    background-color: var(--accent-color);
+    color: #111111;
+}
+
+.primaryButton:hover {
+    background-color: #b8941f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+}
+
+.secondaryButton {
+    background-color: transparent;
+    border: 2px solid var(--accent-color);
+}
+
+.secondaryButton:hover {
+    background-color: var(--accent-color);
+    color: #111111;
+    transform: translateY(-2px);
+}
+
+@keyframes filmRoll {
+    0% {
+        transform: translateX(-50px);
+    }
+
+    100% {
+        transform: translateX(50px);
+    }
+}
+
+@media (max-width: 768px) {
+    .notFoundPage {
+        padding: 1rem;
+    }
+
+    .errorActions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .errorButton {
+        width: 100%;
+        max-width: 250px;
+    }
+}

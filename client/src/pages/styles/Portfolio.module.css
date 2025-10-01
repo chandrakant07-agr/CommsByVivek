@@ -1,0 +1,236 @@
+.portfolioPage {
+    min-height: 100vh;
+    padding-top: 3rem;
+}
+
+.showreelSection {
+    padding: 3rem 0;
+    background: var(--bg-linear-color);
+}
+
+.showreelContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    text-align: center;
+}
+
+.showreelVideo {
+    width: 100%;
+    max-width: 800px;
+    height: 450px;
+    background-color: #000;
+    border: 2px solid var(--accent-color);
+    border-radius: 1rem;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.showreelVideo video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.playButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background-color: var(--accent-color);
+    color: #111111;
+    border: none;
+    border-radius: 50%;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.playButton:hover {
+    background-color: #b8941f;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.portfolioGrid {
+    padding: 2rem 0;
+    background-color: var(--bg-color);
+}
+
+.gridContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.filterTabs {
+    display: flex;
+    justify-content: center;
+    gap: 1vw;
+    margin: 3.25vw 0;
+    flex-wrap: wrap;
+}
+
+.filterTab {
+    padding: 0.75em 1.5em;
+    font-size: clamp(0.65rem, 1.75vw, 0.75rem);
+    font-weight: 500;
+    color: var(--text-color);
+    background-color: transparent;
+    border: 2px solid var(--border-color);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.filterTab:hover,
+.filterTab.active {
+    background-color: var(--accent-color);
+    color: #111111;
+    border-color: var(--accent-color);
+}
+
+.projectsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2.5vw;
+}
+
+.projectCard {
+    position: relative;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.projectCard:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.projectImage {
+    width: 100%;
+    height: 250px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: var(--accent-color);
+    background: linear-gradient(135deg, #333, #666);
+}
+
+.projectOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(212, 175, 55, 0.9), rgba(184, 148, 31, 0.9));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    color: #111111;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.projectCard:hover .projectOverlay {
+    opacity: 1;
+}
+
+.projectContent {
+    padding: 2rem;
+}
+
+.projectTitle {
+    font-family: sans-serif;
+    /* font-size: 1.3rem; */
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.projectCategory {
+    color: var(--accent-color);
+    /* font-size: 0.9rem; */
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+}
+
+.projectDescription {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    opacity: 0.8;
+}
+
+.projectMeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.projectYear {
+    font-size: 0.9rem;
+    opacity: 0.6;
+}
+
+.projectTags {
+    display: flex;
+    gap: 0.5vw;
+}
+
+.projectTag {
+    color: #111111;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    background-color: var(--accent-color);
+    border-radius: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    /* .showreelContainer {
+        padding: 0 1rem;
+    } */
+
+    .showreelVideo {
+        height: 300px;
+    }
+
+    /* .gridContainer {
+        padding: 0 1rem;
+    } */
+
+    .projectsGrid {
+        grid-template-columns: 1fr;
+        /* gap: 1.5rem; */
+    }
+
+    .projectContent {
+        padding: 1.5rem;
+    }
+
+    /* .filterTabs {
+        gap: 0.5rem;
+    } */
+
+    /* .filterTab {
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+    } */
+}
