@@ -29,7 +29,7 @@
 }
 
 .navLinks {
-    display: flex;
+    display: none;
     gap: 1.5em;
     align-items: center;
     font-size: clamp(0.85rem, 1.12vw, 2rem);
@@ -61,18 +61,18 @@
     transition: width 0.3s ease;
 }
 
-.navLink:hover::after, 
+.navLink:hover::after,
 .navLink.active::after {
     width: 100%;
 }
 
 .themeToggle {
-    width: 1.75em;
-    height: 1.75em;
+    /* width: 1.75em;
+    height: 1.75em; */
     display: flex;
     align-items: center;
     justify-content: center;
-    /* padding: 0.5rem; */
+    padding: 0.4rem;
     font-size: clamp(1.2rem, 1.5vw, 1.5rem);
     color: var(--accent-color);
     background: none;
@@ -90,29 +90,28 @@
 
 /* Mobile Menu */
 
-.mobileMenuButton {
+.mobileMenu {
     display: none;
 }
 
 .navRight {
     display: flex;
     align-items: center;
-    gap: 3vw;
+    gap: 2vw;
 }
 
-.mobileMenu {
+.mobileMenuButton {
     display: inherit;
     padding: 0.25rem;
     font-size: 1.5rem;
-    color: var(--text-color);
+    color: var(--accent-color);
     border: none;
     /* background: none; */
-    cursor: pointer;
     clip-path: circle();
     transition: all 0.3s ease-in-out;
 }
 
-/* .mobileMenu:hover {
+/* .mobileMenuButton:hover {
     padding: 0.2em;
     border: 1px solid var(--accent-color);
     border-radius: 50%;
@@ -161,19 +160,21 @@
     z-index: 1100;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 768px) {
     .navLinks {
-        display: none;
+        display: flex;
     }
+}
 
-    .mobileMenuButton {
+@media (max-width: 768px) {
+    .mobileMenu {
         display: block;
         margin-right: -0.5rem;
     }
 
-    .themeToggle {
+    /* .themeToggle {
         margin-left: 1rem;
-    }
+    } */
 
     .scrollProgress {
         height: 3px;

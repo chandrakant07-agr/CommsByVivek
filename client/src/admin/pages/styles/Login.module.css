@@ -1,0 +1,111 @@
+.loginContainer {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--cornflower-blue) 0%, #764ba2 100%);
+}
+
+.backBtn {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    align-items: center;
+    padding: 0.2em;
+    font-size: 1.5rem;
+    color: var(--text-primary-color);
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.loginCard {
+    width: 100%;
+    max-width: 25rem;
+    padding: 1.75rem 1.5rem;
+    background-color: var(--bg-secondary-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 1.5rem 2.5rem rgba(0, 0, 0, 0.1);
+}
+
+.loginTitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-bottom: 0.25rem;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+.loginSubtitle {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+}
+
+.formGroup label {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.formGroup svg {
+    font-size: 1.25rem;
+    color: var(--cornflower-blue);
+}
+
+.formGroup h6 {
+    font-weight: 500;
+    color: var(--text-primary-color);
+}
+
+.formGroup input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    color: var(--input-text-color);
+    background-color: var(--input-bg-color);
+    border: 2px solid var(--input-border-color);
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.formGroup input::placeholder {
+    color: var(--input-placeholder-color);
+}
+
+.formGroup input:focus {
+    outline: none;
+    background-color: var(--input-focus-border-color);
+    border-color: var(--cornflower-blue);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    transform: translateY(-2px);
+}
+
+.btnLogin {
+    width: 100%;
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--white);
+    background: linear-gradient(135deg, var(--bg-gradient-stops));
+    border: none;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btnLogin:hover {
+    background-color: #b8941f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+}

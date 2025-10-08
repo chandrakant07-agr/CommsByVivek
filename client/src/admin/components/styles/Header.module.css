@@ -1,0 +1,251 @@
+.adminLayout {
+    height: 100vh;
+    display: flex;
+    background-color: var(--bg-secondary-color);
+}
+
+.sidebar {
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    width: 16rem;
+    z-index: 1;
+    background-color: var(--bg-primary-color);
+    border-right: 1px solid var(--border-primary-color);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    transform: translateX(-100%);
+    /* transition-duration: 300ms; */
+    /* transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); */
+    /* transition-property: transform; */
+}
+
+.sidebarHead {
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: linear-gradient(to right, var(--bg-gradient-stops));
+}
+
+.sidebarHead h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--white);
+}
+
+.navbar {
+    margin-top: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.navbarItem {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    /* font-size: 0.875rem; */
+    font-weight: 500;
+    color: var(--text-secondary-color);
+    line-height: 1.25rem;
+    border-radius: 0.375rem;
+    transition-duration: 200ms;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbarItem:hover {
+    color: var(--text-primary-color);
+    background-color: var(--bg-secondary-color);
+}
+
+.navbar .active {
+    /* color: var(--text-primary-color); */
+    color: #4f46e5;
+    background-color: #e0e7ff;
+    border-color: var(--cornflower-blue);
+    border-right-width: 4px;
+    border-right-style: solid;
+}
+
+.navbarItem svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.navbarItem .itemName {
+    margin-left: 0.75rem;
+}
+
+.sidebarFooter {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background-color: var(--bg-secondary-color);
+    border-top: 1px solid var(--border-primary-color);
+}
+
+.sidebarFooterIcon {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--cornflower-blue);
+    border-radius: 50%;
+}
+
+.sidebarFooterIcon span {
+    font-weight: 500;
+    color: var(--white);
+    /* font-size: 0.875rem;
+    line-height: 1.25rem; */
+}
+
+.userName {
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: var(--text-primary-color);
+}
+
+.userEmail {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: var(--text-secondary-color);
+}
+
+.userName,
+.userEmail {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.logoutButton {
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: var(--white);
+    background-color: var(--red);
+    border-radius: 0.5rem;
+    text-transform: none;
+    transition-duration: 200ms;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logoutButton:hover {
+    background-color: #dc2626;
+}
+
+/* layout main container */
+.mainContainer {
+    display: flex;
+    flex: 1 1;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.topBarSection {
+    background-color: var(--bg-primary-color);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid var(--border-primary-color);
+}
+
+.topBarContent {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mobileMenuButton {
+    display: inline-flex;
+    flex-grow: 1;
+    padding-left: 0.5rem;
+    font-size: 1.5rem;
+    color: var(--cornflower-blue);
+    transition: all 0.3s ease-in-out;
+}
+
+/* .mobileMenuButton svg {
+    width: 1.5rem;
+    height: 1.5rem;
+} */
+
+.topBarGreeting {
+    display: flex;
+    gap: 0.2rem;
+    align-items: center;
+}
+
+.topBarGreeting h5 {
+    /* font-size: 0.9rem; */
+    line-height: 1.25rem;
+    color: var(--text-secondary-color);
+}
+
+.topBarGreeting span {
+    /* font-weight: 500; */
+    color: var(--text-primary-color);
+}
+
+.themeToggle {
+    /* width: 1.75em;
+    height: 1.75em; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.75rem;
+    padding: 0.4rem;
+    font-size: clamp(1.2rem, 1.5vw, 1.5rem);
+    color: var(--cornflower-blue);
+    background: none;
+    border: 2px solid var(--cornflower-blue);
+    border-radius: 50%;
+    clip-path: circle();
+    transition: all 0.3s ease;
+}
+
+.themeToggle:hover {
+    background-color: var(--cornflower-blue);
+    color: var(--white);
+}
+
+.mainContainer main {
+    flex: 1 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.sidebarOverlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+@media (min-width: 1024px) {
+    .topBarSection .mobileMenuButton {
+        display: none;
+    }
+
+    .mainContainer {
+        margin-left: 0px;
+    }
+
+    .sidebar {
+        position: static;
+        inset: 0px;
+        transform: translateX(0px) !important;
+    }
+
+    .sidebarOverlay {
+       display: none;
+    }
+}

@@ -132,11 +132,6 @@
     letter-spacing: 1px;
 }
 
-.required {
-    color: #ff0000;
-    margin-left: 0.2rem;
-}
-
 .formInput,
 .formSelect,
 .formTextarea {

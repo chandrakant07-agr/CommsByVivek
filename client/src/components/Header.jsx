@@ -1,17 +1,22 @@
 import { useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
-import { motion, useScroll } from 'framer-motion';
-import { RxMoon, RxSun } from 'react-icons/rx';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { CiMenuKebab } from 'react-icons/ci';
-import { useTheme } from '../context/ThemeContext';
+import { RxMoon, RxSun } from 'react-icons/rx';
+import { motion, useScroll } from 'framer-motion';
+import { themeToggle } from '../../store/slices/Theme.Slice';
 import styles from './styles/Header.module.css';
-import logo_black from '../assets/logo/logo_black.png';
-import logo_white from '../assets/logo/logo_white.png';
+import logo_black from '../../public/assets/logo/logo_black.png';
+import logo_white from '../../public/assets/logo/logo_white.png';
 
 const Header = () => {
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const { isDarkMode, toggleTheme } = useTheme();
+    const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    const dispatch = useDispatch();
+    const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+    const toggleTheme = () => dispatch(themeToggle());
+
     const location = useLocation();
     const { scrollYProgress } = useScroll();
 
@@ -24,9 +29,7 @@ const Header = () => {
         { link: "page", label: "PortFolio", path: "/portfolio" },
     ];
 
-    const toggleMobileMenu = () => {
-        setIsMobileMenuOpen(!isMobileMenuOpen);
-    };
+    const toggleMobileMenu = () => setMobileMenuOpen(!isMobileMenuOpen);
 
     return (
         <motion.header
@@ -48,20 +51,20 @@ const Header = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
-                        {
-                            (item.link === "hash")
-                            ? <HashLink to={item.path} smooth className={
-                                `${styles.navLink}
+                            {
+                                (item.link === "hash")
+                                    ? <HashLink to={item.path} smooth className={
+                                        `${styles.navLink}
                                 ${((location.pathname + location.hash) === item.path) ? styles.active : ''}`
-                            }>
-                                {item.label}
-                            </HashLink>
-                            : <NavLink to={item.path} className={
-                                ({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`
-                            }>
-                                {item.label}
-                            </NavLink>
-                        }
+                                    }>
+                                        {item.label}
+                                    </HashLink>
+                                    : <NavLink to={item.path} className={
+                                        ({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`
+                                    }>
+                                        {item.label}
+                                    </NavLink>
+                            }
                         </motion.li>
                     ))}
                     <motion.li
@@ -74,7 +77,7 @@ const Header = () => {
                         </button>
                     </motion.li>
                 </ul>
-                <div className={styles.mobileMenuButton}>
+                <div className={styles.mobileMenu}>
                     <div className={styles.navRight}>
                         <motion.div
                             initial={{ opacity: 0, y: -20 }}
@@ -85,15 +88,15 @@ const Header = () => {
                                 {isDarkMode ? <RxSun /> : <RxMoon />}
                             </button>
                         </motion.div>
-                        <button className={styles.mobileMenu}
+                        <button className={styles.mobileMenuButton}
                             onClick={toggleMobileMenu} aria-label="Toggle mobile menu">
-                                {isMobileMenuOpen ? '✕' :  <CiMenuKebab />}
+                            {isMobileMenuOpen ? '✕' : <CiMenuKebab />}
                         </button>
                     </div>
                 </div>
             </nav>
 
-            <motion.div 
+            <motion.div
                 className={`${styles.mobileNav}`}
                 initial={{ display: 'none', height: 0, y: -25, opacity: 0 }}
                 animate={isMobileMenuOpen ? { display: 'block', height: 'auto', y: 0, opacity: 1 } : { display: 'none', height: 0, y: -25, opacity: 0 }}
@@ -104,19 +107,19 @@ const Header = () => {
                         <li key={item.path}>
                             {
                                 (item.link === "hash")
-                                ? <HashLink to={item.path} smooth className={`${styles.mobileNavLink}
+                                    ? <HashLink to={item.path} smooth className={`${styles.mobileNavLink}
                                     ${(location.pathname + location.hash) === item.path ? styles.active : ''}`
-                                }
-                                    onClick={() => setIsMobileMenuOpen(false)}>
-                                    {item.label}
-                                </HashLink>
-                                : <NavLink to={item.path} className={
-                                    ({ isActive }) => `${styles.mobileNavLink} ${isActive ? styles.active : ''}`
-                                }
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                >
-                                    {item.label}
-                                </NavLink>
+                                    }
+                                        onClick={() => setMobileMenuOpen(false)}>
+                                        {item.label}
+                                    </HashLink>
+                                    : <NavLink to={item.path} className={
+                                        ({ isActive }) => `${styles.mobileNavLink} ${isActive ? styles.active : ''}`
+                                    }
+                                        onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                        {item.label}
+                                    </NavLink>
                             }
                         </li>
                     ))}

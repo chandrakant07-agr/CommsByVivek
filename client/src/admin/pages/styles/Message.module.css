@@ -1,0 +1,381 @@
+.messagesHeader {
+    display: flex;
+    flex-direction: column;
+}
+
+.messagesHeader h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 2rem;
+    color: var(--text-primary-color);
+}
+
+.messagesHeader p {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: var(--text-secondary-color);
+}
+
+.messagesMark {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.messagesMark span {
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    color: var(--text-secondary-color);
+}
+
+.markActions {
+    display: flex;
+    align-items: center;
+    margin-left: 0.75rem;
+}
+
+.markActions span {
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    color: var(--text-secondary-color);
+}
+
+.readMarkBtn,
+.unreadMarkBtn {
+    margin-left: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    border-radius: 0.375rem;
+}
+
+.readMarkBtn {
+    color: #15803d;
+}
+
+.readMarkBtn:hover {
+    background-color: #bbf7d0;
+}
+
+.unreadMarkBtn {
+    color: var(--text-primary-color);
+}
+
+.unreadMarkBtn:hover {
+    background-color: #e5e7eb;
+}
+
+.filterSearch {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background-color: var(--bg-primary-color);
+    box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
+    border-radius: 0.5rem;
+}
+
+.filterSearchContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.filterSearchContainer .search {
+    flex: 1 1;
+    max-width: 32rem;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    display: flex;
+    align-items: center;
+    padding-left: 0.75rem;
+    pointer-events: none;
+}
+
+.searchIcon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #9ca3af;
+}
+
+.filterSearchContainer input {
+    width: 100%;
+    padding: 0.75rem 2.5rem;
+    border: 1px solid var(--border-secondary-color);
+    border-radius: 0.5rem;
+}
+
+.filterSearchContainer .filter {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+
+.filterByRead,
+.filterByType {
+    min-width: 120px;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-secondary-color);
+    border-radius: 0.5rem;
+}
+
+.filterByType {
+    margin-top: 0.5rem;
+}
+
+.messagesList {
+    margin-top: 1.5rem;
+    background-color: var(--bg-primary-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
+    overflow: hidden;
+}
+
+.msgNotFound svg {
+    width: 3rem;
+    height: 3rem;
+    margin-left: auto;
+    margin-right: auto;
+    color: #9ca3af;
+}
+
+.msgNotFound h3 {
+    margin-top: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    color: var(--text-primary-color);
+}
+
+.msgNotFound p {
+    margin-top: 0.25rem;    
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    color: var(--text-secondary-color);
+}
+
+.msgSelectAll {
+    padding: 0.75rem 1.5rem;
+    background-color: #f9fafb;
+    border-bottom: 1px solid var(--border-primary-color);
+}
+
+.msgSelectAll input {
+    width: 1rem;
+    height: 1rem;
+    color: var(--indigo);
+    border-radius: 0.25rem;
+}
+
+.msgSelectAll span {
+    margin-left: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1rem;
+    color: var(--text-secondary-color);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.msgContainer {
+    padding: 1rem 1.5rem;
+    transition-duration: 150ms;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.msgContainer:hover {
+    background-color: var(--gray-light);
+}
+
+.msgContainer input {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.25rem;
+    color: var(--indigo);
+}
+
+.readStatus {
+    margin-left: 1rem;
+    margin-top: 0.25rem;
+}
+
+.readStatus .msgIsRead {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+}
+
+.msgIsRead.yes {
+    background-color: #d1d5db;
+}
+
+.msgIsRead.no {
+    background-color: var(--red);
+}
+
+.msgContent {
+    min-width: 0px;
+    margin-left: 1rem;
+    flex: 1 1;
+}
+
+.msgContent h3 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: var(--text-primary-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.msgContent .statusBadge {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.75rem;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1rem;
+    /* color: #1f2937; */
+    color: var(--accent-success-bg-color);
+    background-color: var(--accent-success-text-color);
+    border-radius: 2rem;
+}
+
+.msgContent .receiveDate {
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    color: var(--text-secondary-color);
+}
+
+.msgContent .receiveTime {
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: #9ca3af;
+}
+
+.msgContent .senderEmail {
+    margin-top: 0.25rem;
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    color: var(--text-secondary-color);
+}
+
+.msgContent .emailMessage {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    color: #1f2937;
+    overflow: hidden;
+}
+
+.mailActionBtn .mailView {
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: var(--indigo);
+}
+
+.mailActionBtn .markReadBtn {
+    margin-left: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    color: var(--text-secondary-color);
+}
+
+.mailActionBtn .mailDeleteBtn {
+    margin-left: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    color: #dc2626;
+}
+
+.pagination {
+    margin-top: 1.5rem;
+    padding: 1rem 1.5rem;
+    background-color: var(--bg-primary-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
+}
+
+.totalPages {
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    color: var(--text-secondary-color);
+}
+
+.prevBtn,
+.pageBtn,
+.nextBtn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    border-radius: 0.5rem;
+}
+
+.prevBtn {
+    color: var(--text-primary-color);
+    background-color: var(--gray-light);
+    opacity: 0.5;
+    cursor: not-allowed;
+    cursor: default;
+}
+
+.pageBtn {
+    margin-left: 0.5rem;
+    color: var(--white);
+    background-color: var(--cornflower-blue);
+}
+
+.nextBtn {
+    margin-left: 0.5rem;
+    color: var(--text-primary-color);
+    background-color: var(--gray-light);
+}
+
+.nextBtn:hover {
+    background-color: #e5e7eb;
+}
+
+.ellipsis {
+    margin-left: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    color: var(--text-secondary-color);
+}
+
+@media (min-width: 640px) {
+    .messagesHeader {
+        align-items: center;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .messagesMark {
+        margin-top: 0px;
+    }
+    .filterSearchContainer .filter {
+        flex-direction: row;
+    }
+    .filterByType {
+        margin-top: 0px;
+        margin-left: 1rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .filterSearchContainer {
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+    }
+    .filterSearchContainer .filter {
+        margin-top: 0px;
+        margin-left: 1rem;
+    }
+}

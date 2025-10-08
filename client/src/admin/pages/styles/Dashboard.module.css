@@ -1,0 +1,218 @@
+.dashboardHeader h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 2rem;
+    color: var(--text-primary-color);
+}
+
+.dashboardHeader p {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: var(--text-secondary-color);
+}
+
+.statusCards {
+    margin-top: 1.5rem;
+    display: grid;
+    gap: 1.5vw;
+    row-gap: 1rem;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.statusCard {
+    padding: 1.5em;
+    border-radius: 0.5rem;
+    background-color: var(--card-primary-bg);;
+    box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
+}
+
+.statIcon {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #eff6ff;
+}
+
+.statIcon svg {
+    color: var(--light-blue);
+    width: 2rem;
+    height: 2rem;
+}
+
+.statContent .title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: var(--text-secondary-color);
+}
+
+.statContent .value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 2rem;
+    color: var(--text-primary-color);
+}
+
+.recentMsg,
+.quickActions {
+    margin-top: 1.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--bg-primary-color);
+    box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
+}
+
+.recentMsg .header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-primary-color);
+}
+
+.recentMsg .header h2,
+.quickActions h2 {
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    color: var(--text-primary-color);
+}
+
+.msgNotFound svg {
+    width: 3rem;
+    height: 3rem;
+    margin-left: auto;
+    margin-right: auto;
+    color: #9ca3af;
+}
+
+.msgNotFound h3 {
+    margin-top: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    color: var(--text-primary-color);
+}
+
+.msgNotFound p {
+    margin-top: 0.25rem;    
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    color: var(--text-secondary-color);
+}
+
+.receivedMsg:hover {
+    background-color: #f9fafb;
+}
+
+.receivedMsg .msgIsRead {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+}
+
+.msgIsRead.yes {
+    background-color: #d1d5db;
+}
+
+.msgIsRead.no {
+    background-color: var(--red);
+}
+
+.receivedMsg .senderName {
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: var(--text-primary-color);
+}
+
+.receivedMsg .senderEmail {
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    color: var(--text-secondary-color);
+}
+
+.receivedMsg .sendDate {
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    color: var(--text-primary-color);
+}
+
+.receivedMsg .sendTime {
+    font-size: 0.8rem;
+    line-height: 1rem;
+    color: var(--text-secondary-color);
+}
+
+.viewAllMsg {
+    padding: 0.75rem 1.5rem;
+    background-color: #f9fafb;
+    border-top: 1px solid var(--border-primary-color);
+}
+
+.viewAllMsg a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: var(--indigo);
+}
+
+.quickActions h2 {
+    margin-bottom: 1rem;
+}
+
+.quickCards {
+    display: grid;
+    gap: 1vw;
+    row-gap: 1rem;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.quickCard {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-primary-color);
+    background-color: var(--card-secondary-bg);;
+
+    transition-duration: 200ms;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function:
+        cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.quickCard:hover {
+    background-color: #e0e7ff;
+    border-color: #c7d2fe;
+}
+
+.quickCard svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.75rem;
+    color: var(--cornflower-blue);
+}
+
+.quickCard .title {
+    font-weight: 500;
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+    color: var(--text-primary-color);
+}
+
+.quickCard .subTitle {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: var(--text-secondary-color);
+}
+
+@media (min-width: 768px) {
+    .statusCards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .quickCards {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .statusCards {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}

@@ -157,7 +157,7 @@ const Contact = () => {
                         <form onSubmit={handleSubmit}>
                             <div className={styles.formGroup}>
                                 <label htmlFor="name" className={styles.formLabel}>Name 
-                                    <span className={styles.required}>*</span>
+                                    <span className="fromRequiredStar">*</span>
                                 </label>
                                 <input
                                     type="text"
@@ -173,7 +173,7 @@ const Contact = () => {
 
                             <div className={styles.formGroup}>
                                 <label htmlFor="email" className={styles.formLabel}>Email 
-                                    <span className={styles.required}>*</span>
+                                    <span className="fromRequiredStar">*</span>
                                 </label>
                                 <input
                                     type="email"
@@ -189,7 +189,7 @@ const Contact = () => {
 
                             <div className={styles.formGroup}>
                                 <label htmlFor="projectType" className={styles.formLabel}>Project Type 
-                                    <span className={styles.required}>*</span>
+                                    <span className="fromRequiredStar">*</span>
                                 </label>
                                 <select
                                     id="projectType"
@@ -207,7 +207,7 @@ const Contact = () => {
 
                             <div className={styles.formGroup}>
                                 <label htmlFor="message" className={styles.formLabel}>Message 
-                                    <span className={styles.required}>*</span>
+                                    <span className="fromRequiredStar">*</span>
                                 </label>
                                 <textarea
                                     id="message"
