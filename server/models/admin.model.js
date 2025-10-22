@@ -28,6 +28,10 @@ const adminSchema = new Schema({
         type: Date,
         default: null
     },
+    passwordUpdatedAt: {
+        type: Date,
+        default: null
+    },
     refreshToken: {
         type: String,
         default: null
@@ -38,6 +42,7 @@ adminSchema.pre('save', async function(next) {
     if(!this.isModified('password')) return next();
     try {
         this.password = await bcrypt.hash(this.password, 10);
+        this.passwordUpdatedAt = new Date();
         next();
     } catch (err) {
         next(err);

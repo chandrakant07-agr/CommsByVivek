@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 
 import Layout from './components/Layout';
 import LandingPage from './pages/Landing.Page';
@@ -10,11 +11,15 @@ import Page404 from './pages/Page404';
 
 import Login from './admin/pages/Login';
 import Dashboard from './admin/pages/Dashboard';
-import AdminLayout from './admin/components/Admin.Layout';
-
-import './App.css';
 import Messages from './admin/pages/Messages';
+import MessageDetail from './admin/pages/MessageDetail';
 import Profile from './admin/pages/Profile';
+import AdminLayout from './admin/components/Admin.Layout';
+import ProjectType from './admin/pages/ProjectType';
+import ContactInfo from './admin/pages/ContactInfo';
+
+import 'react-toastify/dist/ReactToastify.css';
+import './App.css';
 
 function App() {
     const isDarkMode = useSelector((state) => state.theme.isDarkMode);
@@ -26,6 +31,18 @@ function App() {
 
     return (
         <>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme={isDarkMode ? "dark" : "light"}
+            />
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<LandingPage />} />
@@ -38,9 +55,12 @@ function App() {
                     <Route element={<AdminLayout />}>
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="messages" element={<Messages />} />
+                        <Route path="messages/:status" element={<Messages />} />
+                        <Route path="messageView/:id" element={<MessageDetail />} />
                         <Route path="profile" element={<Profile />} />
+                        <Route path="projectType" element={<ProjectType />} />
+                        <Route path="contactInfo" element={<ContactInfo />} />
                     </Route>
-                    {/* Add other admin routes here */}
                 </Route>
             </Routes>
         </>

@@ -18,24 +18,24 @@
 
 .messagesMark {
     display: flex;
-    align-items: center;
-    margin-top: 1rem;
+    align-items: start;
+    flex-direction: column;
+    margin-top: 1.25rem;
 }
 
 .messagesMark span {
-    font-size: 0.9rem;
+    font-weight: 500;
     line-height: 1.25rem;
-    color: var(--text-secondary-color);
+    color: var(--text-primary-color);
 }
 
 .markActions {
     display: flex;
     align-items: center;
-    margin-left: 0.75rem;
 }
 
 .markActions span {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     line-height: 1.25rem;
     color: var(--text-secondary-color);
 }
@@ -43,7 +43,7 @@
 .readMarkBtn,
 .unreadMarkBtn {
     margin-left: 0.5rem;
-    padding: 0.25rem 0.75rem;
+    padding: 0.25rem;
     font-size: 0.9rem;
     line-height: 1.25rem;
     border-radius: 0.375rem;
@@ -62,7 +62,14 @@
 }
 
 .unreadMarkBtn:hover {
-    background-color: #e5e7eb;
+    color: var(--gray-light);
+    background-color: #ef4444;
+}
+
+.markBtnDisabled {
+    pointer-events: none;
+    cursor: auto;
+    opacity: 0.5;
 }
 
 .filterSearch {
@@ -83,7 +90,8 @@
     max-width: 32rem;
 }
 
-.searchIcon {
+.searchIcon,
+.clearIcon {
     position: absolute;
     left: 0px;
     top: 0px;
@@ -94,7 +102,13 @@
     pointer-events: none;
 }
 
-.searchIcon svg {
+.clearIcon {
+    left: auto;
+    right:0.75rem;
+}
+
+.searchIcon svg,
+.clearIcon svg {
     width: 1.25rem;
     height: 1.25rem;
     color: #9ca3af;
@@ -151,7 +165,7 @@
 }
 
 .msgNotFound p {
-    margin-top: 0.25rem;    
+    margin-top: 0.25rem;
     font-size: 0.9rem;
     line-height: 1.25rem;
     color: var(--text-secondary-color);
@@ -175,7 +189,7 @@
     font-size: 0.75rem;
     font-weight: 500;
     line-height: 1rem;
-    color: var(--text-secondary-color);
+    color: var(--text-primary-color);
     letter-spacing: 0.05em;
     text-transform: uppercase;
 }
@@ -307,39 +321,38 @@
 .totalPages {
     font-size: 0.9rem;
     line-height: 1.25rem;
-    color: var(--text-secondary-color);
+    color: var(--text-primary-color);
 }
 
-.prevBtn,
-.pageBtn,
-.nextBtn {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.9rem;
-    line-height: 1.25rem;
+.pageItem {
+    display: inherit;
+    margin-left: 0.75rem;
     border-radius: 0.5rem;
 }
 
-.prevBtn {
-    color: var(--text-primary-color);
-    background-color: var(--gray-light);
-    opacity: 0.5;
-    cursor: not-allowed;
-    cursor: default;
+.prevLink,
+.pageLink,
+.nextLink {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
 }
 
-.pageBtn {
-    margin-left: 0.5rem;
+.pageLink {
     color: var(--white);
     background-color: var(--cornflower-blue);
 }
 
-.nextBtn {
-    margin-left: 0.5rem;
-    color: var(--text-primary-color);
+.prevLink,
+.nextLink {
+    /* color: var(--text-primary-color); */
     background-color: var(--gray-light);
 }
 
-.nextBtn:hover {
+.prevLink:hover,
+.nextLink:hover {
     background-color: #e5e7eb;
 }
 
@@ -350,21 +363,38 @@
     color: var(--text-secondary-color);
 }
 
+.activePage {
+    padding: 0.1rem;
+    border: 2px solid var(--indigo);
+}
+
+.disabledLink {
+    /* background-color: var(--gray-light); */
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 @media (min-width: 640px) {
+    .filterSearchContainer .filter {
+        flex-direction: row;
+    }
+
+    .filterByType {
+        margin-top: 0px;
+        margin-left: 1rem;
+    }
+}
+
+@media (min-width: 768px) {
     .messagesHeader {
         align-items: center;
         flex-direction: row;
         justify-content: space-between;
     }
+
     .messagesMark {
+        align-items: end;
         margin-top: 0px;
-    }
-    .filterSearchContainer .filter {
-        flex-direction: row;
-    }
-    .filterByType {
-        margin-top: 0px;
-        margin-left: 1rem;
     }
 }
 
@@ -374,6 +404,7 @@
         align-items: center;
         flex-direction: row;
     }
+
     .filterSearchContainer .filter {
         margin-top: 0px;
         margin-left: 1rem;

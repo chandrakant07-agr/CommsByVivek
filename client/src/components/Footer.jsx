@@ -1,17 +1,14 @@
 import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { motion } from 'framer-motion';
+import { MdAlternateEmail, MdLocalPhone } from 'react-icons/md';
+import { useGetContactDetailsQuery } from '../../store/api/contactDetailsApiSlice';
+import socialPlatforms from '../constants/socialPlatforms';
 import styles from './styles/Footer.module.css';
-import { MdAlternateEmail } from 'react-icons/md';
-import {
-    FaInstagram,
-    FaYoutube,
-    FaLinkedinIn,
-    FaWhatsapp,
-    FaPhone } from 'react-icons/fa';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
+    const { data: getContactDetails } = useGetContactDetailsQuery();
 
     return (
         <motion.footer
@@ -31,11 +28,15 @@ const Footer = () => {
                     <ul className={styles.footerLinks}>
                         <li>
                             <span className='iconStyle'><MdAlternateEmail /></span>
-                            <Link to="mailto:hello@commsbyvivek.com">hello@commsbyvivek.com</Link>
+                            <Link to={`mailto:${getContactDetails?.data.contactDetails.email}`}>
+                                {getContactDetails?.data.contactDetails.email}
+                            </Link>
                         </li>
                         <li>
-                            <span className='iconStyle'><FaPhone /></span>
-                            <Link to="tel:+919876543210">+91 9876 543 210</Link>
+                            <span className='iconStyle'><MdLocalPhone /></span>
+                            <Link to={`tel:${getContactDetails?.data.contactDetails.phone}`}>
+                                {getContactDetails?.data.contactDetails.phone}
+                            </Link>
                         </li>
                     </ul>
                 </div>
@@ -55,18 +56,16 @@ const Footer = () => {
 
                 <div className={styles.footerSection}>
                     <div className={styles.footerSocial}>
-                        <Link to="https://instagram.com/" target="_blank" className='iconStyle'>
-                            <FaInstagram />
-                        </Link>
-                        <Link to="https://youtube.com/" target="_blank" className='iconStyle'>
-                            <FaYoutube />
-                        </Link>
-                        <Link to="https://linkedin.com/" target="_blank" className='iconStyle'>
-                            <FaLinkedinIn />
-                        </Link>
-                        <Link to="https://wa.me/1234567890" target="_blank" className='iconStyle'>
-                            <FaWhatsapp />
-                        </Link>
+                        {getContactDetails?.data.socialMediaLinks?.map((media) => (
+                            <Link to={media.url} key={media._id} target='_blank'
+                                className={`${styles.socialLink} iconStyle`}
+                            >
+                                {
+                                    socialPlatforms.find(platform =>
+                                        platform.name === media.platform)?.icon
+                                }
+                            </Link>
+                        ))}
                     </div>
                 </div>
             </div>

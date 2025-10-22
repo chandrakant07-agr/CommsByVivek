@@ -1,6 +1,7 @@
 import Admin from "../models/admin.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { ApiError, ApiResponse } from "../utils/responseHandler.js";
+import { clearCookieOptions, sessionCookieOptions } from "../config/cookieConfig.js";
 import { jwtGenerateAccessToken, jwtGenerateRefreshToken } from "../utils/jwtUtils.js";
 
 const generateAccessToken = (admin) => {
@@ -97,16 +98,9 @@ const loginAdmin = asyncHandler(async (req, res) => {
         lastLogin: admin.lastLogin
     };
 
-    const cookieOptions = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "Strict",
-        maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
-    };
-
     res
-        .cookie("accessToken", accessToken, cookieOptions)
-        .cookie("refreshToken", refreshToken, cookieOptions);
+        .cookie("accessToken", accessToken, sessionCookieOptions)
+        .cookie("refreshToken", refreshToken, sessionCookieOptions);
 
     return ApiResponse.sendSuccess(res, adminData, "Admin logged in successfully.");
 });
@@ -118,16 +112,9 @@ const logoutAdmin = asyncHandler(async (req, res) => {
         $unset: { refreshToken: 1 }
     }, { new: true });
 
-    const cookieOptions = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "Strict",
-        maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
-    };
-
     res
-        .clearCookie("accessToken", cookieOptions)
-        .clearCookie("refreshToken", cookieOptions);
+        .clearCookie("accessToken", clearCookieOptions)
+        .clearCookie("refreshToken", clearCookieOptions);
 
     return ApiResponse.sendSuccess(res, "", "Admin logged out successfully.");
 });
@@ -150,16 +137,9 @@ const reLoginAdmin = asyncHandler(async (req, res) => {
         lastLogin: admin.lastLogin
     };
 
-    const cookieOptions = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "Strict",
-        maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
-    };
-
     res
-        .cookie("accessToken", accessToken, cookieOptions)
-        .cookie("refreshToken", refreshToken, cookieOptions);
+        .cookie("accessToken", accessToken, sessionCookieOptions)
+        .cookie("refreshToken", refreshToken, sessionCookieOptions);
 
     return ApiResponse.sendSuccess(res, adminData, "Admin logged in refresh successfully.");
 });
@@ -172,7 +152,10 @@ const getCurrentAdmin = asyncHandler(async (req, res) => {
         fullName: admin.fullName,
         email: admin.email,
         role: admin.role,
-        lastLogin: admin.lastLogin
+        lastLogin: admin.lastLogin,
+        createdAt: admin.createdAt,
+        updatedAt: admin.updatedAt,
+        passwordUpdatedAt: admin.passwordUpdatedAt
     };
 
     return ApiResponse.sendSuccess(res, adminData, "Current admin info retrieved successfully.");
@@ -182,8 +165,14 @@ const updateAdminProfile = asyncHandler(async (req, res) => {
     const adminId = req.admin._id;
     const { fullName, email } = req.body;
 
+    // Update only the available fields
+    const updatedFields = {};
+
+    if(fullName) updatedFields.fullName = fullName;
+    if(email) updatedFields.email = email;
+
     const updatedAdmin = await Admin.findByIdAndUpdate(adminId, {
-        $set: { fullName, email }
+        $set: updatedFields
     }, { new: true }).select('-password -refreshToken -__v -createdAt -updatedAt');
 
     if(!updatedAdmin) {

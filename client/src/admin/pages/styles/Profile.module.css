@@ -23,7 +23,7 @@
 .profileInfoHeader,
 .securityHeader,
 .statisticsHeader {
-    padding: 1rem 1.5rem;
+    padding: 1.25rem 1.5rem;
     border-bottom: 1px solid var(--border-primary-color);
 }
 
@@ -39,7 +39,7 @@
 .profileInfoHeader button,
 .securityHeader button,
 .updateBtn {
-    padding: 0.5rem 1rem;
+    padding: 0.7rem 1rem;
     font-weight: 600;
     color: var(--white);
     border-radius: 0.5rem;
@@ -55,16 +55,22 @@
     background-color: var(--dark-blue);
 }
 
+.updateBtn:disabled {
+    background-color: var(--cornflower-blue);
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .profileInfoUpdateForm,
 .securityUpdateForm {
-    max-width: 25rem;;
+    max-width: 25rem;
 }
     
 .profileInfoUpdateForm label,
 .securityUpdateForm label {
     display: block;
     margin-bottom: 0.5rem;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 500;
     line-height: 1.25rem;
     color: var(--text-primary-color);
@@ -155,7 +161,7 @@
     font-size: 0.9rem;
     font-weight: 500;
     line-height: 1.25rem;
-    color: var(--text-secondary-color);
+    color: var(--text-primary-color);
 }
 
 .accountDetails span {
@@ -172,7 +178,7 @@
     margin-top: 0.25rem;
     font-size: 0.9rem;
     line-height: 1.25rem;
-    color: var(--text-primary-color);
+    color: var(--text-secondary-color);
 }
 
 .securityDetails h3 {
@@ -234,14 +240,14 @@
     font-size: 0.9rem;
     font-weight: 500;
     line-height: 1.25rem;
-    color: var(--text-secondary-color);
+    color: var(--text-primary-color);
 }
 
 .statisticsGrid p {
     margin-top: 0.25rem;
     font-size: 0.9rem;
     line-height: 1.25rem;
-    color: var(--text-primary-color);
+    color: var(--text-secondary-color);
 }
 
 .statisticsGrid .roleBadge {

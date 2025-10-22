@@ -59,7 +59,7 @@
     color: var(--cornflower-blue);
 }
 
-.formGroup h6 {
+.formGroup h5 {
     font-weight: 500;
     color: var(--text-primary-color);
 }

@@ -1,5 +1,5 @@
 import express from 'express';
-import { authorization, authentication } from '../middleware/auth.middleware.js';
+import { authorization, authentication } from '../middlewares/auth.middleware.js';
 import {
     createAdmin,
     loginAdmin,
@@ -31,6 +31,6 @@ router.route("/me").get(authorization, getCurrentAdmin);
 router.route("/updateAdminInfo").patch(authorization, updateAdminProfile);
 
 // change admin password
-router.route("/change-password").post(authorization, changeAdminPassword);
+router.route("/change-password").put(authorization, changeAdminPassword);
 
 export default router;

@@ -1,0 +1,206 @@
+.contactInfoHeader h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 2rem;
+    color: var(--text-primary-color);
+}
+
+.contactInfoHeader p {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: var(--text-secondary-color);
+}
+
+.contactContainer,
+.socialLinksContainer {
+    margin-top: 1.5rem;
+    background-color: var(--bg-primary-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
+}
+
+.contactHeader,
+.socialLinksHeader {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-primary-color);
+}
+
+.contactHeader h2,
+.socialLinksHeader h2 {
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.75rem;
+    color: var(--text-primary-color);
+}
+
+.digitalContact {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.contactContainer label,
+.socialLinksList label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-primary-color);
+}
+
+.contactContainer input,
+.contactContainer textarea,
+.socialLinksList input {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--text-primary-color);
+    background-color: var(--input-bg-color);
+    border: 1px solid var(--input-border-color);
+    border-radius: 0.375rem;
+    transition: border-color 0.2s ease;
+}
+
+.contactContainer input:focus,
+.contactContainer textarea:focus,
+.socialLinksList input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 1px var(--accent-color);
+}
+
+.contactContainer input::placeholder,
+.contactContainer textarea::placeholder,
+.socialLinksList input::placeholder {
+    color: var(--input-placeholder-color);
+}
+
+.contactContainer textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.emptyState {
+    padding: 2rem;
+    text-align: center;
+    background-color: var(--card-secondary-bg);
+    border-radius: 0.375rem;
+}
+
+.emptyState svg {
+    width: 3rem;
+    height: 3rem;
+    margin: 0 auto 1rem;
+    color: var(--text-secondary-color);
+}
+
+.emptyState h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+.emptyState p {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary-color);
+}
+
+.socialLinksList {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.socialLinkItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    background-color: var(--card-secondary-bg);
+    border-radius: 0.375rem;
+    border: 1px solid var(--border-primary-color);
+}
+
+.socialLinkHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.socialLinkTitle {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+.socialLinkHeader .deleteBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    color: var(--red);
+    background-color: rgba(239, 68, 68, 0.1);
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.socialLinkHeader .deleteBtn:hover {
+    background-color: rgba(239, 68, 68, 0.2);
+}
+
+.formButtons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-primary-color);
+}
+
+.saveButton,
+.resetButton {
+    padding: 0.7rem 1rem;
+    font-weight: 600;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+}
+
+.saveButton {
+    color: #ffffff;
+    background-color: var(--cornflower-blue);
+}
+
+.saveButton:hover {
+    background-color: var(--dark-blue);
+}
+
+.resetButton {
+    color: var(--text-primary-color);
+    background-color: var(--bg-secondary-color);
+}
+
+.resetButton:hover {
+    background-color: var(--border-secondary-color);
+}
+
+@media (min-width: 768px) {
+    .digitalContact {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .socialLinksList {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .socialLinksList {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

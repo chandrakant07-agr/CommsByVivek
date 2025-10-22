@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RxMoon, RxSun } from "react-icons/rx";
 import { CiMenuKebab } from "react-icons/ci";
 import { themeToggle } from "../../../store/slices/Theme.Slice";
+import { useGetAdminProfileQuery } from "../../../store/api/adminApiSlice";
 import Header from "./Header";
 import styles from "./styles/Header.module.css";
 
@@ -14,6 +15,8 @@ const AdminLayout = () => {
 
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
     const toggleMobileMenu = () => setMobileMenuOpen(!isMobileMenuOpen);
+
+    const { data: admin } = useGetAdminProfileQuery();
 
     return (
         <div className={styles.adminLayout}>
@@ -32,7 +35,7 @@ const AdminLayout = () => {
                             <h5>
                                 Welcome back,
                             </h5>
-                            <span>{/* {admin?.name} */}hello</span>
+                            <span>{admin?.data.fullName}</span>
                         </div>
                         <button onClick={toggleTheme} className={styles.themeToggle}>
                             {isDarkMode ? <RxSun /> : <RxMoon />}
@@ -44,7 +47,7 @@ const AdminLayout = () => {
                 </main>
             </div>
             {/* Sidebar overlay for mobile */}
-            {isMobileMenuOpen && 
+            {isMobileMenuOpen &&
                 <div
                     className={styles.sidebarOverlay}
                     onClick={() => setMobileMenuOpen(false)}

@@ -1,5 +1,6 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useAdminLoginMutation } from "../../../store/api/adminApiSlice";
 import {
     MdAdminPanelSettings,
     MdLogin,
@@ -7,39 +8,23 @@ import {
     MdOutlineLock,
     MdOutlineMailOutline
 } from "react-icons/md";
+import FormInputError from "../../components/FormInputError";
 import styles from "./styles/Login.module.css";
 
 const Login = () => {
-
-    const loading = false; // Replace with actual loading state
-    const error = null; // Replace with actual error state
-    const success = null; // Replace with actual success state
-
-    const [formData, setFormData] = React.useState({
-        email: '',
-        password: ''
-    });
-
-    const handleLoginChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value
-        }));
-    }
-
-    const handleLoginSubmit = (e) => {
-        e.preventDefault();
-        // Implement login logic here
-        console.log('Logging in with:', formData);
-    }
-
     const navigate = useNavigate();
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+            email: "girish@gmail.com",
+            password: "12345678"
+        }
+    });
+    const [adminLogin, { isLoading }] = useAdminLoginMutation();
 
     return (
         <div className={styles.loginContainer}>
             {/* go back button */}
-            <button className={styles.backBtn} tooltip="Go Back" onClick={() => navigate(-1)}>
+            <button className={styles.backBtn} onClick={() => navigate(-1)}>
                 <MdOutlineKeyboardDoubleArrowLeft />
             </button>
             <div className={styles.loginCard}>
@@ -53,76 +38,62 @@ const Login = () => {
                     </p>
                 </div>
 
-                {error && (
-                    <div className="alert alert-danger">
-                        <i className="fas fa-exclamation-circle"></i>
-                        {error}
-                    </div>
-                )}
-
-                {success && (
-                    <div className="alert alert-success">
-                        <i className="fas fa-check-circle"></i>
-                        {success}
-                    </div>
-                )}
-
-                <form onSubmit={handleLoginSubmit}>
-                    <div className={`${styles.formGroup} mb-6`}>
+                <form onSubmit={handleSubmit(adminLogin)} noValidate>
+                    <div className={`${styles.formGroup} h-18 mb-6`}>
                         <label htmlFor="email">
                             <MdOutlineMailOutline />
                             <div className="d-flex">
-                                <h6>Email Address</h6>
+                                <h5>Email Address</h5>
                                 <span className="fromRequiredStar">*</span>
                             </div>
                         </label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleLoginChange}
-                            required
-                            placeholder="Enter your email"
-                            autoComplete="email"
+                        <input type="email" id="email" placeholder="Enter your email"
+                            {
+                            ...register("email", {
+                                required: "Email is required", pattern: {
+                                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                    message: "Invalid email address"
+                                }
+                            })}
                         />
+                        <FormInputError message={errors.email?.message} />
                     </div>
 
-                    <div className={`${styles.formGroup} mb-6`}>
+                    <div className={`${styles.formGroup} h-18 mb-7`}>
                         <label htmlFor="password">
                             <MdOutlineLock />
                             <div className="d-flex">
-                                <h6>Password</h6>
-                            <span className="fromRequiredStar">*</span>
+                                <h5>Password</h5>
+                                <span className="fromRequiredStar">*</span>
                             </div>
                         </label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleLoginChange}
-                            required
-                            placeholder="Enter your password"
-                            autoComplete="current-password"
+                        <input type="password" id="password" placeholder="Enter your password"
+                            {...register("password", {
+                                required: "Password is required", 
+                                minLength: {
+                                    value: 6,
+                                    message: "Password must be at least 6 characters"
+                                }
+                            })}
                         />
+                        <FormInputError message={errors.password?.message} />
                     </div>
-
-                    <button type="submit" className={styles.btnLogin} disabled={loading}>
+                    <button type="submit" className={styles.btnLogin} disabled={isLoading}>
                         <MdLogin />
-                        {loading ? (
-                            <>
-                                <i className="fas fa-spinner fa-spin"></i>
-                                Logging in...
-                            </>
-                        ) : (
-                            <>
-                                <i className="fas fa-sign-in-alt"></i>
-                                Login
-                            </>
-                        )}
+                        {
+                            isLoading ? (
+                                <span>
+                                    <i className="fas fa-spinner fa-spin"></i>
+                                    Logging in...
+                                </span>
+                            ) : (
+                                <span>
+                                    <i className="fas fa-sign-in-alt"></i>
+                                    Login
+                                </span>
+                            )
+                        }
                     </button>
-
                 </form>
             </div>
         </div>

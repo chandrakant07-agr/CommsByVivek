@@ -16,26 +16,27 @@
     display: grid;
     gap: 1.5vw;
     row-gap: 1rem;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .statusCard {
-    padding: 1.5em;
+    padding: 0.75em;
     border-radius: 0.5rem;
     background-color: var(--card-primary-bg);;
     box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
 }
 
 .statIcon {
-    padding: 0.5rem;
+    display: inherit;
+    padding: 0.4rem;
     border-radius: 0.5rem;
     background-color: #eff6ff;
 }
 
 .statIcon svg {
-    color: var(--light-blue);
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--cornflower-blue);
 }
 
 .statContent .title {
@@ -60,13 +61,14 @@
     box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
 }
 
-.recentMsg .header {
-    padding: 1rem 1.5rem;
+.recentMsgHeader,
+.quickActionsHeader {
+    padding: 1.25rem 1.5rem;
     border-bottom: 1px solid var(--border-primary-color);
 }
 
-.recentMsg .header h2,
-.quickActions h2 {
+.recentMsgHeader h2,
+.quickActionsHeader h2 {
     font-weight: 500;
     font-size: 1.125rem;
     line-height: 1.75rem;
@@ -152,15 +154,12 @@
     color: var(--indigo);
 }
 
-.quickActions h2 {
-    margin-bottom: 1rem;
-}
-
 .quickCards {
     display: grid;
     gap: 1vw;
     row-gap: 1rem;
     grid-template-columns: repeat(1, minmax(0, 1fr));
+    padding: 1.5rem;
 }
 
 .quickCard {
@@ -204,15 +203,15 @@
 
 @media (min-width: 768px) {
     .statusCards {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
     .quickCards {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
-@media (min-width: 1024px) {
+/* @media (min-width: 1024px) {
     .statusCards {
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
-}
+} */

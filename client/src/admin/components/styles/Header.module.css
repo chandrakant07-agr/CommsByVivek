@@ -43,8 +43,7 @@
 .navbarItem {
     display: flex;
     align-items: center;
-    padding: 0.5rem 0.75rem;
-    /* font-size: 0.875rem; */
+    padding: 0.75rem;
     font-weight: 500;
     color: var(--text-secondary-color);
     line-height: 1.25rem;
@@ -60,7 +59,6 @@
 }
 
 .navbar .active {
-    /* color: var(--text-primary-color); */
     color: #4f46e5;
     background-color: #e0e7ff;
     border-color: var(--cornflower-blue);
@@ -126,7 +124,7 @@
 
 .logoutButton {
     width: 100%;
-    margin-top: 0.75rem;
+    margin-top: 1rem;
     padding: 0.75rem 1rem;
     font-size: 0.9rem;
     font-weight: 500;

@@ -1,66 +1,80 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { format } from "date-fns";
+import {
+    useChangeAdminPasswordMutation,
+    useGetAdminProfileQuery,
+    useUpdateAdminProfileMutation
+} from "../../../store/api/adminApiSlice";
+import FormInputError from "../../components/FormInputError";
 import styles from "./styles/Profile.module.css"
 
 const Profile = () => {
+    const [isEditProfile, setIsEditProfile] = useState(false);
+    const [isChangePassword, setIsChangePassword] = useState(false);
 
-    // dummy mutation functions
-    const updateProfileMutation = {
-        isLoading: false,
-        mutate: (data) => {
-            console.log("Updating profile with data:", data);
-            // Simulate a network request
-            setTimeout(() => {
-                toast.success("Profile updated successfully");
-                setIsEditingProfile(false);
-            }, 1000);
+    const { data: admin, isSuccess: isAdminLoaded } = useGetAdminProfileQuery();
+
+    const [
+        updateProfile, {
+            isLoading: isUpdating,
+            isSuccess: isProfileUpdated
         }
-    };
+    ] = useUpdateAdminProfileMutation();
 
-    const changePasswordMutation = {
-        isLoading: false,
-        mutate: (data) => {
-            console.log("Changing password with data:", data);
-            // Simulate a network request
-            setTimeout(() => {
-                toast.success("Password changed successfully");
-                setIsChangingPassword(false);
-                setPasswordForm({
-                    currentPassword: '',
-                    newPassword: '',
-                    confirmPassword: '',
-                });
-            }, 1000);
+    const [
+        changePassword, {
+            isLoading: isChangingPassword,
+            isSuccess: isPasswordChanged,
+            isError: isPasswordError
         }
-    };
+    ] = useChangeAdminPasswordMutation();
 
-    // dummy toast function
-    const toast = {
-        success: (msg) => alert(msg),
-        error: (msg) => alert(msg),
-    };
-    const [isEditingProfile, setIsEditingProfile] = useState(false);
-    const [profileForm, setProfileForm] = useState({
-        name: "",
-        email: "",
-    });
+    const {
+        reset: infoReset,
+        watch: infoWatch,
+        register: infoRegister,
+        handleSubmit: handleInfoSubmit,
+        formState: { errors: infoErrs }
+    } = useForm();
 
-    const admin = {
-        name: "John Doe",
-        email: "john.doe@example.com",
-        role: "admin",
-        createdAt: "2023-01-01T00:00:00Z",
-        lastLogin: "2023-10-01T12:34:56Z",
-        updatedAt: "2023-10-15T08:00:00Z",
-        isActive: true,
-    };
+    const {
+        reset: passwordReset,
+        watch: passwordWatch,
+        register: passwordRegister,
+        handleSubmit: handlePasswordSubmit,
+        formState: { errors: passwordErrs }
+    } = useForm();
 
-    const [isChangingPassword, setIsChangingPassword] = useState(false);
-    const [passwordForm, setPasswordForm] = useState({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-    });
+    // Check that at least one field is available in the profile update form
+    const isProfileFormFilled = infoWatch("fullName") || infoWatch("email");
+
+    // Close and clear the form if the profile update is successfully submitted
+    useEffect(() => {
+        if(isProfileUpdated) {
+            infoReset();
+            setIsEditProfile(false);
+        }
+    }, [isProfileUpdated, infoReset]);
+
+    // Close and clear the form if the password update is successfully submitted
+    useEffect(() => {
+        if(isPasswordChanged) {
+            passwordReset();
+            setIsChangePassword(false);
+        }
+    }, [isPasswordChanged, passwordReset]);
+
+    // useEffect(() => {
+    //     if (isAdminLoaded && admin?.data) {
+    //         infoReset({
+    //             fullName: admin.data.fullName || "",
+    //             email: admin.data.email || ""
+    //         });
+    //     }
+    // }, [admin, isAdminLoaded, infoReset]);
+
+    // console.log(admin, isUpdating, isChangingPassword, isProfileUpdated, isError, error);
 
     return (
         <div>
@@ -73,71 +87,57 @@ const Profile = () => {
                 <div className={styles.profileInfoHeader}>
                     <div className="d-flex a-center justify-between">
                         <h2>Profile Information</h2>
-                        {!isEditingProfile && (
-                            <button
-                                onClick={() => setIsEditingProfile(true)}
-                            >
-                                Edit Profile
-                            </button>
+                        {!isEditProfile && (
+                            <button onClick={() => setIsEditProfile(true)}>Edit Profile</button>
                         )}
                     </div>
                 </div>
 
                 <div className="p-6">
-                    {isEditingProfile ? (
-                        <form onSubmit={(e) => {
-                            e.preventDefault();
-                            updateProfileMutation.mutate({
-                                name: profileForm.name.trim(),
-                                email: profileForm.email.trim(),
-                            });
-                        }} className={styles.profileInfoUpdateForm}>
-                            <div className="mb-4">
+                    {isEditProfile ? (
+                        <form onSubmit={handleInfoSubmit(updateProfile)}
+                            className={styles.profileInfoUpdateForm} noValidate
+                        >
+                            <div className="h-18 mb-4">
                                 <label htmlFor="name">
                                     Full Name
-                                    <span className="fromRequiredStar">*</span>
+                                    <sup className="fromOptional">(optional)</sup>
                                 </label>
-                                <input
-                                    id="name"
-                                    type="text"
-                                    value={profileForm.name}
-                                    onChange={(e) => setProfileForm({ ...profileForm, name: e.target.value })}
-                                    placeholder="Enter your full name"
+                                <input type="text" id="name" placeholder="Enter your full name"
+                                    {
+                                    ...infoRegister("fullName")
+                                    }
                                 />
                             </div>
 
-                            <div>
+                            <div className="h-18">
                                 <label htmlFor="email">
                                     Email Address
-                                    <span className="fromRequiredStar">*</span>
+                                    <sup className="fromOptional">(optional)</sup>
                                 </label>
-                                <input
-                                    id="email"
-                                    type="email"
-                                    value={profileForm.email}
-                                    onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
-                                    placeholder="Enter your email address"
+                                <input type="email" id="email" placeholder="Enter your email"
+                                    className={infoErrs.email && "formInputErrorBorder"}
+                                    {
+                                    ...infoRegister("email", {
+                                        pattern: {
+                                            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                            message: "Invalid email address"
+                                        }
+                                    })
+                                    }
                                 />
+                                <FormInputError message={infoErrs.email?.message} />
                             </div>
 
                             <div className="d-flex a-center mt-6">
-                                <button
-                                    type="submit"
-                                    disabled={updateProfileMutation.isLoading}
-                                    className={styles.updateBtn}
-                                >
-                                    {updateProfileMutation.isLoading ? 'Updating...' : 'Update Profile'}
+                                <button type="submit" className={styles.updateBtn}
+                                    disabled={
+                                        !!isProfileFormFilled === false || isUpdating
+                                    }>
+                                    {isUpdating ? 'Updating...' : 'Update Profile'}
                                 </button>
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setProfileForm({
-                                            name: admin?.name || '',
-                                            email: admin?.email || '',
-                                        });
-                                        setIsEditingProfile(false);
-                                    }}
-                                    className={styles.cancelBtn}
+                                <button type="button" className={styles.cancelBtn}
+                                    onClick={() => setIsEditProfile(false)}
                                 >
                                     Cancel
                                 </button>
@@ -148,13 +148,15 @@ const Profile = () => {
                             <div className="d-flex a-center">
                                 <div className={styles.profileLogo}>
                                     <span className={styles.profileIcon}>
-                                        {admin.name?.charAt(0).toUpperCase()}
+                                        {admin?.data.fullName.charAt(0).toUpperCase()}
                                     </span>
                                 </div>
                                 <div className="ml-4">
-                                    <h3 className={styles.profileName}>{admin.name}</h3>
-                                    <p className={styles.profileEmail}>{admin.email}</p>
-                                    <p className={styles.profileRole}>{admin.role?.replace('_', ' ')}</p>
+                                    <h3 className={styles.profileName}>{admin?.data.fullName}</h3>
+                                    <p className={styles.profileEmail}>{admin?.data.email}</p>
+                                    <p className={styles.profileRole}>
+                                        {admin?.data.role?.replace('_', ' ')}
+                                    </p>
                                 </div>
                             </div>
 
@@ -162,16 +164,19 @@ const Profile = () => {
                                 <div>
                                     <div className={styles.status}>Account Status</div>
                                     <div className="mt-1">
-                                        <span className={admin.isActive ? 'bg-green-100 text-green-800 px-2.5 py-0.5 rounded-full text-xs font-medium' : 'bg-red-100 text-red-800 px-2.5 py-0.5 rounded-full text-xs font-medium'}>
-                                            {admin.isActive ? 'Active' : 'Inactive'}
-                                        </span>
+                                        <span>Active</span>
                                     </div>
                                 </div>
 
-                                <div className="mt-1">
+                                <div className="mt-2">
                                     <div className={styles.memberSince}>Member Since</div>
                                     <div className={styles.joinDate}>
-                                        {admin.createdAt ? format(new Date(admin.createdAt), 'MMMM dd, yyyy') : 'Not available'}
+                                        {
+                                            admin?.data.createdAt
+                                                ? format(new Date(admin?.data.createdAt),
+                                                    'MMMM dd, yyyy')
+                                                : 'Not available'
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -184,87 +189,86 @@ const Profile = () => {
                 <div className={styles.securityHeader}>
                     <div className="d-flex a-center justify-between">
                         <h2>Security Settings</h2>
-                        {!isChangingPassword && (
-                            <button
-                                onClick={() => setIsChangingPassword(true)}
-                            >
-                                Change Password
-                            </button>
+                        {!isChangePassword && (
+                            <button onClick={() => setIsChangePassword(true)}>Change Password</button>
                         )}
                     </div>
                 </div>
 
                 <div className="p-6">
-                    {isChangingPassword ? (
-                        <form onSubmit={(e) => {
-                            e.preventDefault();
-                            if (passwordForm.newPassword === passwordForm.confirmPassword) {
-                                changePasswordMutation.mutate(passwordForm);
-                            } else {
-                                toast.error('Passwords do not match');
-                            }
-                        }} className={styles.securityUpdateForm}>
-                            <div className="mb-4">
+                    {isChangePassword ? (
+                        <form onSubmit={handlePasswordSubmit(changePassword)}
+                            className={styles.securityUpdateForm} noValidate
+                        >
+                            <div className="h-18 mb-4">
                                 <label htmlFor="currentPassword">
                                     Current Password
                                     <span className="fromRequiredStar">*</span>
                                 </label>
-                                <input
-                                    id="currentPassword"
-                                    type="password"
-                                    value={passwordForm.currentPassword}
-                                    onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-                                    placeholder="Enter your current password"
+                                <input type="password" id="currentPassword"
+                                    placeholder="Enter current password"
+                                    className={
+                                        (isPasswordError || passwordErrs.currentPassword)
+                                        && "formInputErrorBorder"
+                                    }
+                                    {
+                                    ...passwordRegister("currentPassword", {
+                                        required: "Current password is required"
+                                    })
+                                    }
                                 />
+                                <FormInputError message={passwordErrs.currentPassword?.message} />
                             </div>
 
-                            <div className="mb-4">
+                            <div className="h-18 mb-4">
                                 <label htmlFor="newPassword">
                                     New Password
                                     <span className="fromRequiredStar">*</span>
                                 </label>
-                                <input
-                                    id="newPassword"
-                                    type="password"
-                                    value={passwordForm.newPassword}
-                                    onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-                                    placeholder="Enter your new password"
+                                <input type="password" id="newPassword"
+                                    placeholder="Enter new password"
+                                    className={passwordErrs.newPassword && "formInputErrorBorder"}
+                                    {
+                                    ...passwordRegister("newPassword", {
+                                        required: "New password is required",
+                                        minLength: {
+                                            value: 6,
+                                            message: "Password must be at least 6 characters long"
+                                        }
+                                    })
+                                    }
                                 />
+                                <FormInputError message={passwordErrs.newPassword?.message} />
                             </div>
 
-                            <div className="mb-6">
+                            <div className="h-18">
                                 <label htmlFor="confirmPassword">
                                     Confirm New Password
                                     <span className="fromRequiredStar">*</span>
                                 </label>
-                                <input
-                                    id="confirmPassword"
-                                    type="password"
-                                    value={passwordForm.confirmPassword}
-                                    onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-                                    placeholder="Confirm your new password"
+                                <input type="password" id="confirmPassword"
+                                    placeholder="Confirm new password"
+                                    className={passwordErrs.confirmPassword && "formInputErrorBorder"}
+                                    {
+                                    ...passwordRegister("confirmPassword", {
+                                        required: "Please confirm your new password",
+                                        validate: (value) =>
+                                            value === passwordWatch('newPassword')
+                                            || "Confirm Password doesn't match"
+                                    })
+                                    }
                                 />
+                                <FormInputError message={passwordErrs.confirmPassword?.message} />
                             </div>
 
                             <div className="d-flex a-center mt-6">
-                                <button
-                                    type="submit"
-                                    disabled={changePasswordMutation.isLoading}
-                                    className={styles.updateBtn}
+                                <button type="submit" className={styles.updateBtn}
+                                    disabled={isChangingPassword}
                                 >
-                                    {changePasswordMutation.isLoading ? 'Changing...' : 'Change Password'}
+                                    {isChangingPassword ? 'Changing...' : 'Change Password'}
                                 </button>
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setPasswordForm({
-                                            currentPassword: '',
-                                            newPassword: '',
-                                            confirmPassword: '',
-                                        });
-                                        setIsChangingPassword(false);
-                                    }}
-                                    className={styles.cancelBtn}
+                                <button type="button" className={styles.cancelBtn}
+                                    onClick={() => setIsChangePassword(false)}
                                 >
                                     Cancel
                                 </button>
@@ -272,12 +276,23 @@ const Profile = () => {
                         </form>
                     ) : (
                         <div>
-                            <div className={`${styles.securityDetails} d-flex a-center justify-between`}>
+                            <div className={`${styles.securityDetails}
+                                d-flex a-center justify-between`}
+                            >
                                 <div>
                                     <h3>Password</h3>
-                                    <p>Last changed on {admin.updatedAt ? format(new Date(admin.updatedAt), 'MMMM dd, yyyy') : 'Not available'}</p>
+                                    <p>Last changed on
+                                        <span className="ml-1">
+                                            {
+                                                admin?.data.updatedAt
+                                                    ? format(new Date(admin?.data.passwordUpdatedAt),
+                                                        'MMMM dd, yyyy h:mm a')
+                                                    : 'Not available'
+                                            }
+                                        </span>
+                                    </p>
                                 </div>
-                                <div className={styles.password}>••••••••</div>
+                                {/* <div className={styles.password}>••••••••</div> */}
                             </div>
 
                             <div className={styles.securityWarning}>
@@ -304,31 +319,44 @@ const Profile = () => {
                         <div className={styles.statisticsGrid}>
                             <h3>Account Created</h3>
                             <p>
-                                {admin.createdAt ? format(new Date(admin.createdAt), 'MMMM dd, yyyy') : 'Not available'}
+                                {
+                                    admin?.data.createdAt
+                                        ? format(new Date(admin?.data.createdAt),
+                                            'MMMM dd, yyyy h:mm a')
+                                        : 'Not available'
+                                }
                             </p>
                         </div>
 
                         <div className={styles.statisticsGrid}>
                             <h3>Last Updated</h3>
                             <p>
-                                {admin.updatedAt ? format(new Date(admin.updatedAt), 'MMMM dd, yyyy') : 'Not available'}
+                                {
+                                    admin?.data.updatedAt
+                                        ? format(new Date(admin?.data.updatedAt), 
+                                            "MMMM dd, yyyy h:mm a")
+                                        : 'Not available'
+                                }
                             </p>
                         </div>
 
-                        {admin.lastLogin && (
-                            <div className={styles.statisticsGrid}>
-                                <h3>Last Login</h3>
-                                <p>
-                                    {format(new Date(admin.lastLogin), 'MMMM dd, yyyy h:mm a')}
-                                </p>
-                            </div>
-                        )}
+                        <div className={styles.statisticsGrid}>
+                            <h3>Last Login</h3>
+                            <p>
+                                {
+                                    admin?.data.lastLogin
+                                        ? format(new Date(admin?.data.lastLogin),
+                                            "MMMM dd, yyyy h:mm a")
+                                        : 'Not available'
+                                }
+                            </p>
+                        </div>
 
                         <div className={styles.statisticsGrid}>
                             <h3>Account Role</h3>
                             <p>
                                 <span className={styles.roleBadge}>
-                                    {admin.role?.replace('_', ' ')}
+                                    {admin?.data.role.replace('_', ' ')}
                                 </span>
                             </p>
                         </div>

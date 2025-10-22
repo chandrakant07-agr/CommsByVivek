@@ -1,80 +1,80 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import ReactPaginate from "react-paginate";
 import { format } from "date-fns";
-import { Link } from "react-router-dom";
-
+import { MdOutlineCleaningServices } from "react-icons/md";
+import { LuMailSearch, LuMessageSquareText } from "react-icons/lu";
+import { useGetProjectTypesQuery } from "../../../store/api/projectTypeApiSlice";
+import {
+    useDeleteMessageMutation,
+    useGetMessagesQuery,
+    useUpdateStatusMutation
+} from "../../../store/api/messageApiSlice";
 import styles from "./styles/Message.module.css"
 
 const Messages = () => {
+    const { status } = useParams();
+    const [currentPage, setCurrentPage] = useState(1);
 
-    const pagination = { totalPages: 5, total: 42 }; // Example pagination data
-    const currentPage = 1; // Example current page
-    const filteredMessages = []; // Example filtered messages
-    const selectedMessages = []; // Example selected messages
-    const searchTerm = ""; // Example search term
-    const statusFilter = "all"; // Example status filter
-    const sortBy = "newest"; // Example sort by
+    const { register: filterRegister, watch: filterWatch } = useForm();
+    const { register: selectRegister, watch: selectWatch, setValue: setSelectValue } = useForm({
+        defaultValues: { selectAllMessages: false, selectedCheckIds: [] }
+    });
 
-    const message = {
-        _id: "1",
-        name: "John Doe",
-        email: "john.doe@example.com",
-        message: "Hello, I would like to inquire about your services.",
-        createdAt: "2023-03-15T12:34:56Z",
-        isRead: false,
-        isReplied: true
-    }; // Example message object
+    const [updateStatus, { isLoading: isUpdating }] = useUpdateStatusMutation();
+    const [deleteMessage, { isLoading: isDeleting }] = useDeleteMessageMutation();
+    const { data: projectTypes } = useGetProjectTypesQuery();
+    const { data: messages, isLoading: isMgsLoading, isError: isMsgError } = useGetMessagesQuery({
+        search: filterWatch("search") || "",
+        status: filterWatch("status") || status ? status : "all",
+        prType: filterWatch("prType") || "all",
+        sortBy: filterWatch("sortBy") || "newest",
+        pageNo: currentPage || 1,
+        limit: 10
+    });
 
-    const markAsReadMutation = { isLoading: false }; // Example mutation state
-    const deleteMessageMutation = { isLoading: false }; // Example mutation state
+    const selectMsgLength = selectWatch("selectedCheckIds").length;
 
-    const handleBulkMarkAsRead = (isRead) => {
-        // Handle bulk mark as read/unread
-    };
-
-    const handleSearchChange = (value) => {
-        // Handle search input change
-    };
-
-    const handleStatusChange = (value) => {
-        // Handle status filter change
-    };
-
-    const handleSortChange = (value) => {
-        // Handle sort by change
-    };
-
-    const handleSelectAll = () => {
-        // Handle select all messages
-    };
-
-    const handleSelectMessage = (id) => {
-        // Handle select individual message
-    };
-
-    const getStatusBadge = (message) => {
-        if (message.isReplied) {
-            return <span className={styles.statusBadge}>Replied</span>;
-        } else if (!message.isRead) {
-            return <span className={styles.statusBadge}>Unread</span>;
+    const handleAllSelectMessages = () => {
+        const allIds = messages?.data.msgList.map(m => m._id) || [];
+        if(selectMsgLength === allIds.length) {
+            setSelectValue("selectedCheckIds", []);         // Uncheck all
         } else {
-            return <span className={styles.statusBadge}>Read</span>;
+            setSelectValue("selectedCheckIds", allIds);     // Check all
         }
-    };
+    }
 
-    const handleMarkAsRead = (id, isRead) => {
-        // Handle mark as read/unread for individual message
-    };
+    const handleBulkMarkAsRead = (isRead) => updateStatus({ 
+        ids: selectWatch("selectedCheckIds"), isRead
+     });
 
-    const handleDeleteMessage = (id) => {
-        // Handle delete message
-    };
+    const handleMarkAsRead = (id, isRead) => updateStatus({ ids: [id], isRead });
 
-    const updateFilters = (newFilters) => {
-        // Update filters and fetch messages
-    };
+    const handleBulkDelete = () => deleteMessage({ ids: selectWatch("selectedCheckIds") });
+    const handleDeleteMessage = (id) => deleteMessage({ ids: [id] });
+
+    const createSnippet = (htmlText, length) => {
+        const plainText = htmlText.replace(/<[^>]+>/g, '');
+        return plainText.length > length ? plainText.substring(0, length) + "..." : plainText;
+    }
+
+    // set selectedCheckIds to empty array when messages change
+    useEffect(() => {
+        setSelectValue("selectAllMessages", false);
+        setSelectValue("selectedCheckIds", []);
+    }, [messages]);
+
+    if(isMgsLoading) {
+        return <p>Loading...</p>
+    }
+
+    if(isMsgError) {
+        return <p>Something went wrong. Please try again later.</p>
+    }
 
     return (
-        <div>
+        <>
             {/* Header */}
             <section className={styles.messagesHeader}>
                 <div>
@@ -83,27 +83,34 @@ const Messages = () => {
                 </div>
                 <div className={styles.messagesMark}>
                     <span>
-                        {pagination.total || 0} total messages
+                        {messages?.data.pagination.totalMsg || 0} total messages
                     </span>
-                    {selectedMessages.length > 0 && (
-                        <div className={styles.markActions}>
-                            <span>
-                                {selectedMessages.length} selected
-                            </span>
-                            <button
-                                onClick={() => handleBulkMarkAsRead(true)}
-                                className={styles.readMarkBtn}
-                            >
-                                Mark as Read
-                            </button>
-                            <button
-                                onClick={() => handleBulkMarkAsRead(false)}
-                                className={styles.unreadMarkBtn}
-                            >
-                                Mark as Unread
-                            </button>
-                        </div>
-                    )}
+                    <div className={styles.markActions}>
+                        <span>
+                            {selectMsgLength} selected
+                        </span>
+                        <button className={`${styles.readMarkBtn}
+                            ${(selectMsgLength === 0 || isUpdating) && styles.markBtnDisabled}`}
+                            onClick={() => handleBulkMarkAsRead(true)}
+                            disabled={selectMsgLength === 0 || isUpdating}
+                        >
+                            Mark as Read
+                        </button>
+                        <button className={`${styles.unreadMarkBtn}
+                            ${(selectMsgLength === 0 || isUpdating) && styles.markBtnDisabled}`}
+                            onClick={() => handleBulkMarkAsRead(false)}
+                            disabled={selectMsgLength === 0 || isUpdating}
+                        >
+                            Mark as Unread
+                        </button>
+                        <button className={`${styles.unreadMarkBtn}
+                            ${(selectMsgLength === 0 || isDeleting) && styles.markBtnDisabled}`}
+                            onClick={() => handleBulkDelete()}
+                            disabled={selectMsgLength === 0 || isDeleting}
+                        >
+                            Delete
+                        </button>
+                    </div>
                 </div>
             </section>
 
@@ -114,41 +121,41 @@ const Messages = () => {
                     <div className={`${styles.search} flex-1 max-w-lg`}>
                         <div className="relative">
                             <div className={styles.searchIcon}>
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
+                                <LuMailSearch />
                             </div>
-                            <input
-                                type="text"
+                            <input type="text"
                                 placeholder="Search messages by name, email, or content..."
-                                value={searchTerm}
-                                onChange={(e) => handleSearchChange(e.target.value)}
+                                {...filterRegister("search")}
                             />
+                            <button className={styles.clearIcon}>
+                                <MdOutlineCleaningServices />
+                            </button>
                         </div>
                     </div>
 
                     {/* Filters */}
                     <div className={styles.filter}>
-                        <select
-                            value={statusFilter}
-                            onChange={(e) => handleStatusChange(e.target.value)}
-                            className={styles.filterByRead}
-                        >
+                        <select {...filterRegister("status")} className={styles.filterByRead}>
                             <option value="all">All Messages</option>
-                            <option value="unread">Unread</option>
                             <option value="read">Read</option>
+                            <option value="unread">Unread</option>
                             <option value="replied">Replied</option>
                         </select>
 
-                        <select
-                            value={sortBy}
-                            onChange={(e) => handleSortChange(e.target.value)}
-                            className={styles.filterByType}
-                        >
+                        <select {...filterRegister("prType")} className={styles.filterByType}>
+                            <option value="all">All Project Types</option>
+                            {projectTypes?.data.map((type, index) => (
+                                <option key={index} value={type._id}>{type.name}</option>
+                            ))}
+                        </select>
+
+                        <select {...filterRegister("sortBy")} className={styles.filterByType}>
                             <option value="newest">Newest First</option>
                             <option value="oldest">Oldest First</option>
-                            <option value="name">Name A-Z</option>
-                            <option value="email">Email A-Z</option>
+                            <option value="nameAsc">Name (A-Z) (a-z)</option>
+                            <option value="nameDesc">Name (Z-A) (z-a)</option>
+                            <option value="emailAsc">Email (A-Z) (a-z)</option>
+                            <option value="emailDesc">Email (Z-A) (z-a)</option>
                         </select>
                     </div>
                 </div>
@@ -156,173 +163,134 @@ const Messages = () => {
 
             {/* Messages List */}
             <section className={styles.messagesList}>
-                {filteredMessages.length !== 0 ? (
+                {messages?.data.msgList.length === 0 ? (
                     <div className={`${styles.msgNotFound} px-6 py-12 text-center`}>
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        <h3>No messages found</h3>
-                        <p>
-                            Messages from your contact form will appear here.
-                        </p>
+                        <LuMessageSquareText />
+                        <h3>Messages not found</h3>
+                        <p>Messages from your contact form will appear here.</p>
                     </div>
-                ) : (
-                    <>
-                        {/* Table Header */}
-                        <div className={styles.msgSelectAll}>
-                            <div className="d-flex a-center">
-                                <input
-                                    type="checkbox"
-                                    checked={selectedMessages.length === filteredMessages.length}
-                                    onChange={handleSelectAll}
-                                />
-                                <span>
-                                    Select All
-                                </span>
-                            </div>
+                ) : (<>
+                    {/* Table Header */}
+                    <div className={styles.msgSelectAll}>
+                        <div className="d-flex a-center">
+                            <input type="checkbox"
+                                {...selectRegister("selectAllMessages", {
+                                    onChange: handleAllSelectMessages
+                                })}
+                            />
+                            <span>Select All</span>
                         </div>
+                    </div>
 
-                        {/* Messages */}
-                        <div>
-                            {/* {filteredMessages.map((message) => ( */}
-                            <div key={message._id} className={styles.msgContainer}>
-                                <div className="d-flex a-start">
-                                    {/* Checkbox */}
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedMessages.includes(message._id)}
-                                        onChange={() => handleSelectMessage(message._id)}
-                                    />
+                    {/* Messages */}
+                    {messages?.data.msgList.map((message) => (
+                        <div key={message._id} className={styles.msgContainer}>
+                            <div className="d-flex a-start">
+                                {/* Checkbox */}
+                                <input type="checkbox" value={message._id}
+                                    {...selectRegister("selectedCheckIds")}
+                                />
 
-                                    {/* Read status indicator */}
-                                    <div className={styles.readStatus}>
-                                        <div className={`${styles.msgIsRead} ${message.isRead ? styles.yes : styles.no}`} />
+                                {/* Read status indicator */}
+                                <div className={styles.readStatus}>
+                                    <div className={`${styles.msgIsRead}
+                                            ${message.isRead ? styles.yes : styles.no}`
+                                    } />
+                                </div>
+
+                                {/* Message Content */}
+                                <div className={styles.msgContent}>
+                                    <div className="d-flex a-center justify-between">
+                                        <div className="d-flex a-center">
+                                            <h3>{message.name}</h3>
+                                            <span className={styles.statusBadge}>
+                                                {message.isRead ? 'Read' : 'Unread'}
+                                            </span>
+                                        </div>
+                                        <div className="d-flex a-center">
+                                            <span className={styles.receiveDate}>
+                                                {format(new Date(message.createdAt),
+                                                    'MMM dd, yyyy')}
+                                            </span>
+                                            <span className={styles.receiveTime}>
+                                                {format(new Date(message.createdAt),
+                                                    'h:mm a')}
+                                            </span>
+                                        </div>
                                     </div>
 
-                                    {/* Message Content */}
-                                    <div className={styles.msgContent}>
-                                        <div className="d-flex a-center justify-between">
-                                            <div className="d-flex a-center">
-                                                <h3>{message.name}</h3>
-                                                {getStatusBadge(message)}
-                                            </div>
-                                            <div className="d-flex a-center">
-                                                <span className={styles.receiveDate}>
-                                                    {format(new Date(message.createdAt), 'MMM dd, yyyy')}
-                                                </span>
-                                                <span className={styles.receiveTime}>
-                                                    {format(new Date(message.createdAt), 'h:mm a')}
-                                                </span>
-                                            </div>
-                                        </div>
+                                    <p className={styles.senderEmail}>{message.email}</p>
+                                    <p className={styles.emailMessage}>
+                                        {createSnippet(message.message, 100)}
+                                    </p>
 
-                                        <p className={styles.senderEmail}>{message.email}</p>
-                                        <p className={styles.emailMessage}>{message.message}</p>
+                                    {/* Action buttons */}
+                                    <div className={`${styles.mailActionBtn} mt-3 d-flex a-center`}>
+                                        <Link
+                                            to={`../messageView/${message._id}`}
+                                            className={styles.mailView}
+                                        >
+                                            View Details
+                                        </Link>
 
-                                        {/* Action buttons */}
-                                        <div className={`${styles.mailActionBtn} mt-3 d-flex a-center`}>
-                                            <Link
-                                                to={`/messages/${message._id}`}
-                                                className={styles.mailView}
-                                            >
-                                                View Details
-                                            </Link>
+                                        <button className={styles.markReadBtn}
+                                            onClick={() => 
+                                                handleMarkAsRead(message._id, !message.isRead)}
+                                        >
+                                            {message.isRead ? "Mark as Unread" : "Mark as Read"}
+                                        </button>
 
-                                            <button
-                                                onClick={() => handleMarkAsRead(message._id, !message.isRead)}
-                                                className={styles.markReadBtn}
-                                                disabled={markAsReadMutation.isLoading}
-                                            >
-                                                {message.isRead ? 'Mark as Unread' : 'Mark as Read'}
-                                            </button>
-
-                                            <button
-                                                onClick={() => handleDeleteMessage(message._id)}
-                                                className={styles.mailDeleteBtn}
-                                                disabled={deleteMessageMutation.isLoading}
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
+                                        <button className={styles.mailDeleteBtn}
+                                            onClick={() => handleDeleteMessage(message._id)}
+                                        >
+                                            Delete
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            {/* ))} */}
                         </div>
-                    </>
+                    ))}
+                </>
                 )}
             </section>
 
             {/* Pagination */}
-            {pagination.totalPages > 1 && (
+            {messages?.data.pagination.totalPages > 1 && (
                 <section className={styles.pagination}>
                     <div className="d-flex a-center justify-between">
                         <div className={styles.totalPages}>
-                            Showing {((currentPage - 1) * 10) + 1} to {Math.min(currentPage * 10, pagination.total)} of {pagination.total} results
+                            {`Showing ${((currentPage - 1) * 10) + 1} 
+                            to ${Math.min(currentPage * 10, messages?.data.pagination.totalMsg)} 
+                            of ${messages?.data.pagination.totalMsg} results`}
                         </div>
 
-                        <div className={`${styles.paginationBtns} d-flex a-center`}>
-                            <button
-                                onClick={() => {
-                                    const newPage = currentPage - 1;
-                                    setCurrentPage(newPage);
-                                    updateFilters({ search: searchTerm, status: statusFilter, sortBy, page: newPage });
-                                }}
-                                disabled={currentPage === 1}
-                                className={styles.prevBtn}
-                            >
-                                Previous
-                            </button>
-
-                            {/* Page numbers */}
-                            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1)
-                                .filter(page => {
-                                    if (pagination.totalPages <= 7) return true;
-                                    if (page === 1 || page === pagination.totalPages) return true;
-                                    if (Math.abs(page - currentPage) <= 1) return true;
-                                    return false;
-                                })
-                                .map((page, index, array) => {
-                                    const prevPage = array[index - 1];
-                                    const showEllipsis = prevPage && page - prevPage > 1;
-
-                                    return (
-                                        <React.Fragment key={page}>
-                                            {showEllipsis && (
-                                                <span className={styles.ellipsis}>...</span>
-                                            )}
-                                            <button
-                                                onClick={() => {
-                                                    setCurrentPage(page);
-                                                    updateFilters({ search: searchTerm, status: statusFilter, sortBy, page });
-                                                }}
-                                                className={`${styles.pageBtn} ${page === currentPage
-                                                    ? 'bg-primary-500 text-white'
-                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                                    }`}
-                                            >
-                                                {page}
-                                            </button>
-                                        </React.Fragment>
-                                    );
-                                })}
-
-                            <button
-                                onClick={() => {
-                                    const newPage = currentPage + 1;
-                                    setCurrentPage(newPage);
-                                    updateFilters({ search: searchTerm, status: statusFilter, sortBy, page: newPage });
-                                }}
-                                disabled={currentPage === pagination.totalPages}
-                                className={styles.nextBtn}
-                            >
-                                Next
-                            </button>
-                        </div>
+                        <ReactPaginate
+                            previousLabel="Previous"
+                            nextLabel="Next"
+                            breakLabel="..."
+                            pageCount={messages?.data.pagination.totalPages}
+                            marginPagesDisplayed={2}
+                            pageRangeDisplayed={3}
+                            onPageChange={(data) => {
+                                setCurrentPage(data.selected + 1);
+                            }}
+                            containerClassName={"d-flex a-center"}
+                            pageClassName={styles.pageItem}
+                            pageLinkClassName={styles.pageLink}
+                            // previousClassName={styles.prevItem}
+                            previousLinkClassName={styles.prevLink}
+                            nextClassName="ml-3"
+                            nextLinkClassName={styles.nextLink}
+                            // breakClassName={}
+                            breakLinkClassName={styles.ellipsis}
+                            activeClassName={styles.activePage}
+                            disabledLinkClassName={styles.disabledLink}
+                            forcePage={currentPage - 1} // To keep the selected page in sync
+                        />
                     </div>
                 </section>
             )}
-        </div>
+        </>
     )
 }
 

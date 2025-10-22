@@ -18,7 +18,7 @@ class ApiError extends Error {
 class ApiResponse {
     static sendSuccess(res, data, message = "Request successful", statusCode = 200) {
         res.status(statusCode).json({
-            status: "success",
+            success: true,
             message,
             data
         });
@@ -30,7 +30,7 @@ class ApiResponse {
         const errors = error.errors || [];
 
         res.status(statusCode).json({
-            status: "error",
+            success: false,
             message,
             errors,
             // Development/Debugging ke liye stack, production mein ise hatayein

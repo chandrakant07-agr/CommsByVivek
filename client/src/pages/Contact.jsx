@@ -1,80 +1,68 @@
-import { useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Controller, useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
-import styles from './styles/Contact.module.css';
 import { MdAlternateEmail } from 'react-icons/md';
-import {
-    FaInstagram,
-    FaYoutube,
-    FaLinkedinIn,
-    FaVimeo,
-    FaPhone,
-    FaLocationArrow,
-    FaClock } from 'react-icons/fa';
+import { FaPhone, FaClock, FaLocationArrow, } from 'react-icons/fa';
+import { useSendMessageMutation } from '../../store/api/messageApiSlice';
+import { useGetProjectTypesQuery } from '../../store/api/projectTypeApiSlice';
+import { useGetContactDetailsQuery } from '../../store/api/contactDetailsApiSlice';
+import socialPlatforms from '../constants/socialPlatforms';
+import FormInputError from '../components/FormInputError';
+import TinyEditor from '../components/TinyEditor';
+import styles from './styles/Contact.module.css';
 
 const Contact = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        projectType: '',
-        message: ''
-    });
+    const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+    const { register, handleSubmit, control, formState: { errors }, reset } = useForm();
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
+    const { data: projectTypes } = useGetProjectTypesQuery();
+    const { data: getContactDetails } = useGetContactDetailsQuery();
+    const [sendMessage, { isLoading: isMessageSending, isSuccess }] = useSendMessageMutation();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Since this is frontend only, just log to console
-        console.log('Form submission:', formData);
-        alert('Thank you for your message! We\'ll get back to you soon.');
-
-        // Reset form
-        setFormData({
-            name: '',
-            email: '',
-            projectType: '',
-            message: ''
-        });
-    };
+    // Clear the form if the message is successfully sent
+    useEffect(() => {
+        if(isSuccess) {
+            reset({
+                name: "",
+                email: "",
+                projectTypeId: "",
+                message: ""
+            });
+        }
+    }, [isSuccess, reset]);
 
     const contactDetails = [
         {
+            label: "Email",
             icon: <MdAlternateEmail />,
-            label: 'Email',
-            value: 'hello@commsbyvivek.com'
+            value: getContactDetails?.data.contactDetails.email
         },
         {
+            label: "Phone",
             icon: <FaPhone />,
-            label: 'Phone',
-            value: '+91 9876 543 210'
+            value: getContactDetails?.data.contactDetails.phone
         },
         {
+            label: "Address",
             icon: <FaLocationArrow />,
-            label: 'Location',
-            value: 'Mumbai, India'
+            value: getContactDetails?.data.contactDetails.address
         },
         {
+            label: "Response Time",
             icon: <FaClock />,
-            label: 'Response Time',
-            value: 'Within 24 hours'
+            value: "Within 24 hours"
         }
     ];
 
-    const projectTypes = [
-        'Brand Campaign',
-        'Corporate Photography',
-        'Product Photography',
-        'Event Coverage',
-        'Documentary Project',
-        'Creative Collaboration',
-        'Other'
-    ];
+    const platformIcons = useMemo(() => {
+        return getContactDetails?.data.socialMediaLinks?.map((media) => (
+            <Link to={media.url} key={media._id} target='_blank' className={`${styles.socialLink} iconStyle`}>
+                {socialPlatforms.find(platform => platform.name === media.platform)?.icon}
+            </Link>
+        ));
+    }, [getContactDetails?.data.socialMediaLinks]);
 
     return (
         <div className={styles.contactPage}>
@@ -95,9 +83,9 @@ const Contact = () => {
                     >
                         <h2 className={styles.infoTitle}>Let's Connect</h2>
                         <p className={styles.infoText}>
-                            Whether you're looking to elevate your brand with compelling commercial content
-                            or explore artistic storytelling through FilmedByVivek, we're here to bring
-                            your vision to life with cinematic excellence.
+                            Whether you're looking to elevate your brand with compelling
+                            commercial content or explore artistic storytelling through FilmedByVivek,
+                            we're here to bring your vision to life with cinematic excellence.
                         </p>
 
                         <div className={styles.contactDetails}>
@@ -124,22 +112,7 @@ const Contact = () => {
                         <div className={styles.socialSection}>
                             <h5 className={styles.socialTitle}>Follow Our Journey</h5>
                             <div className={styles.socialLinks}>
-                                <Link to="#" target='_blank'
-                                    className={`${styles.socialLink} iconStyle`} aria-label="Instagram">
-                                        <FaInstagram />
-                                </Link>
-                                <Link to="#" target='_blank'
-                                    className={`${styles.socialLink} iconStyle`} aria-label="YouTube">
-                                        <FaYoutube />
-                                </Link>
-                                <Link to="#" target='_blank'
-                                    className={`${styles.socialLink} iconStyle`} aria-label="Vimeo">
-                                        <FaVimeo />
-                                </Link>
-                                <Link to="#" target='_blank'
-                                    className={`${styles.socialLink} iconStyle`} aria-label="LinkedIn">
-                                        <FaLinkedinIn />
-                                </Link>
+                                {platformIcons}
                             </div>
                         </div>
                     </motion.div>
@@ -154,79 +127,107 @@ const Contact = () => {
                     >
                         <h2 className={styles.formTitle}>Tell Us Your Story</h2>
 
-                        <form onSubmit={handleSubmit}>
-                            <div className={styles.formGroup}>
-                                <label htmlFor="name" className={styles.formLabel}>Name 
+                        <form onSubmit={handleSubmit(sendMessage)} noValidate>
+                            <div className="h-18 mb-6">
+                                <label htmlFor="name" className={styles.formLabel}>Full Name
                                     <span className="fromRequiredStar">*</span>
                                 </label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    className={styles.formInput}
-                                    value={formData.name}
-                                    onChange={handleInputChange}
-                                    required
-                                    placeholder="Your full name"
+                                <input type="text" id="name"
+                                    className={
+                                        `${styles.formInput} ${errors.name && "formInputErrorBorder"}`
+                                    }
+                                    placeholder="Enter your full name"
+                                    {
+                                    ...register("name", {
+                                        required: "Full name is required"
+                                    })
+                                    }
                                 />
+                                <FormInputError message={errors.name?.message} />
                             </div>
 
-                            <div className={styles.formGroup}>
-                                <label htmlFor="email" className={styles.formLabel}>Email 
+                            <div className="h-18 mb-6">
+                                <label htmlFor="email" className={styles.formLabel}>Email ID
                                     <span className="fromRequiredStar">*</span>
                                 </label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    className={styles.formInput}
-                                    value={formData.email}
-                                    onChange={handleInputChange}
-                                    required
+                                <input type="email" id="email"
+                                    className={
+                                        `${styles.formInput} ${errors.email && "formInputErrorBorder"}`
+                                    }
                                     placeholder="your.email@example.com"
+                                    {
+                                    ...register("email", {
+                                        required: "Email id is required",
+                                        pattern: {
+                                            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                            message: "Invalid email address"
+                                        }
+                                    })
+                                    }
                                 />
+                                <FormInputError message={errors.email?.message} />
                             </div>
 
-                            <div className={styles.formGroup}>
-                                <label htmlFor="projectType" className={styles.formLabel}>Project Type 
+                            <div className="h-18 mb-7">
+                                <label htmlFor="projectType" className={styles.formLabel}>Project Type
                                     <span className="fromRequiredStar">*</span>
                                 </label>
-                                <select
-                                    id="projectType"
-                                    name="projectType"
-                                    className={styles.formSelect}
-                                    value={formData.projectType}
-                                    onChange={handleInputChange}
+                                <select id="projectType"
+                                    className={
+                                        `${styles.formSelect} ${errors.projectTypeId && "formInputErrorBorder"}`
+                                    }
+                                    {
+                                    ...register("projectTypeId", {
+                                        required: "Selecting a project type is required"
+                                    })
+                                    }
                                 >
                                     <option value="">Select a project type</option>
-                                    {projectTypes.map((type, index) => (
-                                        <option key={index} value={type}>{type}</option>
+                                    {projectTypes?.data.map((type, index) => (
+                                        <option key={index} value={type._id}>{type.name}</option>
                                     ))}
                                 </select>
+                                <FormInputError message={errors.projectTypeId?.message} />
                             </div>
 
-                            <div className={styles.formGroup}>
-                                <label htmlFor="message" className={styles.formLabel}>Message 
+                            <div className={`h-100 mb-6
+                                ${styles.formSelect} ${errors.message && "error-message"}`
+                            }>
+                                <label htmlFor="message" className={styles.formLabel}>Message
                                     <span className="fromRequiredStar">*</span>
                                 </label>
-                                <textarea
-                                    id="message"
+                                <Controller
                                     name="message"
-                                    className={styles.formTextarea}
-                                    value={formData.message}
-                                    onChange={handleInputChange}
-                                    required
-                                    placeholder="Tell us about your project, vision, timeline, and any specific requirements..."
+                                    control={control}
+                                    rules={{
+                                        required: "Message is required"
+                                    }}
+                                    render={({ field }) => (
+                                        <TinyEditor
+                                            id="message"
+                                            key={isDarkMode ? "dark" : "light"}
+                                            height="22rem"
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            placeholder="Tell us about your project, vision, timeline,
+                                                and any specific requirements..."
+                                            customConfig={{
+                                                skin: isDarkMode ? 'oxide-dark' : 'oxide',
+                                                content_css: isDarkMode ? 'dark' : 'default'
+                                            }}
+                                        />
+                                    )}
                                 />
+                                <FormInputError message={errors.message?.message} />
                             </div>
 
                             <motion.button
-                                type="submit"
+                                type="submit" disabled={isMessageSending}
                                 className={styles.submitButton}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                             >
-                                Start a Story
+                                {isMessageSending ? "Sending..." : "Start a Story"}
                             </motion.button>
                         </form>
                     </motion.div>

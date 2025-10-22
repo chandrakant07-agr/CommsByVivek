@@ -51,19 +51,18 @@ const Header = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
-                            {
-                                (item.link === "hash")
-                                    ? <HashLink to={item.path} smooth className={
-                                        `${styles.navLink}
-                                ${((location.pathname + location.hash) === item.path) ? styles.active : ''}`
-                                    }>
-                                        {item.label}
-                                    </HashLink>
-                                    : <NavLink to={item.path} className={
-                                        ({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`
-                                    }>
-                                        {item.label}
-                                    </NavLink>
+                            {(item.link === "hash")
+                                ? <HashLink to={item.path} smooth className={`${styles.navLink}
+                                    ${((location.pathname + location.hash) === item.path)
+                                        ? styles.active : ''}`
+                                }>
+                                    {item.label}
+                                </HashLink>
+                                : <NavLink to={item.path} className={({ isActive }) =>
+                                    `${styles.navLink} ${isActive ? styles.active : ''}`
+                                }>
+                                    {item.label}
+                                </NavLink>
                             }
                         </motion.li>
                     ))}
@@ -99,27 +98,30 @@ const Header = () => {
             <motion.div
                 className={`${styles.mobileNav}`}
                 initial={{ display: 'none', height: 0, y: -25, opacity: 0 }}
-                animate={isMobileMenuOpen ? { display: 'block', height: 'auto', y: 0, opacity: 1 } : { display: 'none', height: 0, y: -25, opacity: 0 }}
+                animate={isMobileMenuOpen
+                    ? { display: 'block', height: 'auto', y: 0, opacity: 1 }
+                    : { display: 'none', height: 0, y: -25, opacity: 0 }}
                 transition={{ duration: 0.4 }}
             >
                 <ul className={styles.mobileNavLinks}>
                     {navItems.map((item) => (
                         <li key={item.path}>
-                            {
-                                (item.link === "hash")
-                                    ? <HashLink to={item.path} smooth className={`${styles.mobileNavLink}
-                                    ${(location.pathname + location.hash) === item.path ? styles.active : ''}`
-                                    }
-                                        onClick={() => setMobileMenuOpen(false)}>
-                                        {item.label}
-                                    </HashLink>
-                                    : <NavLink to={item.path} className={
-                                        ({ isActive }) => `${styles.mobileNavLink} ${isActive ? styles.active : ''}`
+                            {(item.link === "hash")
+                                ? <HashLink to={item.path} smooth className={`${styles.mobileNavLink}
+                                    ${(location.pathname + location.hash) === item.path
+                                        ? styles.active : ''}`
                                     }
                                         onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                        {item.label}
-                                    </NavLink>
+                                >
+                                    {item.label}
+                                </HashLink>
+                                : <NavLink to={item.path} className={({ isActive }) =>
+                                        `${styles.mobileNavLink} ${isActive ? styles.active : ''}`
+                                    }
+                                        onClick={() => setMobileMenuOpen(false)}
+                                >
+                                    {item.label}
+                                </NavLink>
                             }
                         </li>
                     ))}

@@ -4,69 +4,69 @@ import asyncHandler from "../utils/asyncHandler.js";
 import { ApiError, ApiResponse } from "../utils/responseHandler.js";
 
 const addProjectType = asyncHandler(async (req, res) => {
-    const { projectTypes } = req.body;
+    // const { projectTypes } = req.body;
 
-    if(!Array.isArray(projectTypes) || projectTypes.length === 0) {
-        throw new ApiError(400, "Project types must be a non-empty array.");
-    }
+    // if(!Array.isArray(projectTypes) || projectTypes.length === 0) {
+    //     throw new ApiError(400, "Project types must be a non-empty array.");
+    // }
 
-    // Trim whitespace, filter out empty types and remove duplicates
-    const cleanedList = [...new Set(projectTypes.map(type => type.trim()).filter(Boolean))];
+    // // Trim whitespace, filter out empty types and remove duplicates
+    // const cleanedList = [...new Set(projectTypes.map(type => type.trim()).filter(Boolean))];
 
-    if(cleanedList.length === 0) {
-        throw new ApiError(400, "Project types list must contain valid non-empty types.");
-    }
+    // if(cleanedList.length === 0) {
+    //     throw new ApiError(400, "Project types list must contain valid non-empty types.");
+    // }
 
-    // sanitize project type names removing any HTML tags
-    const sanitizedList = cleanedList.map(
-        type => sanitize(type, { allowedTags: [], allowedAttributes: {} })).filter(Boolean);
+    // // sanitize project type names removing any HTML tags
+    // const sanitizedList = cleanedList.map(
+    //     type => sanitize(type, { allowedTags: [], allowedAttributes: {} })).filter(Boolean);
 
-    if(sanitizedList.length === 0) {
-        throw new ApiError(400, "HTML tags are not allowed in Project types.");
-    }
+    // if(sanitizedList.length === 0) {
+    //     throw new ApiError(400, "HTML tags are not allowed in Project types.");
+    // }
 
-    // Find existing project types in the database
-    const existingTypes = await ProjectType.find({ name: { $in: sanitizedList } }).select("-_id name");
-    const existingTypesNames = existingTypes.map(type => type.name);
+    // // Find existing project types in the database
+    // const existingTypes = await ProjectType.find({ name: { $in: sanitizedList } }).select("-_id name");
+    // const existingTypesNames = existingTypes.map(type => type.name);
 
-    // Filter out names that already exist
-    const newTypesNames = sanitizedList.filter(name => !existingTypesNames.includes(name));
+    // // Filter out names that already exist
+    // const newTypesNames = sanitizedList.filter(name => !existingTypesNames.includes(name));
 
-    if(newTypesNames.length === 0) {
-        throw new ApiError(400, "All provided project types already exist.");
-    }
+    // if(newTypesNames.length === 0) {
+    //     throw new ApiError(400, "All provided project types already exist.");
+    // }
 
-    // Prepare documents for insertion
-    const newTypeDocs = newTypesNames.map(name => ({ name }));
+    // // Prepare documents for insertion
+    // const newTypeDocs = newTypesNames.map(name => ({ name }));
 
-    // Insert new project types
-    const insertedTypes = await ProjectType.insertMany(newTypeDocs);
+    // // Insert new project types
+    // const insertedTypes = await ProjectType.insertMany(newTypeDocs);
 
-    return ApiResponse.sendSuccess(res, insertedTypes, "Project types successfully added.", 201);
+    // return ApiResponse.sendSuccess(res, insertedTypes, "Project types successfully added.", 201);
 });
 
-// admin send new project type array to update existing project type
-const updateProjectType = asyncHandler(async (req, res) => {
+// admin sends a new project type array to sync the existing project type
+const syncProjectType = asyncHandler(async (req, res) => {
     const { projectTypes } = req.body;
 
-    if(!Array.isArray(projectTypes) || projectTypes.length === 0) {
+    if(!Array.isArray(projectTypes)) {
         throw new ApiError(400, "Project types must be a non-empty array.");
     }
 
     // Trim whitespace, filter out empty types and remove duplicates
     const cleanedList = [...new Set(projectTypes.map(type => type.trim()).filter(Boolean))];
 
-    if(cleanedList.length === 0) {
-        throw new ApiError(400, "Project types list must contain valid non-empty types.");
-    }
+    // if(cleanedList.length === 0) {
+    //     throw new ApiError(400, "Project types list must contain valid non-empty types.");
+    // }
 
     // sanitize project type names removing any HTML tags
     const sanitizedList = cleanedList.map(
         type => sanitize(type, { allowedTags: [], allowedAttributes: {} })).filter(Boolean);
 
-    if(sanitizedList.length === 0) {
-        throw new ApiError(400, "HTML tags are not allowed in Project types.");
-    }
+    // if(sanitizedList.length === 0) {
+    //     throw new ApiError(400, "HTML tags are not allowed in Project types.");
+    // }
 
     // Find existing project types in the database
     const existingTypes = await ProjectType.find().select("-_id name");
@@ -88,19 +88,22 @@ const updateProjectType = asyncHandler(async (req, res) => {
             ? ProjectType.deleteMany({ name: { $in: typesToRemove } }) : Promise.resolve()
     ]);
 
-    const [insertedCount, deletedCount] = results;
+    const [insertCount, deleteCount] = results;
     var message;
 
-    if(insertedCount === undefined && deletedCount === undefined) {
+    if(!!insertCount === false && !!deleteCount === false) {
         message = "No changes made. All provided project types already exist.";
     } else {
         const messageParts = [];
-        if(insertedCount !== undefined) {
-            messageParts.push(`${insertedCount.length} project type(s) added`);
+
+        if(!!insertCount) {
+            messageParts.push(`${insertCount.length} added`);
         }
-        if(deletedCount !== undefined) {
-            messageParts.push(`${deletedCount.deletedCount} project type(s) removed`);
+
+        if(!!deleteCount) {
+            messageParts.push(`${deleteCount.deletedCount} removed`);
         }
+
         message = `Project types successfully updated: ${messageParts.join(", ")}.`;
     }
 
@@ -108,9 +111,9 @@ const updateProjectType = asyncHandler(async (req, res) => {
 });
 
 const fetchProjectTypes = asyncHandler(async (_, res) => {
-    const projectTypes = await ProjectType.find().select("-__v -createdAt -updatedAt").sort({ name: 1 });
+    const projectTypes = await ProjectType.find().select("-__v -createdAt -updatedAt");
 
     return ApiResponse.sendSuccess(res, projectTypes, "Project types successfully fetched.");
 });
 
-export { addProjectType, fetchProjectTypes, updateProjectType };
+export { addProjectType, syncProjectType, fetchProjectTypes };

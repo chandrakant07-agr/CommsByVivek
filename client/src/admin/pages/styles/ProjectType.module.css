@@ -1,0 +1,271 @@
+.pageHeader {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+.pageHeader h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 2rem;
+    color: var(--text-primary-color);
+}
+
+.pageHeader p {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: var(--text-secondary-color);
+}
+
+.cardContainer {
+    padding: 1.5rem;
+    background-color: var(--bg-primary-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
+}
+
+.formSection {
+    margin-bottom: 2rem;
+}
+
+.formSection h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary-color);
+}
+
+/* Tags Input Component Styling */
+.tagsInputWrapper {
+    margin-bottom: 1rem;
+}
+
+.tagsInputWrapper :global(.rti--container) {
+    --rti-bg: var(--input-bg-color, var(--card-secondary-bg));
+    --rti-border: var(--input-border-color, var(--border-primary-color));
+    --rti-main: var(--accent-color, var(--indigo));
+    --rti-radius: 0.375rem;
+    --rti-s: 0.5rem;
+    --rti-tag: var(--bg-secondary-color);
+    --rti-tag-remove: var(--text-secondary-color);
+    border: 1px solid var(--border-primary-color);
+    background-color: var(--card-secondary-bg);
+    padding: 0.5rem;
+    min-height: 3.5rem;
+}
+
+.tagsInputWrapper :global(.rti--container:focus-within) {
+    border-color: var(--accent-color, var(--indigo));
+    box-shadow: 0 0 0 1px var(--accent-color, var(--indigo));
+}
+
+.tagsInputWrapper :global(.rti--tag) {
+    background-color: var(--bg-secondary-color);
+    color: var(--text-primary-color);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    margin: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.tagsInputWrapper :global(.rti--tag button) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-left: 0.375rem;
+    color: var(--text-secondary-color);
+    border-radius: 50%;
+}
+
+.tagsInputWrapper :global(.rti--tag button:hover) {
+    color: var(--red);
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+.tagsInputWrapper :global(.rti--input) {
+    background: transparent;
+    color: var(--text-primary-color);
+    padding: 0.375rem;
+    font-size: 0.875rem;
+    border: none;
+    outline: none;
+    min-width: 150px;
+}
+
+.tagsInputWrapper :global(.rti--input::placeholder) {
+    color: var(--text-secondary-color);
+}
+
+.tagsHelperText {
+    font-size: 0.75rem;
+    color: var(--text-secondary-color);
+    margin-top: 0.375rem;
+}
+
+.errorText {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--red);
+}
+
+.formButtons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.saveButton,
+.resetButton {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.saveButton {
+    color: #ffffff;
+    background-color: var(--indigo);
+}
+
+.saveButton:hover {
+    background-color: var(--dark-blue);
+}
+
+.saveButton svg {
+    margin-right: 0.5rem;
+}
+
+.resetButton {
+    color: var(--text-primary-color);
+    background-color: var(--bg-secondary-color);
+}
+
+.resetButton:hover {
+    background-color: var(--border-secondary-color);
+}
+
+.tableSection {
+    margin-top: 2rem;
+}
+
+.tableHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.tableHeader h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+.emptyState {
+    padding: 2rem;
+    text-align: center;
+    background-color: var(--card-secondary-bg);
+    border-radius: 0.375rem;
+}
+
+.emptyState svg {
+    width: 3rem;
+    height: 3rem;
+    margin: 0 auto 1rem;
+    color: var(--text-secondary-color);
+}
+
+.emptyState h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+.emptyState p {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary-color);
+}
+
+.typeTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.typeTable th {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: left;
+    text-transform: uppercase;
+    color: var(--text-secondary-color);
+    background-color: var(--card-secondary-bg);
+    border-bottom: 1px solid var(--border-primary-color);
+}
+
+.typeTable th:first-child {
+    border-top-left-radius: 0.375rem;
+}
+
+.typeTable th:last-child {
+    border-top-right-radius: 0.375rem;
+    text-align: center;
+}
+
+.typeTable td {
+    padding: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-primary-color);
+    border-bottom: 1px solid var(--border-primary-color);
+}
+
+.typeTable tr:last-child td {
+    border-bottom: none;
+}
+
+.typeTable tr:last-child td:first-child {
+    border-bottom-left-radius: 0.375rem;
+}
+
+.typeTable tr:last-child td:last-child {
+    border-bottom-right-radius: 0.375rem;
+}
+
+.typeTable td:last-child {
+    text-align: center;
+}
+
+.actionButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    margin: 0 0.25rem;
+    color: var(--text-secondary-color);
+    background-color: var(--bg-secondary-color);
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+    color: var(--text-primary-color);
+    background-color: var(--border-secondary-color);
+}
+
+.actionButton.delete:hover {
+    color: #ffffff;
+    background-color: var(--red);
+}
+
+@media (min-width: 768px) {
+    .pageHeader {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}

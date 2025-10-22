@@ -6,9 +6,137 @@ import { ApiError, ApiResponse } from "../utils/responseHandler.js";
 
 
 // Fetch all messages (admin)
-const fetchAllMessages = asyncHandler(async (_, res) => {
-    const messages = await Message.find().populate("projectType", "name").sort({ createdAt: -1 });
-    return ApiResponse.sendSuccess(res, { messages }, "Messages successfully fetched.");
+const fetchAllMessages = asyncHandler(async (req, res) => {
+    const { search, status, prType, sortBy, pageNo, limit } = req.query;
+
+    const query = {};
+
+    // Search by name or email
+    if(search) {
+        query.$or = [
+            { name: { $regex: search, $options: "i" } },
+            { email: { $regex: search, $options: "i" } }
+        ];
+    }
+
+    // Filter by read/unread status
+    if(status === "read") query.isRead = true;
+    else if(status === "unread") query.isRead = false;
+
+    // Filter by project type
+    if(prType && prType !== "all") {
+        query.projectType = prType;
+    }
+
+    // Sorting
+    const sortCriteria = { createdAt: -1 };   // default sort by newest
+    if(sortBy === "oldest") sortCriteria.createdAt = 1;
+    else if(sortBy === "nameAsc") sortCriteria.name = 1;
+    else if(sortBy === "nameDesc") sortCriteria.name = -1;
+    else if(sortBy === "emailAsc") sortCriteria.email = 1;
+    else if(sortBy === "emailDesc") sortCriteria.email = -1;
+
+    // Pagination
+    const page = parseInt(pageNo, 10) > 0 ? parseInt(pageNo, 10) : 1;
+    const pageSize = parseInt(limit, 10) > 0 ? parseInt(limit, 10) : 10;
+    const skip = (page - 1) * pageSize;
+
+    // Fetch messages with pagination and sorting
+    const totalMsg = await Message.countDocuments(query);
+    const msgList = await Message.find(query)
+        .populate("projectType", "name")
+        .sort(sortCriteria)
+        .skip(skip)
+        .limit(pageSize);
+
+    return ApiResponse.sendSuccess(res, {
+        msgList,
+        pagination: {
+            totalMsg,
+            currentPage: page,
+            pageLimit: pageSize,
+            totalPages: Math.ceil(totalMsg / pageSize)
+        }
+    }, "Messages successfully fetched.");
+});
+
+// Fetch message by ID (admin)
+const fetchMessageById = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    // Validate ID format
+    if(!id.match(/^[0-9a-fA-F]{24}$/)) {
+        throw new ApiError(400, "Invalid message ID format.");
+    }
+
+    const message = await Message.findById(id).populate("projectType", "name");
+    if(!message) {
+        throw new ApiError(404, "Message not found.");
+    }
+
+    return ApiResponse.sendSuccess(res, message, "Message successfully fetched.");
+});
+
+// Fetch message statistics (admin)
+const fetchTodayMsgStats = asyncHandler(async (req, res) => {
+    // const totalMessages = await Message.countDocuments();
+    // const readMessages = await Message.countDocuments({ isRead: true });
+    // const unreadMessages = totalMessages - readMessages;
+    // const thisMonthMessages = await Message.countDocuments({
+    //     createdAt: {
+    //         $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+    //         $lt: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1)
+    //     }
+    // });
+    // const thisWeekMessages = await Message.countDocuments({
+    //     createdAt: {
+    //         $gte: new Date(new Date().setDate(new Date().getDate() - new Date().getDay())),
+    //         $lt: new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 7))
+    //     }
+    // });
+    // const todayMessages = await Message.countDocuments({
+    //     createdAt: {
+    //         $gte: new Date(new Date().setHours(0, 0, 0, 0)),
+    //         $lt: new Date(new Date().setHours(23, 59, 59, 999))
+    //     }
+    // });
+
+    const [
+        totalMsg, readMsg, thisMonthMsg, thisWeekMsg, todayMsg, todayMsgList
+    ] = await Promise.all([
+        Message.countDocuments(),
+        Message.countDocuments({ isRead: true }),
+        Message.countDocuments({
+            createdAt: {
+                $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+                $lt: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1)
+            }
+        }),
+        Message.countDocuments({
+            createdAt: {
+                $gte: new Date(new Date().setDate(new Date().getDate() - new Date().getDay())),
+                $lt: new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 7))
+            }
+        }),
+        Message.countDocuments({
+            createdAt: {
+                $gte: new Date(new Date().setHours(0, 0, 0, 0)),
+                $lt: new Date(new Date().setHours(23, 59, 59, 999))
+            }
+        }),
+        Message.find({
+            createdAt: {
+                $gte: new Date(new Date().setHours(0, 0, 0, 0)),
+                $lt: new Date(new Date().setHours(23, 59, 59, 999))
+            }
+        }).populate("projectType", "name").sort({ createdAt: -1 })
+    ]);
+
+    const unreadMsg = totalMsg - readMsg;
+
+    return ApiResponse.sendSuccess(res, {
+        totalMsg, readMsg, unreadMsg, thisMonthMsg, thisWeekMsg, todayMsg, todayMsgList
+    }, "Message statistics successfully fetched.");
 });
 
 // Update message status to read/unread (single/bulk)
@@ -109,4 +237,11 @@ const sendMessage = asyncHandler(async (req, res) => {
     return ApiResponse.sendSuccess(res, "", "Message successfully sent.", 201);
 });
 
-export { sendMessage, fetchAllMessages, deleteMessageById, updateMessageStatus };
+export {
+    sendMessage,
+    fetchAllMessages,
+    fetchMessageById,
+    fetchTodayMsgStats,
+    deleteMessageById,
+    updateMessageStatus
+};
