@@ -77,11 +77,11 @@ const Profile = () => {
     // console.log(admin, isUpdating, isChangingPassword, isProfileUpdated, isError, error);
 
     return (
-        <div>
-            <div className={styles.profileHeader}>
+        <>
+            <section className={styles.profileHeader}>
                 <h1>Profile Settings</h1>
                 <p>Manage your account information and security settings</p>
-            </div>
+            </section>
 
             <section className={styles.profileInfo}>
                 <div className={styles.profileInfoHeader}>
@@ -363,7 +363,7 @@ const Profile = () => {
                     </div>
                 </div>
             </section>
-        </div>
+        </>
     )
 }
 

@@ -91,36 +91,7 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
             }),
             invalidatesTags: ["Content"],
         }),
-        getPortfolioItems: builder.query({
-            query: () => ({
-                url: "/admin/portfolio",
-                method: "GET",
-            }),
-            providesTags: ["Portfolio"],
-        }),
-        addPortfolioItem: builder.mutation({
-            query: (itemData) => ({
-                url: "/admin/portfolio",
-                method: "POST",
-                body: itemData,
-            }),
-            invalidatesTags: ["Portfolio"],
-        }),
-        updatePortfolioItem: builder.mutation({
-            query: ({ id, ...itemData }) => ({
-                url: `/admin/portfolio/${id}`,
-                method: "PUT",
-                body: itemData,
-            }),
-            invalidatesTags: ["Portfolio"],
-        }),
-        deletePortfolioItem: builder.mutation({
-            query: (itemId) => ({
-                url: `/admin/portfolio/${itemId}`,
-                method: "DELETE",
-            }),
-            invalidatesTags: ["Portfolio"],
-        }),
+        
     }),
 });
 
@@ -133,8 +104,4 @@ export const {
 
     useGetContentQuery,
     useUpdateContentMutation,
-    useGetPortfolioItemsQuery,
-    useAddPortfolioItemMutation,
-    useUpdatePortfolioItemMutation,
-    useDeletePortfolioItemMutation,
 } = adminApiSlice;

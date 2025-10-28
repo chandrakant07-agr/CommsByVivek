@@ -17,6 +17,7 @@ const Header = ({ isMobileMenuOpen }) => {
         { name: 'Profile', path: '/admin/profile', icon: <LuUserRound /> },
         { name: 'Project Type', path: '/admin/projectType', icon: <GoProjectRoadmap /> },
         { name: 'Contact Info', path: '/admin/contactInfo', icon: <GrContactInfo /> },
+        { name: 'Portfolio', path: '/admin/portfolio', icon: <GrContactInfo /> },
     ];
 
     return (

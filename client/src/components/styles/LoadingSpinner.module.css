@@ -1,0 +1,84 @@
+/* Container Styles */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.fullPageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 100vh;
+    width: 100%;
+    /* background-color: var(--bg-primary-color); */
+    background: transparent;
+}
+
+/* Spinner Base */
+.spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 2px 8px rgba(90, 111, 216, 0.3));
+}
+
+/* Size Variants */
+.spinnerSm {
+    width: 1rem;
+    height: 1rem;
+    font-size: 1rem;
+}
+
+.spinnerMd {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.spinnerLg {
+    width: 2rem;
+    height: 2rem;
+    font-size: 2rem;
+}
+
+.spinnerXl {
+    width: 3rem;
+    height: 3rem;
+    font-size: 3rem;
+}
+
+/* Loading Text */
+.loadingText {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary-color);
+    margin: 0;
+    text-align: center;
+}
+
+/* Dark theme support */
+[data-theme='dark'] .spinner {
+    filter: drop-shadow(0 2px 12px rgba(90, 111, 216, 0.5));
+}
+
+/* Responsive adjustments */
+@media (min-width: 640px) {
+    .spinnerXl {
+        width: 4rem;
+        height: 4rem;
+        font-size: 4rem;
+    }
+
+    .spinnerLg {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 2.5rem;
+    }
+}

@@ -192,6 +192,11 @@ video {
     padding: 4rem 0;
 }
 
+/* text alignment utilities */
+.text-left {
+    text-align: left;
+}
+
 .text-center {
     text-align: center;
 }
@@ -200,12 +205,17 @@ video {
     text-align: right;
 }
 
+/* display utilities */
 .d-flex {
     display: flex;
 }
 
 .d-inherit {
     display: inherit;
+}
+
+.d-none {
+    display: none;
 }
 
 .a-center {
@@ -224,10 +234,12 @@ video {
     flex-shrink: 0;
 }
 
+/* width utilities */
 .w-7 {
     width: 1.75rem;
 }
 
+/* height utilities */
 .h-7 {
     height: 1.75rem;
 }
@@ -236,10 +248,15 @@ video {
     height: 4.5rem;
 }
 
+.h-19 {
+    height: 4.75rem;
+}
+
 .h-100 {
     height: 100%;
 }
 
+/* margin utilities */
 .mt-1 {
     margin-top: 0.25rem;
 }
@@ -252,8 +269,20 @@ video {
     margin-top: 0.75rem;
 }
 
+.mt-4 {
+    margin-top: 1rem;
+}
+
+.mt-5 {
+    margin-top: 1.25rem;
+}
+
 .mt-6 {
     margin-top: 1.5rem;
+}
+
+.mt-10 {
+    margin-top: 2.5rem;
 }
 
 .mb-4 {
@@ -280,8 +309,13 @@ video {
     margin-left: 1rem;
 }
 
+/* padding utilities */
 .p-6 {
     padding: 1.5rem;
+}
+
+.pb-0 {
+    padding-bottom: 0;
 }
 
 .px-6 {
@@ -304,16 +338,27 @@ video {
     padding-bottom: 3rem;
 }
 
+/* overflow utilities */
 .overflow-hidden {
     overflow: hidden;
+}
+
+/* position utilities */
+.absolute {
+    position: absolute;
 }
 
 .relative {
     position: relative;
 }
 
-/* golbally pages styles */
 
+/* z-index utilities */
+.z--1 {
+    z-index: -1;
+}
+
+/* globally pages styles */
 .fromRequiredStar {
     color: #ff0000;
     margin-left: 0.2rem;

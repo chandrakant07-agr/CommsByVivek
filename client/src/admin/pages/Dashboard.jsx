@@ -59,7 +59,7 @@ const Dashboard = () => {
     }
 
     return (
-        <div>
+        <>
             {/* Header */}
             <section className={styles.dashboardHeader}>
                 <h1>Dashboard</h1>
@@ -167,7 +167,7 @@ const Dashboard = () => {
                     </Link>
                 </div>
             </section>
-        </div>
+        </>
     )
 }
 

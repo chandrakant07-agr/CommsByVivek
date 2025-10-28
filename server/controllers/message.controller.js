@@ -9,7 +9,7 @@ import { ApiError, ApiResponse } from "../utils/responseHandler.js";
 const fetchAllMessages = asyncHandler(async (req, res) => {
     const { search, status, prType, sortBy, pageNo, limit } = req.query;
 
-    const query = {};
+        
 
     // Search by name or email
     if(search) {
@@ -79,28 +79,6 @@ const fetchMessageById = asyncHandler(async (req, res) => {
 
 // Fetch message statistics (admin)
 const fetchTodayMsgStats = asyncHandler(async (req, res) => {
-    // const totalMessages = await Message.countDocuments();
-    // const readMessages = await Message.countDocuments({ isRead: true });
-    // const unreadMessages = totalMessages - readMessages;
-    // const thisMonthMessages = await Message.countDocuments({
-    //     createdAt: {
-    //         $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-    //         $lt: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1)
-    //     }
-    // });
-    // const thisWeekMessages = await Message.countDocuments({
-    //     createdAt: {
-    //         $gte: new Date(new Date().setDate(new Date().getDate() - new Date().getDay())),
-    //         $lt: new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 7))
-    //     }
-    // });
-    // const todayMessages = await Message.countDocuments({
-    //     createdAt: {
-    //         $gte: new Date(new Date().setHours(0, 0, 0, 0)),
-    //         $lt: new Date(new Date().setHours(23, 59, 59, 999))
-    //     }
-    // });
-
     const [
         totalMsg, readMsg, thisMonthMsg, thisWeekMsg, todayMsg, todayMsgList
     ] = await Promise.all([

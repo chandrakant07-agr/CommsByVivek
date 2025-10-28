@@ -1,0 +1,49 @@
+.pageItem {
+    display: inherit;
+    margin-left: 0.75rem;
+    border-radius: 0.5rem;
+}
+
+.prevLink,
+.pageLink,
+.nextLink {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.pageLink {
+    color: var(--white);
+    background-color: var(--cornflower-blue);
+}
+
+.prevLink,
+.nextLink {
+    /* color: var(--text-primary-color); */
+    background-color: var(--gray-light);
+}
+
+.prevLink:hover,
+.nextLink:hover {
+    background-color: #e5e7eb;
+}
+
+.ellipsis {
+    margin-left: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    color: var(--text-secondary-color);
+}
+
+.activePage {
+    padding: 0.1rem;
+    border: 2px solid var(--indigo);
+}
+
+.disabledLink {
+    /* background-color: var(--gray-light); */
+    opacity: 0.5;
+    cursor: not-allowed;
+}

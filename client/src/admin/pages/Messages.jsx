@@ -16,6 +16,7 @@ import styles from "./styles/Message.module.css"
 const Messages = () => {
     const { status } = useParams();
     const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     const { register: filterRegister, watch: filterWatch } = useForm();
     const { register: selectRegister, watch: selectWatch, setValue: setSelectValue } = useForm({
@@ -31,7 +32,7 @@ const Messages = () => {
         prType: filterWatch("prType") || "all",
         sortBy: filterWatch("sortBy") || "newest",
         pageNo: currentPage || 1,
-        limit: 10
+        limit: itemsPerPage
     });
 
     const selectMsgLength = selectWatch("selectedCheckIds").length;
@@ -118,19 +119,17 @@ const Messages = () => {
             <section className={styles.filterSearch}>
                 <div className={styles.filterSearchContainer}>
                     {/* Search */}
-                    <div className={`${styles.search} flex-1 max-w-lg`}>
-                        <div className="relative">
-                            <div className={styles.searchIcon}>
-                                <LuMailSearch />
-                            </div>
-                            <input type="text"
-                                placeholder="Search messages by name, email, or content..."
-                                {...filterRegister("search")}
-                            />
-                            <button className={styles.clearIcon}>
-                                <MdOutlineCleaningServices />
-                            </button>
+                    <div className={`${styles.searchBox} flex-1 max-w-lg`}>
+                        <div className={styles.searchIcon}>
+                            <LuMailSearch />
                         </div>
+                        <input type="text"
+                            placeholder="Search messages by name, email, or content..."
+                            {...filterRegister("search")}
+                        />
+                        <button className={styles.clearIcon}>
+                            <MdOutlineCleaningServices />
+                        </button>
                     </div>
 
                     {/* Filters */}
@@ -144,8 +143,8 @@ const Messages = () => {
 
                         <select {...filterRegister("prType")} className={styles.filterByType}>
                             <option value="all">All Project Types</option>
-                            {projectTypes?.data.map((type, index) => (
-                                <option key={index} value={type._id}>{type.name}</option>
+                            {projectTypes?.data.map((type) => (
+                                <option key={type._id} value={type._id}>{type.name}</option>
                             ))}
                         </select>
 

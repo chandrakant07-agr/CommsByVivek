@@ -12,6 +12,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
     "@tinymce/tinymce-react": "^6.3.0",
+    "axios": "^1.12.2",
     "date-fns": "^4.1.0",
     "framer-motion": "^11.18.2",
     "react": "^19.1.1",

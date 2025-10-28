@@ -55,10 +55,8 @@ const ContactInfo = () => {
     return (
         <>
             <section className={styles.contactInfoHeader}>
-                <div>
-                    <h1>Contact Information</h1>
-                    <p>Update your contact details and social media links</p>
-                </div>
+                <h1>Contact Information</h1>
+                <p>Update your contact details and social media links</p>
             </section>
 
             <section className={styles.contactContainer}>
@@ -72,7 +70,7 @@ const ContactInfo = () => {
                         <div className={styles.digitalContact}>
                             <div>
                                 <label htmlFor="email">
-                                    Email Address <span className="fromRequiredStar">*</span>
+                                    Email Address<span className="fromRequiredStar">*</span>
                                 </label>
                                 <div className={styles.inputWithIcon}>
                                     <input type="email" id="email" placeholder="contact@example.com"
@@ -90,7 +88,7 @@ const ContactInfo = () => {
 
                             <div>
                                 <label htmlFor="phone">
-                                    Phone Number <span className="fromRequiredStar">*</span>
+                                    Phone Number<span className="fromRequiredStar">*</span>
                                 </label>
                                 <div className={styles.inputWithIcon}>
                                     <input type="text" id="phone" placeholder="+1 (123) 456-7890"
@@ -105,7 +103,7 @@ const ContactInfo = () => {
 
                         <div>
                             <label htmlFor="address">
-                                Address <span className="fromRequiredStar">*</span>
+                                Address<span className="fromRequiredStar">*</span>
                             </label>
                             <textarea id="address" placeholder="Enter your address"
                                 {...registerContact("address", {

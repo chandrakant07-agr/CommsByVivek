@@ -13,7 +13,11 @@ const uploadOnCloudinary = (filePath, folder) => {
     if(!folder) throw new Error("Folder name is required");
 
     return new Promise((resolve, reject) => {
-        cloudinary.uploader.upload(filePath, { folder }, (error, result) => {
+        cloudinary.uploader.upload_large(filePath, {
+            folder,
+            resource_type: "auto",      // to support both image and video uploads
+            chunk_size: 20_000_000      // 20 MB
+        }, (error, result) => {
             if (error) {
                 fs.unlinkSync(filePath); // Delete the local file in case of error
                 reject(error);

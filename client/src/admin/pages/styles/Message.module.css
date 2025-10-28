@@ -85,9 +85,10 @@
     flex-direction: column;
 }
 
-.filterSearchContainer .search {
+.filterSearchContainer .searchBox {
+    position: relative;
     flex: 1 1;
-    max-width: 32rem;
+    max-width: 25rem;
 }
 
 .searchIcon,
@@ -310,6 +311,7 @@
     color: #dc2626;
 }
 
+/* Pagination */
 .pagination {
     margin-top: 1.5rem;
     padding: 1rem 1.5rem;
@@ -374,6 +376,7 @@
     cursor: not-allowed;
 }
 
+/* Responsive Design */
 @media (min-width: 640px) {
     .filterSearchContainer .filter {
         flex-direction: row;

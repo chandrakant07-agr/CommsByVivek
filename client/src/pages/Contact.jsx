@@ -183,8 +183,8 @@ const Contact = () => {
                                     }
                                 >
                                     <option value="">Select a project type</option>
-                                    {projectTypes?.data.map((type, index) => (
-                                        <option key={index} value={type._id}>{type.name}</option>
+                                    {projectTypes?.data.map((type) => (
+                                        <option key={type._id} value={type._id}>{type.name}</option>
                                     ))}
                                 </select>
                                 <FormInputError message={errors.projectTypeId?.message} />
