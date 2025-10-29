@@ -18,8 +18,8 @@ const Footer = () => {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
         >
-            <div className={styles.footerContent}>
-                <div className={styles.footerSection}>
+            <div className={styles.footerGridContainer}>
+                <div className={styles.footerGridItem}>
                     <div className={styles.footerLogo}>
                         <Link to="/">
                             <h2>Comms<span>By</span>Vivek</h2>
@@ -41,7 +41,7 @@ const Footer = () => {
                     </ul>
                 </div>
 
-                <div className={styles.footerSection}>
+                <div className={styles.footerGridItem}>
                     <div className={styles.footerNav}>
                         <ul>
                             <li><HashLink to="/#home">Home</HashLink></li>
@@ -54,7 +54,7 @@ const Footer = () => {
                     </div>
                 </div>
 
-                <div className={styles.footerSection}>
+                <div className={styles.footerGridItem}>
                     <div className={styles.footerSocial}>
                         {getContactDetails?.data.socialMediaLinks?.map((media) => (
                             <Link to={media.url} key={media._id} target='_blank'

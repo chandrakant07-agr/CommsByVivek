@@ -263,14 +263,18 @@ const Portfolio = () => {
                                 {...filterRegister("searchQuery")}
                             />
                         </div>
-                        <select className={styles.categoryFilter}
-                            {...filterRegister("categoryFilter")}
-                        >
-                            <option value="">All Categories</option>
-                            {fetchCategories?.data.map((cat) => (
-                                <option key={cat._id} value={cat._id}>{cat.name}</option>
-                            ))}
-                        </select>
+                        {isFetchingCategory ? (
+                            <LoadingSpinner size="sm" />
+                        ) : (
+                            <select className={styles.categoryFilter}
+                                {...filterRegister("categoryFilter")}
+                            >
+                                <option value="">All Categories</option>
+                                {fetchCategories?.data.map((cat) => (
+                                    <option key={cat._id} value={cat._id}>{cat.name}</option>
+                                ))}
+                            </select>
+                        )}
                     </div>
 
                     {/* Portfolio Grid */}

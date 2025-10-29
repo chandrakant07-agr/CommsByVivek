@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './styles/Portfolio.module.css';
+import { FaRegPlayCircle } from 'react-icons/fa';
 
 const Portfolio = () => {
     const [activeFilter, setActiveFilter] = useState('all');
@@ -112,116 +113,114 @@ const Portfolio = () => {
         : projects.filter(project => project.type === activeFilter);
 
     return (
-        <div className={styles.portfolioPage}>
+        <>
             {/* Master Showreel Section */}
-            <section className={styles.showreelSection}>
-                <div className={styles.showreelContainer}>
-                    <motion.h1
-                        className="heroTitle"
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                        viewport={{ once: true }}
-                    >
-                        Our Work
-                    </motion.h1>
-                    <div className="separatorHeroTitle"></div>
+            <section className="mb-10 text-center">
+                <motion.h1
+                    className="heroTitle"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                    viewport={{ once: true }}
+                >
+                    Our Work
+                </motion.h1>
+                <div className="separatorHeroTitle"></div>
+            </section>
 
-                    <motion.div
-                        className={styles.showreelVideo}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                        viewport={{ once: true }}
-                    >
-                        <video controls poster="/placeholder-video-poster.jpg">
-                            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-                            Your browser does not support the video tag.
-                        </video>
-                        <button className={styles.playButton} aria-label="Play showreel">
-                            ▶
-                        </button>
-                    </motion.div>
-                </div>
+            <section className="mb-10">
+                <motion.div
+                    className={styles.showreelVideo}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    viewport={{ once: true }}
+                >
+                    <video controls poster="/placeholder-video-poster.jpg">
+                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                    <button className={styles.playButton} aria-label="Play showreel">
+                        <FaRegPlayCircle />
+                    </button>
+                </motion.div>
             </section>
 
             {/* Portfolio Grid */}
-            <section className={styles.portfolioGrid}>
-                <div className={styles.gridContainer}>
-                    <motion.h1
-                        className="showReelTitle"
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                        viewport={{ once: true }}
-                    >
-                        Featured Projects
-                    </motion.h1>
-                    <div className="separatorShowReelTitle"></div>
+            <section className="px-6 px-lg-10">
+                <motion.h1
+                    className="heroTitle text-center"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                    viewport={{ once: true }}
+                >
+                    Featured Projects
+                </motion.h1>
+                <div className="separatorShowReelTitle"></div>
 
-                    {/* Filter Tabs */}
-                    <motion.div
-                        className={styles.filterTabs}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        viewport={{ once: true }}
-                    >
-                        {filters.map((filter) => (
-                            <button
-                                key={filter.id}
-                                className={`${styles.filterTab} ${activeFilter === filter.id ? styles.active : ''}`}
-                                onClick={() => setActiveFilter(filter.id)}
+                {/* Filter Tabs */}
+                <motion.div
+                    className={styles.filterTabs}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                >
+                    {filters.map((filter) => (
+                        <button
+                            key={filter.id}
+                            className={`${styles.filterTab} ${activeFilter === filter.id ? styles.active : ''}`}
+                            onClick={() => setActiveFilter(filter.id)}
+                        >
+                            {filter.label}
+                        </button>
+                    ))}
+                </motion.div>
+
+                {/* Projects Grid */}
+                <div className={styles.projectsGrid}>
+                    <AnimatePresence>
+                        {filteredProjects.map((project, index) => (
+                            <motion.div
+                                key={project.id}
+                                className={styles.projectCard}
+                                layout
+                                initial={{ opacity: 0, y: 50 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 50 }}
+                                transition={{ duration: 0.6, delay: index * 0.1 }}
+                                whileHover={{ scale: 1.02 }}
                             >
-                                {filter.label}
-                            </button>
+                                <div className={styles.projectThumbnail}>
+                                    {/* <span>{project.icon}</span> */}
+                                    <div className={styles.projectOverlay}>
+                                        View Project
+                                    </div>
+                                </div>
+
+                                <div className={styles.projectContent}>
+                                    <h3 className={styles.projectTitle}>{project.title}</h3>
+                                    <h6 className={styles.projectCategory}>{project.category}</h6>
+                                    <p className={styles.projectDescription}>{project.description}</p>
+
+                                    <div className={styles.projectMeta}>
+                                        <span className={styles.projectYear}>{project.year}</span>
+                                        <div className={styles.projectTags}>
+                                            {project.tags.map((tag, idx) => (
+                                                <span key={idx} className={styles.projectTag}>
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </motion.div>
                         ))}
-                    </motion.div>
-
-                    {/* Projects Grid */}
-                    <div className={styles.projectsGrid}>
-                        <AnimatePresence>
-                            {filteredProjects.map((project, index) => (
-                                <motion.div
-                                    key={project.id}
-                                    className={styles.projectCard}
-                                    layout
-                                    initial={{ opacity: 0, y: 50 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: 50 }}
-                                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                                    whileHover={{ scale: 1.02 }}
-                                >
-                                    <div className={styles.projectImage}>
-                                        <span>{project.icon}</span>
-                                        <div className={styles.projectOverlay}>
-                                            View Project
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.projectContent}>
-                                        <h3 className={styles.projectTitle}>{project.title}</h3>
-                                        <h6 className={styles.projectCategory}>{project.category}</h6>
-                                        <p className={styles.projectDescription}>{project.description}</p>
-
-                                        <div className={styles.projectMeta}>
-                                            <span className={styles.projectYear}>{project.year}</span>
-                                            <div className={styles.projectTags}>
-                                                {project.tags.map((tag, idx) => (
-                                                    <span key={idx} className={styles.projectTag}>
-                                                        {tag}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </AnimatePresence>
-                    </div>
+                    </AnimatePresence>
                 </div>
             </section>
-        </div>
+        </>
     );
 };
 

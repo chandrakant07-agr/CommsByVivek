@@ -30,7 +30,7 @@
 [data-theme='light'] {
     /* Light mode colors */
     --bg-color: #ffffff;
-    --bg-linear-color: linear-gradient(135deg, #e5e5e5 0%, #d2d2d2 100%);
+    --bg-linear-color: linear-gradient(135deg, #f3f4f6 0%, #e5e5e5 100%);
     --text-color: #111111;
     --border-color: #e0e0e0;
     --card-bg: #f5f5f5;
@@ -281,12 +281,16 @@ video {
     margin-top: 1.5rem;
 }
 
-.mt-10 {
-    margin-top: 2.5rem;
+.mt-18 {
+    margin-top: 4.5rem;
 }
 
 .mb-4 {
     margin-bottom: 1rem;
+}
+
+.mb-10 {
+    margin-bottom: 2.5rem;
 }
 
 .mb-6 {
@@ -309,9 +313,18 @@ video {
     margin-left: 1rem;
 }
 
+.my-4 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
 /* padding utilities */
 .p-6 {
     padding: 1.5rem;
+}
+
+.p-8 {
+    padding: 2rem;
 }
 
 .pb-0 {
@@ -321,6 +334,11 @@ video {
 .px-6 {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+}
+
+.px-10 {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
 }
 
 .py-4 {
@@ -336,6 +354,13 @@ video {
 .py-12 {
     padding-top: 3rem;
     padding-bottom: 3rem;
+}
+
+@media (min-width: 1024px) {
+    .px-lg-10 {
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+    }
 }
 
 /* overflow utilities */
@@ -416,19 +441,15 @@ video {
 .heroContent {
     max-width: 800px;
     margin: 0 auto;
+    padding: 0 1.75rem;
 }
 
 .heroTitle,
-.storyTitle,
-.showReelTitle {
+.storyTitle {
     margin-bottom: 0.25em;
     font-family: sans-serif;
     letter-spacing: 3px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.showReelTitle {
-    text-align: center;
 }
 
 .separatorHeroTitle,
@@ -454,11 +475,13 @@ video {
 }
 
 /* Responsive breakpoints */
-@media (max-width: 768px) {
+@media (min-width: 768px) {
     .heroContent {
-        padding: 0 1rem;
+        padding: 0;
     }
+}
 
+@media (max-width: 768px) {
     .container {
         padding: 0 1rem;
     }

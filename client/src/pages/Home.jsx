@@ -83,62 +83,59 @@ const Home = () => {
             </section>
 
             {/* Introduction Section */}
-            <section className={styles.intro}>
-                <div className={styles.introContent}>
-                    <motion.div
-                        className={styles.introText}
-                        initial={{ opacity: 0, x: -50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8 }}
-                        viewport={{ once: false }}
-                    >
-                        <h1>Dual Vision, Single Excellence</h1>
-                        <p>
-                            CommsByVivek represents the commercial powerhouse - delivering
-                            brand campaigns, corporate stories, and marketing content that
-                            drives results.
-                        </p>
-                        <p>
-                            FilmedByVivek embodies our artistic soul - creating documentaries,
-                            personal narratives, and experimental works that push creative
-                            boundaries.
-                        </p>
-                        <HashLink to="/#about" className={styles.introBtn}>
-                            Discover Our Story
-                        </HashLink>
-                    </motion.div>
+            <section className={styles.introContainer}>
+                <motion.div
+                    className={styles.introText}
+                    initial={{ opacity: 0, x: -50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8 }}
+                    viewport={{ once: false }}
+                >
+                    <h1>Dual Vision, Single Excellence</h1>
+                    <p>
+                        CommsByVivek represents the commercial powerhouse - delivering
+                        brand campaigns, corporate stories, and marketing content that
+                        drives results.
+                    </p>
+                    <p>
+                        FilmedByVivek embodies our artistic soul - creating documentaries,
+                        personal narratives, and experimental works that push creative
+                        boundaries.
+                    </p>
+                    <HashLink to="/#about" className={styles.introBtn}>
+                        Discover Our Story
+                    </HashLink>
+                </motion.div>
 
-                    <motion.div
-                        className={styles.introStats}
-                        initial={{ opacity: 0, x: 50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                        viewport={{ once: false }}
-                        ref={ref}
-                    >
-                        {stats.map((stat, index) => (
-                            <motion.div
-                                key={index}
-                                className={styles.stat}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
-                                viewport={{ once: true }}
-                            >
-                                {/* <span className={styles.statNumber}>{stat.number}</span> */}
-                                {
-                                    isInView &&
-                                    <CountUp
-                                        className={styles.statNumber}
-                                        start={0} end={stat.number} suffix="+"
-                                        duration={1} delay={0.2}
-                                    />
-                                }
-                                <span className={styles.statLabel}>{stat.label}</span>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                </div>
+                <motion.div
+                    className={styles.statusCardsContainer}
+                    initial={{ opacity: 0, x: 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    viewport={{ once: false }}
+                    ref={ref}
+                >
+                    {stats.map((stat, index) => (
+                        <motion.div
+                            key={index}
+                            className={styles.statusCard}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                            viewport={{ once: true }}
+                        >
+                            {
+                                isInView &&
+                                <CountUp
+                                    className={styles.statusCardNumber}
+                                    start={0} end={stat.number} suffix="+"
+                                    duration={1} delay={0.2}
+                                />
+                            }
+                            <span className={styles.statusCardLabel}>{stat.label}</span>
+                        </motion.div>
+                    ))}
+                </motion.div>
             </section>
         </div>
     );

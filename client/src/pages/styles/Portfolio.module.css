@@ -1,24 +1,7 @@
-.portfolioPage {
-    min-height: 100vh;
-    padding-top: 3rem;
-}
-
-.showreelSection {
-    padding: 3rem 0;
-    background: var(--bg-linear-color);
-}
-
-.showreelContainer {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    text-align: center;
-}
-
 .showreelVideo {
     width: 100%;
-    max-width: 800px;
-    height: 450px;
+    max-width: 70%;
+    height: 40vw;
     background-color: #000;
     border: 2px solid var(--accent-color);
     border-radius: 1rem;
@@ -37,33 +20,16 @@
     position: absolute;
     top: 50%;
     left: 50%;
+    font-size: 2.5rem;
+    color: var(--accent-color);
     transform: translate(-50%, -50%);
-    width: 80px;
-    height: 80px;
-    background-color: var(--accent-color);
-    color: #111111;
-    border: none;
-    border-radius: 50%;
-    font-size: 2rem;
-    cursor: pointer;
     transition: all 0.3s ease;
     z-index: 10;
 }
 
 .playButton:hover {
-    background-color: #b8941f;
-    transform: translate(-50%, -50%) scale(1.1);
-}
-
-.portfolioGrid {
-    padding: 2rem 0;
-    background-color: var(--bg-color);
-}
-
-.gridContainer {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
+    color: #b8941f;
+    transform: translate(-50%, -50%) scale(1.25);
 }
 
 .filterTabs {
@@ -82,22 +48,21 @@
     background-color: transparent;
     border: 2px solid var(--border-color);
     border-radius: 0.5rem;
-    cursor: pointer;
     letter-spacing: 1px;
     transition: all 0.3s ease;
 }
 
 .filterTab:hover,
 .filterTab.active {
-    background-color: var(--accent-color);
     color: #111111;
+    background-color: var(--accent-color);
     border-color: var(--accent-color);
 }
 
 .projectsGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2.5vw;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 2.25vw;
 }
 
 .projectCard {
@@ -115,16 +80,11 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-.projectImage {
+.projectThumbnail {
     width: 100%;
-    height: 250px;
     position: relative;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-    color: var(--accent-color);
+    aspect-ratio: 4 / 3;
     background: linear-gradient(135deg, #333, #666);
 }
 
@@ -134,15 +94,15 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(45deg, rgba(212, 175, 55, 0.9), rgba(184, 148, 31, 0.9));
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    color: #111111;
     font-size: 1.2rem;
     font-weight: 600;
+    color: #111111;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: linear-gradient(45deg, rgba(212, 175, 55, 0.9), rgba(184, 148, 31, 0.9));
 }
 
 .projectCard:hover .projectOverlay {
@@ -150,19 +110,17 @@
 }
 
 .projectContent {
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 .projectTitle {
     font-family: sans-serif;
-    /* font-size: 1.3rem; */
     margin-bottom: 0.5rem;
     letter-spacing: 1px;
 }
 
 .projectCategory {
     color: var(--accent-color);
-    /* font-size: 0.9rem; */
     font-weight: 500;
     letter-spacing: 1px;
     margin-bottom: 1rem;
@@ -197,40 +155,27 @@
     color: #111111;
     padding: 0.2rem 0.5rem;
     font-size: 0.7rem;
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: 0.5px;
     background-color: var(--accent-color);
     border-radius: 0.25rem;
 }
 
-@media (max-width: 768px) {
-    /* .showreelContainer {
-        padding: 0 1rem;
-    } */
-
-    .showreelVideo {
-        height: 300px;
-    }
-
-    /* .gridContainer {
-        padding: 0 1rem;
-    } */
-
+/* Responsive Design */
+@media (min-width: 640px) {
     .projectsGrid {
-        grid-template-columns: 1fr;
-        /* gap: 1.5rem; */
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+}
 
-    .projectContent {
-        padding: 1.5rem;
+@media (min-width: 768px) {
+    /* .projectsGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    } */
+}
+
+@media (min-width: 1024px) {
+    .projectsGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
-
-    /* .filterTabs {
-        gap: 0.5rem;
-    } */
-
-    /* .filterTab {
-        padding: 0.6rem 1rem;
-        font-size: 0.8rem;
-    } */
 }

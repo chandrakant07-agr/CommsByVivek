@@ -1,25 +1,10 @@
-.contactPage {
-    min-height: 100vh;
-    padding-top: 3rem;
-}
-
-.contactContent {
-    padding: 3rem 0;
-    background-color: var(--bg-color);
-}
-
-.sectionHeader {
-    margin-bottom: 3rem;
-    text-align: center;
-}
-
 .contentContainer {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4vw;
+    grid-template-columns: 1fr;
+    gap: 2rem;
     align-items: start;
     overflow: hidden;
 }
@@ -106,7 +91,7 @@
 
 .contactForm {
     background-color: var(--card-bg);
-    padding: 2.5vw;
+    padding: 2rem 1.5rem;
     border: 1px solid var(--border-color);
     border-radius: 1rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -119,11 +104,6 @@
     letter-spacing: 1px;
     text-align: center;
 }
-
-/* .formGroup {
-    height: 4.5rem;
-    margin-bottom: 1.5rem;
-} */
 
 .formLabel {
     display: block;
@@ -165,7 +145,7 @@
 
 .submitButton {
     width: 100%;
-    padding: 1.2rem 2rem;
+    /* padding: 1.2rem 2rem; */
     background-color: var(--accent-color);
     color: #121212;
     border: none;
@@ -195,14 +175,13 @@
     box-shadow: none;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 768px) {
     .contentContainer {
-        grid-template-columns: 1fr;
-        /* gap: 3rem; */
-        padding: 0 1rem;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5vw;
     }
 
     .contactForm {
-        padding: 2rem 1.5rem;
+        padding: 2.5vw;
     }
 }

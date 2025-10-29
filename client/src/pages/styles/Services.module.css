@@ -1,19 +1,10 @@
-.servicesPage {
-    min-height: 100vh;
-}
-
-.servicesGrid {
-    padding: 2rem 0;
-    background-color: var(--bg-color);
-}
-
-.gridContainer {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
+.servicesGridContainer {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2vw;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 2.5vw;
+    row-gap: 1.5rem;
+    justify-content: center;
+    padding: 2rem;
 }
 
 .serviceCard {
@@ -23,7 +14,7 @@
     padding: 1.75rem;
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
-    border-radius: 10px;
+    border-radius: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: var(--transition);
 }
@@ -31,16 +22,17 @@
 .serviceIcon {
     font-size: clamp(2rem, 2.5vw, 2.5rem);
     color: var(--accent-color);
-    /* margin-bottom: 20px; */
 }
 
 .serviceCard h3 {
-    margin-bottom: 15px;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
 }
 
 .serviceCard p {
     margin-bottom: 20px;
     font-size: 1rem;
+    color: var(--text-secondary-color);
 }
 
 .servicePreview {
@@ -61,10 +53,14 @@
     transform: translateX(100%);
 }
 
-@media (max-width: 768px) {
-    .gridContainer {
-        padding: 0 1rem;
-        grid-template-columns: 1fr;
-        gap: 2rem;
+@media (min-width: 640px) {
+    .servicesGridContainer {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .servicesGridContainer {
+        grid-template-columns: repeat(3, minmax(0, 350px));
     }
 }

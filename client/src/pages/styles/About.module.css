@@ -1,10 +1,6 @@
-.aboutPage {
-    min-height: 100vh;
-}
-
 .splitSection {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     min-height: 80vh;
     overflow: hidden;
 }
@@ -15,7 +11,7 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
-    padding: 3rem 4.25vw;
+    padding: 2.5rem 4vw;
 }
 
 .commsBrand {
@@ -32,14 +28,12 @@
 
 .brandContent h2 {
     font-family: sans-serif;
-    /* font-size: clamp(2rem, 4vw, 3rem); */
     margin-bottom: 1.5rem;
     letter-spacing: 1px;
 }
 
 .brandContent h5 {
     color: var(--accent-color);
-    /* font-size: 1.2rem; */
     font-weight: 600;
     margin-bottom: 1rem;
     letter-spacing: 1px;
@@ -84,26 +78,21 @@
 }
 
 .storySection {
-    padding: 2rem 0;
+    padding: 2rem;
     text-align: center;
-    background-color: var(--bg-colorg);
 }
 
-.storyContent {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-
-.storyGrid {
+.storyGridContainer {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 3vw;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 2.5vw;
+    row-gap: 1.5rem;
+    justify-content: center;
     margin-top: 2rem;
 }
 
 .storyCard {
-    padding: 2rem;
+    padding: 1.75rem;
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 1rem;
@@ -118,7 +107,7 @@
 .storyCard h2 {
     font-family: sans-serif;
     color: var(--accent-color);
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     /* font-size: 1.3rem; */
     letter-spacing: 1px;
 }
@@ -129,52 +118,18 @@
     opacity: 0.8;
 }
 
-.teamSection {
-    padding: 6rem 0;
-    background-color: var(--bg-color);
+@media (min-width: 640px) {
+    .storyGridContainer {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
-.teamContent {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    text-align: center;
-}
-
-.teamTitle {
-    font-family: sans-serif;
-    font-size: clamp(2rem, 5vw, 3rem);
-    letter-spacing: 1px;
-}
-
-.teamBio {
-    font-size: 1.2rem;
-    line-height: 1.8;
-    opacity: 0.8;
-    margin-bottom: 3rem;
-}
-
-@media (max-width: 768px) {
+@media (min-width: 768px) {
     .splitSection {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
     }
 
-    .commsBrand,
-    .filmedBrand {
-        padding: 3rem 2rem;
-        min-height: 50vh;
-    }
-
-    .storyGrid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-
-    .storyCard {
-        padding: 2rem 1.5rem;
-    }
-
-    .teamContent {
-        padding: 0 1rem;
+    .storyGridContainer {
+        grid-template-columns: repeat(3, minmax(0, 350px));
     }
 }

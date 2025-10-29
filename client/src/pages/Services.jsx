@@ -38,7 +38,7 @@ const Services = () => {
     ];
 
     return (
-        <div id="services" className={styles.servicesPage}>
+        <div id="services">
             {/* Hero Section */}
             <section className="heroSection">
                 <motion.div
@@ -69,29 +69,27 @@ const Services = () => {
             </section>
 
             {/* Services Grid */}
-            <section className={styles.servicesGrid}>
-                <div className={styles.gridContainer}>
-                    {services.map((service, index) => (
-                        <motion.div
-                            key={service.title}
-                            className={styles.serviceCard}
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: index * 0.1 }}
-                            viewport={{ once: true }}
-                            whileHover={{ scale: 1.02 }}
-                        >
-                            <div className={styles.serviceIcon}>
-                                {service.icon}
-                            </div>
-                            <h3>{service.title}</h3>
-                            <p>{service.description}</p>
-                            <div className={styles.servicePreview}>
-                                <img src={service.previewImage} alt={service.title} />
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
+            <section className={styles.servicesGridContainer}>
+                {services.map((service, index) => (
+                    <motion.div
+                        key={service.title}
+                        className={styles.serviceCard}
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: index * 0.1 }}
+                        viewport={{ once: true }}
+                        whileHover={{ scale: 1.02 }}
+                    >
+                        <div className={styles.serviceIcon}>
+                            {service.icon}
+                        </div>
+                        <h3>{service.title}</h3>
+                        <p>{service.description}</p>
+                        <div className={styles.servicePreview}>
+                            <img src={service.previewImage} alt={service.title} />
+                        </div>
+                    </motion.div>
+                ))}
             </section>
         </div>
     );

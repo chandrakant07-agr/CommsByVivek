@@ -4,14 +4,6 @@ import CountUp from 'react-countup';
 import styles from './styles/404.module.css';
 
 const Page404 = () => {
-    const suggestions = [
-        { label: 'View Our Work', path: '/work' },
-        { label: 'About Us', path: '/about' },
-        { label: 'Our Services', path: '/services' },
-        { label: 'FilmedByVivek', path: '/filmed-by-vivek' },
-        { label: 'Get in Touch', path: '/contact' }
-    ];
-
     const goBack = () => {
         window.history.back();
     };
@@ -20,7 +12,7 @@ const Page404 = () => {
         <div className={styles.notFoundPage}>
             <div className={styles.filmStrip}></div>
             <motion.div
-                className={styles.notFoundContent}
+                className="relative"
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}

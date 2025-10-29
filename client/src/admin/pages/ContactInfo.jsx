@@ -13,7 +13,7 @@ import socialPlatforms from "../../constants/socialPlatforms";
 import styles from "./styles/ContactInfo.module.css";
 
 const ContactInfo = () => {
-    const { data: getContactDetails, isLoading, isError } = useGetContactDetailsQuery();
+    const { data: fetchContactDetails, isLoading, isError } = useGetContactDetailsQuery();
     const [updateContact, { isLoading: isContactUpdating }] = useUpdateContactDetailsMutation();
     const [updateSocialHandles, { isLoading: isSocialUpdating }] = useUpdateSocialHandlesMutation();
 
@@ -42,9 +42,9 @@ const ContactInfo = () => {
 
     // Fetch contact info on mount
     useEffect(() => {
-        resetContact(getContactDetails?.data.contactDetails);
+        resetContact(fetchContactDetails?.data.contactDetails);
         resetSocial(
-            { socialLinks: getContactDetails?.data.socialMediaLinks },
+            { socialLinks: fetchContactDetails?.data.socialMediaLinks },
             { keepDefaultValues: true }
         )
     }, [getContactDetails, resetContact, resetSocial]);
@@ -184,7 +184,7 @@ const ContactInfo = () => {
                                 ))}
                             </div>
                         )}
-                        {(fields.length > 0 || getContactDetails?.data.socialMediaLinks.length > 0) && (
+                        {(fields.length > 0 || fetchContactDetails?.data.socialMediaLinks.length > 0) && (
                         <div className={styles.formButtons}>
                             <button type="button" className={styles.resetButton}
                                 onClick={() => resetSocial()}>

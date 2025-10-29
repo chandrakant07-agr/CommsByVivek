@@ -46,7 +46,7 @@ const FilmedByVivek = () => {
     ];
 
     return (
-        <div id="filmed-by-vivek" className={styles.filmedPage}>
+        <div id="filmed-by-vivek">
             {/* Hero Section */}
             <section className="heroSection">
                 <motion.div
@@ -88,44 +88,42 @@ const FilmedByVivek = () => {
             </section>
 
             {/* Projects Section */}
-            <section className={styles.projectsSection}>
-                <div className={styles.projectsContainer}>
-                    {projects.map((project, index) => (
+            <section className="p-6">
+                {projects.map((project, index) => (
+                    <motion.div
+                        key={index}
+                        className={styles.projectItem}
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: index * 0.2 }}
+                        viewport={{ once: true }}
+                    >
                         <motion.div
-                            key={index}
-                            className={styles.projectItem}
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: index * 0.2 }}
-                            viewport={{ once: true }}
+                            className={styles.projectVisual}
+                            whileHover={{ scale: 1.02 }}
+                            transition={{ duration: 0.3 }}
                         >
-                            <motion.div
-                                className={styles.projectVisual}
-                                whileHover={{ scale: 1.02 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <span>{project.icon}</span>
-                            </motion.div>
+                            {/* <span>{project.icon}</span> */}
+                        </motion.div>
 
-                            <div className={styles.projectContent}>
-                                <h2 className={styles.projectTitle}>{project.title}</h2>
-                                <h5 className={styles.projectType}>{project.type}</h5>
-                                <p className={styles.projectDescription}>{project.description}</p>
+                        <div className={styles.projectContent}>
+                            <h2 className={styles.projectTitle}>{project.title}</h2>
+                            <h5 className={styles.projectType}>{project.type}</h5>
+                            <p className={styles.projectDescription}>{project.description}</p>
 
-                                <div className={styles.projectMeta}>
-                                    <span className={styles.projectYear}>Released {project.year}</span>
-                                    <div className={styles.projectTags}>
-                                        {project.tags.map((tag, idx) => (
-                                            <span key={idx} className={styles.projectTag}>
-                                                {tag}
-                                            </span>
-                                        ))}
-                                    </div>
+                            <div className={styles.projectMeta}>
+                                <span className={styles.projectYear}>Released {project.year}</span>
+                                <div className={styles.projectTags}>
+                                    {project.tags.map((tag, idx) => (
+                                        <span key={idx} className={styles.projectTag}>
+                                            {tag}
+                                        </span>
+                                    ))}
                                 </div>
                             </div>
-                        </motion.div>
-                    ))}
-                </div>
+                        </div>
+                    </motion.div>
+                ))}
             </section>
         </div>
     );

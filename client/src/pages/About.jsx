@@ -19,7 +19,7 @@ const About = () => {
     ];
 
     return (
-        <div id='about' className={styles.aboutPage}>
+        <div id='about'>
             {/* Hero Section */}
             <section className="heroSection">
                 <motion.div
@@ -114,38 +114,31 @@ const About = () => {
 
             {/* Story Section */}
             <section className={styles.storySection}>
-                <div
-                    className={styles.storyContent}
-                    initial={{ opacity: 0, y: 50 }}
+                <motion.h1
+                    className="storyTitle"
+                    initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1 }}
+                    transition={{ duration: 1, delay: 0.3 }}
                 >
-                    <motion.h1
-                        className="storyTitle"
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1, delay: 0.3 }}
-                    >
-                        Our Foundation
-                    </motion.h1>
-                    <div className="separatorStoryTitle"></div>
+                    Our Foundation
+                </motion.h1>
+                <div className="separatorStoryTitle"></div>
 
-                    <div className={styles.storyGrid}>
-                        {storyPoints.map((point, index) => (
-                            <motion.div
-                                key={index}
-                                className={styles.storyCard}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: index * 0.2 }}
-                                viewport={{ once: true }}
-                                whileHover={{ scale: 1.05 }}
-                            >
-                                <h2>{point.title}</h2>
-                                <p>{point.description}</p>
-                            </motion.div>
-                        ))}
-                    </div>
+                <div className={styles.storyGridContainer}>
+                    {storyPoints.map((point, index) => (
+                        <motion.div
+                            key={index}
+                            className={styles.storyCard}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: index * 0.2 }}
+                            viewport={{ once: true }}
+                            whileHover={{ scale: 1.05 }}
+                        >
+                            <h2>{point.title}</h2>
+                            <p>{point.description}</p>
+                        </motion.div>
+                    ))}
                 </div>
             </section>
         </div>
