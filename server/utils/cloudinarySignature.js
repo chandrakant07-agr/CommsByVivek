@@ -18,7 +18,7 @@ const cloudinarySignature = (timestamp, folder) => {
 };
 
 const cloudinaryDelete = async (publicId) => {
-    const resource_type = publicId.split('/')[0] === "portfolio_videos" ? "video" : "image";
+    const resource_type = publicId.split('/')[0] === "gallery_videos" ? "video" : "image";
     try {
         return await cloudinary.uploader.destroy(publicId, {
             resource_type

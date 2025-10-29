@@ -1,12 +1,12 @@
 import Category from "../models/category.model.js";
-import Portfolio from "../models/portfolio.model.js";
+import Gallery from "../models/gallery.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import sanitizeInput from "../utils/sanitizeInputField.js";
 import { ApiError, ApiResponse } from "../utils/responseHandler.js";
 import { cloudinaryDelete } from "../utils/cloudinarySignature.js";
 
-// fetch portfolio items (for public use)
-const fetchPortfolioItems = asyncHandler(async (req, res) => {
+// fetch gallery items (for public use)
+const fetchGalleryItems = asyncHandler(async (req, res) => {
     const { search, category, pageNo, limit } = req.query;
     
     const query = {};
@@ -22,9 +22,9 @@ const fetchPortfolioItems = asyncHandler(async (req, res) => {
     const pageSize = parseInt(limit, 10) > 0 ? parseInt(limit, 10) : 10;
     const skip = (page - 1) * pageSize;
 
-    // Fetch portfolio items with pagination
-    const totalItems = await Portfolio.countDocuments(query);
-    const portfolioItems = await Portfolio.find(query)
+    // Fetch gallery items with pagination
+    const totalItems = await Gallery.countDocuments(query);
+    const galleryItems = await Gallery.find(query)
         .populate('category', 'name _id')
         .select("-__v -createdAt -updatedAt")
         .sort({ year: -1, title: 1 })
@@ -32,18 +32,18 @@ const fetchPortfolioItems = asyncHandler(async (req, res) => {
         .limit(pageSize);
 
     return ApiResponse.sendSuccess(res, {
-        portfolioItems,
+        galleryItems,
         pagination: {
             totalItems,
             currentPage: page,
             pageLimit: pageSize,
             totalPages: Math.ceil(totalItems / pageSize)
         }
-    }, "Portfolio items successfully fetched.");
+    }, "Gallery items successfully fetched.");
 });
 
-// admin: add new portfolio item
-const addPortfolioItem = asyncHandler(async (req, res) => {
+// admin: add new gallery item
+const addGalleryItem = asyncHandler(async (req, res) => {
     const { title, category, cloudinaryData, shortDescription, year, subTags } = req.body;
 
     if (!title || !category || !shortDescription || !year) {
@@ -60,8 +60,8 @@ const addPortfolioItem = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Provided category does not exist.");
     }
 
-    // create new portfolio item
-    const newPortfolioItem = new Portfolio({
+    // create new gallery item
+    const newGalleryItem = new Gallery({
         category,
         cloudinaryData,
         year: Number(year),
@@ -70,13 +70,13 @@ const addPortfolioItem = asyncHandler(async (req, res) => {
         subTags: Array.isArray(subTags) ? subTags.map(tag => sanitizeInput(tag)).filter(Boolean) : []
     });
 
-    await newPortfolioItem.save();
+    await newGalleryItem.save();
 
-    return ApiResponse.sendSuccess(res, "newPortfolioItem", "Portfolio item successfully added.");
+    return ApiResponse.sendSuccess(res, "newGalleryItem", "Gallery item successfully added.");
 });
 
-// admin: update portfolio item
-const updatePortfolioItem = asyncHandler(async (req, res) => {
+// admin: update gallery item
+const updateGalleryItem = asyncHandler(async (req, res) => {
     const { id } = req.query;
     const { title, category, cloudinaryData, shortDescription, year, subTags } = req.body;
 
@@ -103,32 +103,32 @@ const updatePortfolioItem = asyncHandler(async (req, res) => {
         await cloudinaryDelete(req.body.oldCloudinaryPublicId);
     }
 
-    const updatedPortfolioItem = await Portfolio.findByIdAndUpdate(id, updatePayload, { new: true });
+    const updatedGalleryItem = await Gallery.findByIdAndUpdate(id, updatePayload, { new: true });
 
-    if (!updatedPortfolioItem) {
-        throw new ApiError(404, "Portfolio item not found.");
+    if (!updatedGalleryItem) {
+        throw new ApiError(404, "Gallery item not found.");
     }
 
-    return ApiResponse.sendSuccess(res, updatedPortfolioItem, "Portfolio item successfully updated.");
+    return ApiResponse.sendSuccess(res, updatedGalleryItem, "Gallery item successfully updated.");
 });
 
-// admin: delete portfolio item
-const deletePortfolioItem = asyncHandler(async (req, res) => {
+// admin: delete gallery item
+const deleteGalleryItem = asyncHandler(async (req, res) => {
     const { id } = req.query;
 
-    const deletedPortfolioItem = await Portfolio.findByIdAndDelete(id);
-    
-    await cloudinaryDelete(deletedPortfolioItem.cloudinaryData.public_id);
+    const deletedGalleryItem = await Gallery.findByIdAndDelete(id);
 
-    if (!deletedPortfolioItem) {
-        throw new ApiError(404, "Portfolio item not found.");
+    await cloudinaryDelete(deletedGalleryItem.cloudinaryData.public_id);
+
+    if (!deletedGalleryItem) {
+        throw new ApiError(404, "Gallery item not found.");
     }
 
-    return ApiResponse.sendSuccess(res, "", "Portfolio item successfully deleted.");
+    return ApiResponse.sendSuccess(res, "", "Gallery item successfully deleted.");
 });
 
-// admin sends a new portfolio category array to sync the existing portfolio categories
-const syncPortfolioCategory = asyncHandler(async (req, res) => {
+// admin sends a new gallery category array to sync the existing gallery categories
+const syncGalleryCategory = asyncHandler(async (req, res) => {
     const { categories } = req.body;
 
     if (!Array.isArray(categories)) {
@@ -182,17 +182,17 @@ const syncPortfolioCategory = asyncHandler(async (req, res) => {
     return ApiResponse.sendSuccess(res, "", message);
 });
 
-// fetch portfolio categories (for public use)
-const fetchPortfolioCategories = asyncHandler(async (req, res) => {
+// fetch gallery categories (for public use)
+const fetchGalleryCategories = asyncHandler(async (req, res) => {
     const categories = await Category.find().select("-__v -createdAt -updatedAt").sort({ name: 1 });
-    return ApiResponse.sendSuccess(res, categories, "Portfolio categories fetched successfully.");
+    return ApiResponse.sendSuccess(res, categories, "Gallery categories fetched successfully.");
 });
 
 export {
-    addPortfolioItem,
-    fetchPortfolioItems,
-    updatePortfolioItem,
-    deletePortfolioItem,
-    syncPortfolioCategory,
-    fetchPortfolioCategories
+    addGalleryItem,
+    fetchGalleryItems,
+    updateGalleryItem,
+    deleteGalleryItem,
+    syncGalleryCategory,
+    fetchGalleryCategories
 };

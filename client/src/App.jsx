@@ -17,7 +17,7 @@ import Profile from './admin/pages/Profile';
 import AdminLayout from './admin/components/Admin.Layout';
 import ProjectType from './admin/pages/ProjectType';
 import ContactInfo from './admin/pages/ContactInfo';
-import PortfolioAdmin from './admin/pages/Portfolio';
+import Gallery from './admin/pages/Gallery';
 
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
@@ -61,7 +61,7 @@ function App() {
                         <Route path="profile" element={<Profile />} />
                         <Route path="projectType" element={<ProjectType />} />
                         <Route path="contactInfo" element={<ContactInfo />} />
-                        <Route path="portfolio" element={<PortfolioAdmin />} />
+                        <Route path="gallery" element={<Gallery />} />
                     </Route>
                 </Route>
             </Routes>

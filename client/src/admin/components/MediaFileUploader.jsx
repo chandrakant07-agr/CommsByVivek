@@ -9,7 +9,7 @@ const MediaFileUploader = ({
     label,
     required = false,
     uploadFileType,
-    portfolioControl,
+    mediaFileControl,
     uploadFilePreview,
     handleMediaRemove,
     handleUploadFilePreview,
@@ -42,7 +42,7 @@ const MediaFileUploader = ({
             </label>
             {uploadFilePreview ? (
                 <div className={styles.imagePreviewContainer}>
-                    {uploadFileType === "portfolio_videos" ? (
+                    {uploadFileType === "gallery_videos" ? (
                         <video controls className={styles.imagePreview}>
                             <source src={uploadFilePreview} type="video/mp4" />
                             Your browser does not support the video tag.
@@ -60,7 +60,7 @@ const MediaFileUploader = ({
             ) : (
                 <Controller
                     name={name}
-                    control={portfolioControl}
+                    control={mediaFileControl}
                     render={({ field }) => (
                         <div
                             className={`${styles.uploadArea} ${isDragging ? styles.dragging : ''}`}

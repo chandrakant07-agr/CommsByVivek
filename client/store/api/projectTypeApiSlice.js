@@ -1,7 +1,7 @@
 import { baseApiSlice } from "./baseApiSlice";
 import { toast } from "react-toastify";
 
-export const adminApiSlice = baseApiSlice.injectEndpoints({
+export const projectTypesApiSlice = baseApiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getProjectTypes: builder.query({
             query: () => ({
@@ -33,4 +33,4 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
 export const {
     useGetProjectTypesQuery,
     useSyncProjectTypeMutation,
-} = adminApiSlice;
+} = projectTypesApiSlice;

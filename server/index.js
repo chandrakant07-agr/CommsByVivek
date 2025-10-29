@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 // Import Routes
 import adminRoutes from './routers/admin.routes.js';
 import messageRoutes from './routers/message.routes.js';
-import portfolioRoutes from './routers/portfolio.routes.js';
+import galleryRoutes from './routers/gallery.routes.js';
 import cloudinaryRoutes from './routers/cloudinary.routes.js';
 import projectTypeRoutes from './routers/projectType.routes.js';
 import contactDetailsRoutes from './routers/contactDetails.routes.js';
@@ -35,7 +35,7 @@ import contactDetailsRoutes from './routers/contactDetails.routes.js';
 // Routers Declaration
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/message', messageRoutes);
-app.use('/api/v1/portfolio', portfolioRoutes);
+app.use('/api/v1/gallery', galleryRoutes);
 app.use('/api/v1/cloudinary', cloudinaryRoutes);
 app.use('/api/v1/project-type', projectTypeRoutes);
 app.use('/api/v1/contact-details', contactDetailsRoutes);

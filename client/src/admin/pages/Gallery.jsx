@@ -12,12 +12,12 @@ import {
 import { MdEdit, MdDelete, MdCategory } from "react-icons/md";
 import {
     useGetCategoriesQuery,
-    useGetPortfolioItemsQuery,
+    useGetGalleryItemsQuery,
     useSyncCategoriesMutation,
-    useAddPortfolioItemMutation,
-    useUpdatePortfolioItemMutation,
-    useDeletePortfolioItemMutation
-} from "../../../store/api/portfolioApiSlice";
+    useAddGalleryItemMutation,
+    useUpdateGalleryItemMutation,
+    useDeleteGalleryItemMutation
+} from "../../../store/api/galleryApiSlice";
 import {
     useGenerateSignatureMutation
 } from "../../../store/api/cloudinaryApiSlice";
@@ -27,9 +27,9 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import UploadProgressBar from "../components/UploadProgressBar";
 import MediaFileUploader from "../components/MediaFileUploader";
 import { generateThumbnailUrl, uploadFileCloudinary } from "../../../utils/cloudinaryUtils";
-import styles from "./styles/Portfolio.module.css";
+import styles from "./styles/Gallery.module.css";
 
-const Portfolio = () => {
+const Gallery = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
 
@@ -47,17 +47,17 @@ const Portfolio = () => {
     const { control: categoryControl, handleSubmit: categorySubmit, reset: resetCategory } = useForm();
 
     const {
-        reset: resetPortfolio,
-        control: portfolioControl,
-        register: portfolioRegister,
-        handleSubmit: portfolioSubmit,
-        formState: { errors: portfolioErrors }
+        reset: resetGallery,
+        control: galleryControl,
+        register: galleryRegister,
+        handleSubmit: gallerySubmit,
+        formState: { errors: galleryErrors }
     } = useForm();
 
     const { data: fetchCategories, isLoading: isFetchingCategory } = useGetCategoriesQuery();
     const [syncCategories, { isLoading: isSyncing }] = useSyncCategoriesMutation();
 
-    const { data: fetchPortfolio, isLoading: isFetchingPortfolio } = useGetPortfolioItemsQuery({
+    const { data: fetchGallery, isLoading: isFetchingGallery } = useGetGalleryItemsQuery({
         search: filterWatch("searchQuery") || "",
         category: filterWatch("categoryFilter") || "all",
         pageNo: currentPage,
@@ -65,22 +65,22 @@ const Portfolio = () => {
     });
 
     const [
-        addPortfolioItem, { isLoading: isAdding, isSuccess: isAddSuccess }
-    ] = useAddPortfolioItemMutation();
+        addGalleryItem, { isLoading: isAdding, isSuccess: isAddSuccess }
+    ] = useAddGalleryItemMutation();
 
     const [
-        updatePortfolioItem, { isLoading: isUpdating, isSuccess: isUpdateSuccess }
-    ] = useUpdatePortfolioItemMutation();
+        updateGalleryItem, { isLoading: isUpdating, isSuccess: isUpdateSuccess }
+    ] = useUpdateGalleryItemMutation();
 
-    const [deletePortfolioItem, { isLoading: isDeleting }] = useDeletePortfolioItemMutation();
+    const [deleteGalleryItem, { isLoading: isDeleting }] = useDeleteGalleryItemMutation();
 
     const [generateSignature] = useGenerateSignatureMutation();
 
-    // console.log(fetchPortfolio);
+    // console.log(fetchGallery);
     // console.log(fetchCategories);
 
-    // Submit portfolio form (only file upload part shown)
-    const onSubmitPortfolio = async (data) => {
+    // Submit gallery form (only file upload part shown)
+    const onSubmitGallery = async (data) => {
         try {
             setIsUploading(true);
 
@@ -115,18 +115,18 @@ const Portfolio = () => {
             // remove coverFile from form data
             delete data.coverFile;
 
-            if(!!editingItem) await updatePortfolioItem({ id: editingItem._id, ...data }).unwrap();
-            else await addPortfolioItem(data).unwrap();
+            if(!!editingItem) await updateGalleryItem({ id: editingItem._id, ...data }).unwrap();
+            else await addGalleryItem(data).unwrap();
 
         } catch (error) {
             setIsUploading(false);
-            toast.error("Failed to save portfolio item. Please try again.");
+            toast.error("Failed to save gallery item. Please try again.");
         }
     };
 
     // Open modal for adding new item
     const handleAddNewItem = () => {
-        resetPortfolio();
+        resetGallery();
         setIsModalOpen(true);
         setEditingItem(null);
         setUploadFilePreview(null);
@@ -136,7 +136,7 @@ const Portfolio = () => {
     const handleUpdateItem = (item) => {
         setIsModalOpen(true);
         setEditingItem(item);
-        resetPortfolio({
+        resetGallery({
             year: item.year,
             title: item.title,
             subTags: item.subTags || [],
@@ -144,16 +144,16 @@ const Portfolio = () => {
             shortDescription: item.shortDescription
         }, { keepDefaultValues: true });
         setUploadFilePreview(item.cloudinaryData.secure_url);
-        if(item.cloudinaryData.resource_type === "image") setUploadFileType("portfolio_images");
-        if(item.cloudinaryData.resource_type === "video") setUploadFileType("portfolio_videos");
+        if(item.cloudinaryData.resource_type === "image") setUploadFileType("gallery_images");
+        if(item.cloudinaryData.resource_type === "video") setUploadFileType("gallery_videos");
     };
 
     const handleDeleteItem = async (itemId) => {
         if(window.confirm("Are you sure you want to delete this item?")) {
             try {
-                await deletePortfolioItem({ itemId }).unwrap();
+                await deleteGalleryItem({ itemId }).unwrap();
             } catch (error) {
-                toast.error("Failed to delete portfolio item. Please try again.");
+                toast.error("Failed to delete gallery item. Please try again.");
             }
         }
     };
@@ -161,14 +161,14 @@ const Portfolio = () => {
     const handleUploadFilePreview = (file) => {
         if(file) {
             setUploadFilePreview(URL.createObjectURL(file));
-            if(file.type.startsWith("image/")) setUploadFileType("portfolio_images");
-            if(file.type.startsWith("video/")) setUploadFileType("portfolio_videos");
+            if(file.type.startsWith("image/")) setUploadFileType("gallery_images");
+            if(file.type.startsWith("video/")) setUploadFileType("gallery_videos");
         }
     };
 
     const handleMediaRemove = () => {
         setUploadFilePreview(null);
-        resetPortfolio({ coverFile: null });
+        resetGallery({ coverFile: null });
     };
 
     const handleCancelUpload = () => {
@@ -182,18 +182,18 @@ const Portfolio = () => {
     }, [fetchCategories, resetCategory]);
 
     useEffect(() => {
-        resetPortfolio();
+        resetGallery();
         setEditingItem(null);
         setIsModalOpen(false);
         setIsUploading(false);
         setUploadFilePreview(null);
-    }, [isAddSuccess, isUpdateSuccess, resetPortfolio]);
+    }, [isAddSuccess, isUpdateSuccess, resetGallery]);
 
     return (
         <>
             <section className={styles.pageHeader}>
-                <h1>Portfolio Management</h1>
-                <p>Manage your portfolio items and categories</p>
+                <h1>Gallery Management</h1>
+                <p>Manage your gallery items and categories</p>
             </section>
 
             {/* Category Management Section */}
@@ -240,11 +240,11 @@ const Portfolio = () => {
                 )}
             </section>
 
-            {/* Portfolio List Section */}
+            {/* Gallery List Section */}
             <section className={styles.cardContainer}>
                 <div className={styles.sectionHeader}>
                     <IoImagesOutline className={styles.sectionIcon} />
-                    <h2>Portfolio Items</h2>
+                    <h2>Gallery Items</h2>
                     <button className={styles.addNewButton}
                         onClick={handleAddNewItem}
                     >
@@ -277,19 +277,19 @@ const Portfolio = () => {
                         )}
                     </div>
 
-                    {/* Portfolio Grid */}
-                    {isFetchingPortfolio ? (
+                    {/* Gallery Grid */}
+                    {isFetchingGallery ? (
                         <LoadingSpinner size="lg" />
-                    ) : fetchPortfolio?.data.portfolioItems.length === 0 ? (
-                        <div className={styles.portfolioEmptyState}>
+                    ) : fetchGallery?.data.galleryItems.length === 0 ? (
+                        <div className={styles.galleryEmptyState}>
                             <IoImagesOutline />
-                            <h4>No portfolio items found</h4>
-                            <p>Add your first portfolio item to get started</p>
+                            <h4>No gallery items found</h4>
+                            <p>Add your first gallery item to get started</p>
                         </div>
                     ) : (
-                        <div className={styles.portfolioGrid}>
-                            {fetchPortfolio?.data.portfolioItems.map((item) => (
-                                <div key={item._id} className={styles.portfolioCard}>
+                        <div className={styles.galleryGrid}>
+                            {fetchGallery?.data.galleryItems.map((item) => (
+                                <div key={item._id} className={styles.galleryCard}>
                                     <div className={styles.cardThumbnail}>
                                         <img src={generateThumbnailUrl(item.cloudinaryData.secure_url,
                                             item.cloudinaryData.resource_type, 300, 200)}
@@ -324,21 +324,21 @@ const Portfolio = () => {
             </section>
 
             {/* Pagination */}
-            {fetchPortfolio?.data.pagination.totalPages > 1 && (
+            {fetchGallery?.data.pagination.totalPages > 1 && (
                 <section className={`${styles.cardContainer} px-6 py-4`}>
-                    {isFetchingPortfolio ? (
+                    {isFetchingGallery ? (
                         <LoadingSpinner />
                     ) : (
                         <div className="d-flex a-center justify-between">
                             <div className={styles.totalPages}>
                                 {`Showing ${((currentPage - 1) * itemsPerPage) + 1} 
                                 to ${Math.min(currentPage * itemsPerPage,
-                                    fetchPortfolio?.data.pagination.totalItems)} 
-                            of ${fetchPortfolio?.data.pagination.totalItems} results`}
+                                    fetchGallery?.data.pagination.totalItems)} 
+                            of ${fetchGallery?.data.pagination.totalItems} results`}
                             </div>
 
                             <Pagination
-                                pageCount={fetchPortfolio?.data.pagination.totalPages}
+                                pageCount={fetchGallery?.data.pagination.totalPages}
                                 currentPage={currentPage}
                                 setCurrentPage={setCurrentPage}
                             />
@@ -352,7 +352,7 @@ const Portfolio = () => {
                 <section className={styles.modalOverlay}>
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                         <div className={styles.modalHeader}>
-                            <h2>{!!editingItem ? "Edit Portfolio Item" : "Add New Portfolio Item"}</h2>
+                            <h2>{!!editingItem ? "Edit Gallery Item" : "Add New Gallery Item"}</h2>
                             <button
                                 className={styles.closeButton}
                                 onClick={() => setIsModalOpen(false)}
@@ -361,7 +361,7 @@ const Portfolio = () => {
                             </button>
                         </div>
 
-                        <form onSubmit={portfolioSubmit(onSubmitPortfolio)}
+                        <form onSubmit={gallerySubmit(onSubmitGallery)}
                             className="p-6 pb-0" noValidate>
 
                             {/* Title */}
@@ -370,14 +370,14 @@ const Portfolio = () => {
                                     Title<span className="fromRequiredStar">*</span>
                                 </label>
                                 <input type="text" id="title" className={`${styles.textInput}
-                                    ${portfolioErrors.title && "formInputErrorBorder"}
+                                    ${galleryErrors.title && "formInputErrorBorder"}
                                 `}
-                                    placeholder="Enter portfolio title"
-                                    {...portfolioRegister("title", {
+                                    placeholder="Enter your project title"
+                                    {...galleryRegister("title", {
                                         required: "Title is required"
                                     })}
                                 />
-                                <FormInputError message={portfolioErrors.title?.message} />
+                                <FormInputError message={galleryErrors.title?.message} />
                             </div>
 
                             {/* Main Category */}
@@ -386,8 +386,8 @@ const Portfolio = () => {
                                     Category<span className="fromRequiredStar">*</span>
                                 </label>
                                 <select id="category" className={`${styles.categorySelect}
-                                    ${portfolioErrors.category && "formInputErrorBorder"}`}
-                                    {...portfolioRegister("category", {
+                                    ${galleryErrors.category && "formInputErrorBorder"}`}
+                                    {...galleryRegister("category", {
                                         required: "Category is required"
                                     })}
                                 >
@@ -396,7 +396,7 @@ const Portfolio = () => {
                                         <option key={cat._id} value={cat._id}>{cat.name}</option>
                                     ))}
                                 </select>
-                                <FormInputError message={portfolioErrors.category?.message} />
+                                <FormInputError message={galleryErrors.category?.message} />
                             </div>
 
                             {/* Cover Image */}
@@ -406,7 +406,7 @@ const Portfolio = () => {
                                     label="Cover Media"
                                     required={true}
                                     uploadFileType={uploadFileType}
-                                    portfolioControl={portfolioControl}
+                                    mediaFileControl={galleryControl}
                                     uploadFilePreview={uploadFilePreview}
                                     handleMediaRemove={handleMediaRemove}
                                     handleUploadFilePreview={handleUploadFilePreview}
@@ -419,14 +419,14 @@ const Portfolio = () => {
                                     Short Description<span className="fromRequiredStar">*</span>
                                 </label>
                                 <textarea id="shortDescription" className={`${styles.textAreaInput}
-                                    ${portfolioErrors.shortDescription && "formInputErrorBorder"}`}
+                                    ${galleryErrors.shortDescription && "formInputErrorBorder"}`}
                                     placeholder="Brief description for the card"
                                     rows="3"
-                                    {...portfolioRegister("shortDescription", {
+                                    {...galleryRegister("shortDescription", {
                                         required: "Short description is required"
                                     })}
                                 />
-                                <FormInputError message={portfolioErrors.shortDescription?.message} />
+                                <FormInputError message={galleryErrors.shortDescription?.message} />
                             </div>
 
                             {/* Year */}
@@ -435,13 +435,13 @@ const Portfolio = () => {
                                     Year<span className="fromRequiredStar">*</span>
                                 </label>
                                 <input type="text" id="year" className={`${styles.textInput}
-                                    ${portfolioErrors.year && "formInputErrorBorder"}`}
+                                    ${galleryErrors.year && "formInputErrorBorder"}`}
                                     placeholder="e.g., 2024"
-                                    {...portfolioRegister("year", {
+                                    {...galleryRegister("year", {
                                         required: "Year is required"
                                     })}
                                 />
-                                <FormInputError message={portfolioErrors.year?.message} />
+                                <FormInputError message={galleryErrors.year?.message} />
                             </div>
 
                             {/* Sub Tags */}
@@ -450,7 +450,7 @@ const Portfolio = () => {
                                 <div className={styles.tagsInputWrapper}>
                                     <Controller
                                         name="subTags"
-                                        control={portfolioControl}
+                                        control={galleryControl}
                                         render={({ field }) => (
                                             <TagsInput
                                                 value={field.value || []}
@@ -503,4 +503,4 @@ const Portfolio = () => {
     );
 };
 
-export default Portfolio;
+export default Gallery;

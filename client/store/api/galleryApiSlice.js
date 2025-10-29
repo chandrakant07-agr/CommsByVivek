@@ -1,18 +1,18 @@
 import { baseApiSlice } from "./baseApiSlice";
 import { toast } from "react-toastify";
 
-export const adminApiSlice = baseApiSlice.injectEndpoints({
+export const galleryApiSlice = baseApiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getCategories: builder.query({
             query: () => ({
-                url: "/portfolio/categories/get",
+                url: "/gallery/categories/get",
                 method: "GET"
             }),
-            providesTags: ["Portfolio"]
+            providesTags: ["Gallery"]
         }),
         syncCategories: builder.mutation({
             query: (categories) => ({
-                url: "/portfolio/categories/sync",
+                url: "/gallery/categories/sync",
                 method: "PUT",
                 body: categories
             }),
@@ -25,36 +25,36 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
                     toast.error(err.message || "Failed to sync categories.");
                 }
             },
-            invalidatesTags: ["Portfolio"]
+            invalidatesTags: ["Gallery"]
         }),
-        getPortfolioItems: builder.query({
+        getGalleryItems: builder.query({
             query: (params) => ({
-                url: "/portfolio/get",
+                url: "/gallery/get",
                 method: "GET",
                 params
             }),
-            providesTags: ["Portfolio"],
+            providesTags: ["Gallery"],
         }),
-        addPortfolioItem: builder.mutation({
+        addGalleryItem: builder.mutation({
             query: (body) => ({
-                url: "/portfolio/add",
+                url: "/gallery/add",
                 method: "POST",
                 body,
             }),
             onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
                 try {
                     const { data } = await queryFulfilled;
-                    toast.success(data.message || "Portfolio item successfully added!");
+                    toast.success(data.message || "Gallery item successfully added!");
                 } catch (error) {
                     const err = error.error?.data;
-                    toast.error(err.message || "Failed to add portfolio item.");
+                    toast.error(err.message || "Failed to add gallery item.");
                 }
             },
-            invalidatesTags: ["Portfolio"],
+            invalidatesTags: ["Gallery"],
         }),
-        updatePortfolioItem: builder.mutation({
+        updateGalleryItem: builder.mutation({
             query: ({id, ...body}) => ({
-                url: "/portfolio/update",
+                url: "/gallery/update",
                 method: "PATCH",
                 params: { id },
                 body,
@@ -62,30 +62,30 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
             onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
                 try {
                     const { data } = await queryFulfilled;
-                    toast.success(data.message || "Portfolio item successfully updated!");
+                    toast.success(data.message || "Gallery item successfully updated!");
                 } catch (error) {
                     const err = error.error?.data;
-                    toast.error(err.message || "Failed to update portfolio item.");
+                    toast.error(err.message || "Failed to update gallery item.");
                 }
             },
-            invalidatesTags: ["Portfolio"],
+            invalidatesTags: ["Gallery"],
         }),
-        deletePortfolioItem: builder.mutation({
+        deleteGalleryItem: builder.mutation({
             query: ({itemId, cloudinaryPublicId}) => ({
-                url: "/portfolio/delete",
+                url: "/gallery/delete",
                 method: "DELETE",
                 params: { id: itemId, cloudinaryPublicId },
             }),
             onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
                 try {
                     const { data } = await queryFulfilled;
-                    toast.success(data.message || "Portfolio item successfully deleted!");
+                    toast.success(data.message || "Gallery item successfully deleted!");
                 } catch (error) {
                     const err = error.error?.data;
-                    toast.error(err.message || "Failed to delete portfolio item.");
+                    toast.error(err.message || "Failed to delete gallery item.");
                 }
             },
-            invalidatesTags: ["Portfolio"],
+            invalidatesTags: ["Gallery"],
         }),
     })
 });
@@ -93,8 +93,8 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
 export const {
     useGetCategoriesQuery,
     useSyncCategoriesMutation,
-    useGetPortfolioItemsQuery,
-    useAddPortfolioItemMutation,
-    useUpdatePortfolioItemMutation,
-    useDeletePortfolioItemMutation
-} = adminApiSlice;
+    useGetGalleryItemsQuery,
+    useAddGalleryItemMutation,
+    useUpdateGalleryItemMutation,
+    useDeleteGalleryItemMutation
+} = galleryApiSlice;

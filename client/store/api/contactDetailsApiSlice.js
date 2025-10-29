@@ -1,7 +1,7 @@
 import { baseApiSlice } from "./baseApiSlice";
 import { toast } from "react-toastify";
 
-export const adminApiSlice = baseApiSlice.injectEndpoints({
+export const contactDetailsApiSlice = baseApiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getContactDetails: builder.query({
             query: () => ({
@@ -51,4 +51,4 @@ export const {
     useGetContactDetailsQuery,
     useUpdateContactDetailsMutation,
     useUpdateSocialHandlesMutation
-} = adminApiSlice;
+} = contactDetailsApiSlice;

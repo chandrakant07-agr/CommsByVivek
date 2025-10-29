@@ -4,7 +4,7 @@ import { LuMessageSquareMore, LuPanelsLeftBottom, LuUserRound } from "react-icon
 import { useAdminLogoutMutation, useGetAdminProfileQuery } from "../../../store/api/adminApiSlice";
 import styles from "./styles/Header.module.css";
 import { GoProjectRoadmap } from "react-icons/go";
-import { GrContactInfo } from "react-icons/gr";
+import { GrContactInfo, GrGallery } from "react-icons/gr";
 
 const Header = ({ isMobileMenuOpen }) => {
 
@@ -17,7 +17,7 @@ const Header = ({ isMobileMenuOpen }) => {
         { name: 'Profile', path: '/admin/profile', icon: <LuUserRound /> },
         { name: 'Project Type', path: '/admin/projectType', icon: <GoProjectRoadmap /> },
         { name: 'Contact Info', path: '/admin/contactInfo', icon: <GrContactInfo /> },
-        { name: 'Portfolio', path: '/admin/portfolio', icon: <GrContactInfo /> },
+        { name: 'Gallery', path: '/admin/gallery', icon: <GrGallery /> },
     ];
 
     return (

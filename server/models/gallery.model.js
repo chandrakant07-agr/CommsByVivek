@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const portfolioSchema = new Schema({
+const gallerySchema = new Schema({
     title: {
         type: String,
         required: true,
@@ -40,6 +40,6 @@ const portfolioSchema = new Schema({
     }
 }, { timestamps: true });
 
-const Portfolio = model("Portfolio", portfolioSchema);
+const Gallery = model("Gallery", gallerySchema);
 
-export default Portfolio;
+export default Gallery;
