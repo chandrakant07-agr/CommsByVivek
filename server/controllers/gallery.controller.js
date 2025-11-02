@@ -7,20 +7,23 @@ import { cloudinaryDelete } from "../utils/cloudinarySignature.js";
 
 // fetch gallery items (for public use)
 const fetchGalleryItems = asyncHandler(async (req, res) => {
-    const { search, category, pageNo, limit } = req.query;
-    
+    const { search, pageLocation, category, pageNo, limit, initialSkip = 0 } = req.query;
+
     const query = {};
 
     // search by title
-    if(search) query.title = { $regex: search, $options: "i" };
+    if (search) query.title = { $regex: search, $options: "i" };
+
+    // filter by page location
+    if (pageLocation && pageLocation !== "all") query.pageLocation = pageLocation;
 
     // filter by category
-    if(category && category !== "all") query.category = category;
+    if (category && category !== "all") query.category = category;
 
     // Pagination
     const page = parseInt(pageNo, 10) > 0 ? parseInt(pageNo, 10) : 1;
     const pageSize = parseInt(limit, 10) > 0 ? parseInt(limit, 10) : 10;
-    const skip = (page - 1) * pageSize;
+    const skip = (page - 1) * pageSize + parseInt(initialSkip, 10);
 
     // Fetch gallery items with pagination
     const totalItems = await Gallery.countDocuments(query);
@@ -31,20 +34,22 @@ const fetchGalleryItems = asyncHandler(async (req, res) => {
         .skip(skip)
         .limit(pageSize);
 
+    const pagination = {
+        totalItems,
+        currentPage: page,
+        pageLimit: pageSize,
+        totalPages: Math.ceil(totalItems / pageSize)
+    };
+
     return ApiResponse.sendSuccess(res, {
         galleryItems,
-        pagination: {
-            totalItems,
-            currentPage: page,
-            pageLimit: pageSize,
-            totalPages: Math.ceil(totalItems / pageSize)
-        }
+        pagination
     }, "Gallery items successfully fetched.");
 });
 
 // admin: add new gallery item
 const addGalleryItem = asyncHandler(async (req, res) => {
-    const { title, category, cloudinaryData, shortDescription, year, subTags } = req.body;
+    const { title, category, cloudinaryData, shortDescription, year, pageLocation, subTags } = req.body;
 
     if (!title || !category || !shortDescription || !year) {
         throw new ApiError(400, "All required fields must be provided.");
@@ -67,6 +72,7 @@ const addGalleryItem = asyncHandler(async (req, res) => {
         year: Number(year),
         title: sanitizeInput(title),
         shortDescription: sanitizeInput(shortDescription),
+        pageLocation: pageLocation,
         subTags: Array.isArray(subTags) ? subTags.map(tag => sanitizeInput(tag)).filter(Boolean) : []
     });
 
@@ -78,7 +84,7 @@ const addGalleryItem = asyncHandler(async (req, res) => {
 // admin: update gallery item
 const updateGalleryItem = asyncHandler(async (req, res) => {
     const { id } = req.query;
-    const { title, category, cloudinaryData, shortDescription, year, subTags } = req.body;
+    const { title, category, cloudinaryData, shortDescription, year, pageLocation, subTags } = req.body;
 
     if (!title || !category || !shortDescription || !year) {
         throw new ApiError(400, "Title, Category, Short Description and Year are required.");
@@ -95,6 +101,7 @@ const updateGalleryItem = asyncHandler(async (req, res) => {
         year: Number(year),
         title: sanitizeInput(title),
         shortDescription: sanitizeInput(shortDescription),
+        pageLocation: sanitizeInput(pageLocation),
         subTags: Array.isArray(subTags) ? subTags.map(tag => sanitizeInput(tag)).filter(Boolean) : []
     };
 
@@ -112,19 +119,37 @@ const updateGalleryItem = asyncHandler(async (req, res) => {
     return ApiResponse.sendSuccess(res, updatedGalleryItem, "Gallery item successfully updated.");
 });
 
-// admin: delete gallery item
+// admin: delete gallery item (single/bulk)
 const deleteGalleryItem = asyncHandler(async (req, res) => {
-    const { id } = req.query;
+    const { ids } = req.body;
 
-    const deletedGalleryItem = await Gallery.findByIdAndDelete(id);
-
-    await cloudinaryDelete(deletedGalleryItem.cloudinaryData.public_id);
-
-    if (!deletedGalleryItem) {
-        throw new ApiError(404, "Gallery item not found.");
+    if (!Array.isArray(ids) || ids.length === 0) {
+        throw new ApiError(400, "Please provide at least one gallery item ID to delete.");
     }
 
-    return ApiResponse.sendSuccess(res, "", "Gallery item successfully deleted.");
+    // get cloudinary public ids before deletion
+    const galleryPublicIds = await Gallery.find({ _id: { $in: ids } })
+        .select("cloudinaryData.public_id");
+
+    if (galleryPublicIds.length === 0) {
+        throw new ApiError(404, "No gallery items found with the provided ID(s).");
+    }
+
+    // delete gallery items from database
+    const deletedGalleryItems = await Gallery.deleteMany({ _id: { $in: ids } });
+
+    if (deletedGalleryItems.deletedCount === 0) {
+        throw new ApiError(404, "No gallery items found with the provided ID(s).");
+    }
+
+    // delete images from cloudinary
+    await Promise.all(galleryPublicIds.map(item => cloudinaryDelete(item.cloudinaryData.public_id)));
+
+    if (!deletedGalleryItems) {
+        throw new ApiError(404, "Gallery items not found.");
+    }
+
+    return ApiResponse.sendSuccess(res, "", "Gallery items successfully deleted.");
 });
 
 // admin sends a new gallery category array to sync the existing gallery categories

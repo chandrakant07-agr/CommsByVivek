@@ -47,7 +47,7 @@ const ContactInfo = () => {
             { socialLinks: fetchContactDetails?.data.socialMediaLinks },
             { keepDefaultValues: true }
         )
-    }, [getContactDetails, resetContact, resetSocial]);
+    }, [fetchContactDetails, resetContact, resetSocial]);
 
     if(isLoading) return <p>Loading...</p>;
     if(isError) return <p>Error loading contact details.</p>;

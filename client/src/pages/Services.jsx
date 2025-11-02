@@ -86,7 +86,7 @@ const Services = () => {
                         <h3>{service.title}</h3>
                         <p>{service.description}</p>
                         <div className={styles.servicePreview}>
-                            <img src={service.previewImage} alt={service.title} />
+                            {/* <img src={service.previewImage} alt={service.title} /> */}
                         </div>
                     </motion.div>
                 ))}

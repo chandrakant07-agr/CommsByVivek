@@ -20,7 +20,7 @@ router.route('/add').post(authorization, addGalleryItem);
 // admin: update gallery item
 router.route('/update').patch(authorization, updateGalleryItem);
 
-// admin: delete gallery item
+// admin: delete gallery item (single/bulk)
 router.route('/delete').delete(authorization, deleteGalleryItem);
 
 // fetch gallery items (for public use)

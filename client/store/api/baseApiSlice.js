@@ -6,6 +6,7 @@ export const baseApiSlice = createApi({
         baseUrl: import.meta.env.VITE_API_BASE_URL,
         credentials: "include",
     }),
-    tagTypes: ["Admin", "Message", "ProjectType", "ContactDetails", "Content", "Gallery"],
+    tagTypes: ["Admin", "Message", "ProjectType", "ContactDetails", "Content", "Gallery", "Banner"],
+    keepUnusedDataFor: 600, // 10 minutes
     endpoints:  builder => ({}),
 });

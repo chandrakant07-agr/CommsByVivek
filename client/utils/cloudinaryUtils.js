@@ -40,6 +40,7 @@ const uploadFileCloudinary = async (
     formData.append("api_key", signatureData.api_Key);
     formData.append("timestamp", signatureData.timestamp);
     formData.append("signature", signatureData.signature);
+    formData.append("eager", signatureData.eager);
 
     try {
         const responseUpload = await axios.post(signatureData.uploadUrl, formData, {

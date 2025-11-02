@@ -128,7 +128,7 @@
     display: flex;
     gap: 1rem;
     flex-direction: column;
-    margin-bottom: 1.5rem;
+    /* margin-bottom: 1.5rem; */
 }
 
 .searchBox {
@@ -163,6 +163,7 @@
     box-shadow: 0 0 0 1px var(--accent-color, var(--indigo));
 }
 
+.pageFilter,
 .categoryFilter {
     min-width: 200px;
     padding: 0.5rem 0.75rem;
@@ -175,10 +176,69 @@
     cursor: pointer;
 }
 
+.pageFilter:focus,
 .categoryFilter:focus {
     outline: none;
     border-color: var(--accent-color, var(--indigo));
     box-shadow: 0 0 0 1px var(--accent-color, var(--indigo));
+}
+
+/* deleteAllActionButton */
+.deleteAllActionButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    font-size: 1.3rem;
+    color: var(--white);
+    background-color: var(--red);
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.deleteAllActionButton:hover {
+    background-color: var(--dark-red);
+    transform: translateY(-2px) scale(1.1);
+}
+
+/* Gallery Item Actions */
+.selectAllContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.75rem;
+}
+
+.selectedItemsInfo {
+    font-weight: 500;
+    color: var(--text-primary-color);
+}
+
+.selectedItemsInfo span {
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--text-secondary-color);
+}
+
+.selectAllCheckbox label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary-color);
+    text-transform: uppercase;
+}
+
+.selectAllCheckbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.selectAllCheckbox input {
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
 }
 
 /* Gallery Empty State */
@@ -216,6 +276,7 @@
 }
 
 .galleryCard {
+    position: relative;
     background-color: var(--card-secondary-bg);
     border: 1px solid var(--border-primary-color);
     border-radius: 0.5rem;
@@ -226,6 +287,19 @@
 .galleryCard:hover {
     transform: translateY(-4px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cardCheckbox {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--border-primary-color);
+    border-radius: 0.25rem;
+    z-index: 5;
+    cursor: pointer;
 }
 
 .cardThumbnail {
@@ -285,11 +359,18 @@
 .actionButton:hover {
     color: var(--text-primary-color);
     background-color: var(--border-secondary-color);
+    transform: translateY(-2px) scale(1.1);
 }
 
-.actionButton.deleteAction:hover {
-    color: #ffffff;
+.deleteAction {
+    color: var(--red);
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+.deleteAction:hover {
+    color: var(--white);
     background-color: var(--red);
+    transform: translateY(-2px) scale(1.1);
 }
 
 .actionButton:disabled {
@@ -373,7 +454,7 @@
 }
 
 /* Form Elements */
-.modalContent label {
+.modalContent .modelLabel {
     display: block;
     margin-bottom: 0.5rem;
     font-size: 1rem;
@@ -406,6 +487,7 @@
     padding: 0.5rem 0.75rem;
     font-size: 0.9rem;
     color: var(--text-primary-color);
+    line-height: 1.25rem;
     background-color: var(--input-bg-color, var(--card-secondary-bg));
     border: 1px solid var(--border-primary-color);
     border-radius: 0.375rem;
@@ -491,18 +573,18 @@
 
 /* Responsive Design */
 @media (min-width: 640px) {
-    .filterBar {
-        justify-content: space-between;
-        align-items: center;
-        flex-direction: row;
-    }
-
     .galleryGrid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
 @media (min-width: 768px) {
+    .filterBar {
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+    }
+
     .galleryGrid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }

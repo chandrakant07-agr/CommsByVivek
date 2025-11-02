@@ -1,49 +1,37 @@
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { IoImagesOutline } from 'react-icons/io5';
+import LoadingSpinner from '../components/LoadingSpinner';
+import { generateThumbnailUrl } from '../../utils/cloudinaryUtils';
+import { useGetGalleryInfiniteQuery } from '../../store/api/galleryApiSlice';
 import styles from './styles/FilmedByVivek.module.css';
 
 const FilmedByVivek = () => {
-    const projects = [
-        {
-            title: 'Voices of the Street',
-            type: 'Documentary Film',
-            description: 'An intimate exploration of urban life through the eyes of street artists, capturing their stories, struggles, and the vibrant culture they create in forgotten corners of the city.',
-            year: '2024',
-            tags: ['Documentary', 'Social Impact', 'Urban Culture'],
-            icon: '🎨'
-        },
-        {
-            title: 'The Last Craftsman',
-            type: 'Short Documentary',
-            description: 'A poignant portrait of traditional artisans preserving ancient crafts in a rapidly modernizing world. A meditation on heritage, skill, and the passage of time.',
-            year: '2023',
-            tags: ['Heritage', 'Craftsmanship', 'Traditional Arts'],
-            icon: '🛠️'
-        },
-        {
-            title: 'Digital Nomads',
-            type: 'Experimental Film',
-            description: 'A visual essay exploring the intersection of technology and human connection in the age of remote work and digital wandering.',
-            year: '2024',
-            tags: ['Experimental', 'Technology', 'Modern Life'],
-            icon: '💻'
-        },
-        {
-            title: 'Monsoon Memories',
-            type: 'Personal Narrative',
-            description: 'A deeply personal reflection on childhood, family, and the changing landscape of home, told through the lens of seasonal transformation.',
-            year: '2023',
-            tags: ['Personal', 'Family', 'Nostalgia'],
-            icon: '🌧️'
-        },
-        {
-            title: 'The Underground',
-            type: 'Music Documentary',
-            description: 'An immersive journey into the underground music scene, capturing raw performances and the passionate community that thrives in the shadows.',
-            year: '2024',
-            tags: ['Music', 'Underground', 'Performance'],
-            icon: '🎵'
+    const inViewRef = useRef(null);
+    const isInView = useInView(inViewRef);
+
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const fetchItemsLimit = 6;
+
+    const {
+        data: fetchGallery, isLoading: isLoadingGallery, isFetching: isFetchingGallery
+    } = useGetGalleryInfiniteQuery({
+        pageLocation: "filmedByVivek",
+        pageNo: currentPage,
+        limit: fetchItemsLimit
+    });
+
+    // console.log("FilmedByVivek Gallery Data:", fetchGallery);
+
+    const paginationData = fetchGallery?.data.pagination;
+    const hasNextPage = paginationData?.currentPage < paginationData?.totalPages;
+
+    useEffect(() => {
+        if (isInView && hasNextPage) {
+            setCurrentPage((prevPage) => prevPage + 1);
         }
-    ];
+    }, [isInView, hasNextPage]);
 
     return (
         <div id="filmed-by-vivek">
@@ -88,43 +76,81 @@ const FilmedByVivek = () => {
             </section>
 
             {/* Projects Section */}
-            <section className="p-6">
-                {projects.map((project, index) => (
-                    <motion.div
-                        key={index}
-                        className={styles.projectItem}
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: index * 0.2 }}
-                        viewport={{ once: true }}
-                    >
-                        <motion.div
-                            className={styles.projectVisual}
-                            whileHover={{ scale: 1.02 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            {/* <span>{project.icon}</span> */}
-                        </motion.div>
+            <section className="px-6 pt-6">
+                {isLoadingGallery ? (
+                    <LoadingSpinner size="lg" color="var(--accent-color)" />
+                ) : fetchGallery?.data.galleryItems.length === 0 ? (
+                    <div className="projectEmptyState">
+                        <IoImagesOutline />
+                        <h4>No projects found under FilmedByVivek</h4>
+                    </div>
+                ) : (
+                    <>
+                        {fetchGallery?.data.galleryItems.map((item, index) => (
+                            <motion.div
+                                key={item._id}
+                                className={styles.projectItem}
+                                initial={{ opacity: 0, y: 50 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: index * 0.2 }}
+                                viewport={{ once: true }}
+                            >
+                                <motion.div
+                                    className={styles.projectVisual}
+                                    whileHover={{ scale: 1.02 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <img
+                                        src={generateThumbnailUrl(
+                                            item.cloudinaryData.secure_url,
+                                            item.cloudinaryData.resource_type,
+                                            600,
+                                            337
+                                        )}
+                                        alt={item.title}
+                                        loading="lazy"
+                                        className={styles.projectImage}
+                                    />
+                                </motion.div>
 
-                        <div className={styles.projectContent}>
-                            <h2 className={styles.projectTitle}>{project.title}</h2>
-                            <h5 className={styles.projectType}>{project.type}</h5>
-                            <p className={styles.projectDescription}>{project.description}</p>
+                                <div className={styles.projectContent}>
+                                    <h2 className={styles.projectTitle}>
+                                        {item.title}
+                                    </h2>
+                                    <h5 className={styles.projectType}>
+                                        {item.category.name}
+                                    </h5>
+                                    <p className={styles.projectDescription}>
+                                        {item.shortDescription}
+                                    </p>
 
-                            <div className={styles.projectMeta}>
-                                <span className={styles.projectYear}>Released {project.year}</span>
-                                <div className={styles.projectTags}>
-                                    {project.tags.map((tag, idx) => (
-                                        <span key={idx} className={styles.projectTag}>
-                                            {tag}
+                                    <div className={styles.projectMeta}>
+                                        <span className={styles.projectYear}>
+                                            Released {item.year}
                                         </span>
-                                    ))}
+                                        <div className={styles.projectTags}>
+                                            {item.subTags?.map((tag) => (
+                                                <span key={tag} className={styles.projectTag}>
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </motion.div>
+                        ))}
+                    </>
+                )}
+                <div ref={inViewRef} className={`text-center mt-4 ${!hasNextPage && 'd-none'}`}>
+                    {isFetchingGallery && (
+                        <div className="inViewTriggerElement">
+                            <LoadingSpinner size="lg" color="var(--accent-color)" />
                         </div>
-                    </motion.div>
-                ))}
+                    )}
+                    load more...
+                </div>
             </section>
+
         </div>
     );
 };

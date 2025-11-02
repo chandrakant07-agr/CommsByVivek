@@ -1,0 +1,49 @@
+.customRadioInput {
+    opacity: 0;
+    position: absolute;
+}
+
+.customRadioLabel {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding-left: 1.75rem;
+    font-size: 0.9rem;
+    color: var(--text-primary-color);
+    cursor: pointer;
+    user-select: none;
+}
+
+.customRadioLabel::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.customRadioLabel::after {
+    content: '';
+    position: absolute;
+    left: 5.5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background-color: var(--cornflower-blue);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.customRadioInput:checked+.customRadioLabel::before {
+    border-color: var(--cornflower-blue);
+}
+
+.customRadioInput:checked+.customRadioLabel::after {
+    opacity: 1;
+}

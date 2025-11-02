@@ -20,7 +20,7 @@ const AdminLayout = () => {
 
     return (
         <div className={styles.adminLayout}>
-            <Header isMobileMenuOpen={isMobileMenuOpen} />
+            <Header isMobileMenuOpen={isMobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} />
             <div className={styles.mainContainer}>
                 <section className={styles.topBarSection}>
                     <div className={styles.topBarContent}>

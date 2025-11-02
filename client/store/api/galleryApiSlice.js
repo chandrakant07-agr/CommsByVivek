@@ -8,6 +8,7 @@ export const galleryApiSlice = baseApiSlice.injectEndpoints({
                 url: "/gallery/categories/get",
                 method: "GET"
             }),
+            staleTime: 600000,  // 10 minutes
             providesTags: ["Gallery"]
         }),
         syncCategories: builder.mutation({
@@ -27,12 +28,41 @@ export const galleryApiSlice = baseApiSlice.injectEndpoints({
             },
             invalidatesTags: ["Gallery"]
         }),
-        getGalleryItems: builder.query({
+        getGalleryPaginated: builder.query({
             query: (params) => ({
                 url: "/gallery/get",
                 method: "GET",
                 params
             }),
+            staleTime: 600000,  // 10 minutes
+            providesTags: ["Gallery"],
+        }),
+        getGalleryInfinite: builder.query({
+            query: (params) => ({
+                url: "/gallery/get",
+                method: "GET",
+                params
+            }),
+            serializeQueryArgs: ({ endpointName, queryArgs }) => {
+                const { pageNo, limit, initialSkip, ...restArgs } = queryArgs;
+                return `${endpointName}-${JSON.stringify(restArgs)}`;
+            },
+            forceRefetch: ({ currentArg, previousArg }) => {
+                return currentArg?.pageNo !== previousArg?.pageNo ||
+                    currentArg?.category !== previousArg?.category;
+            },
+            merge: (currentCache, newItems) => {
+                const isFirstPage = newItems.data.pagination.currentPage === 1;
+
+                if (isFirstPage) {
+                    currentCache.data.galleryItems = newItems.data.galleryItems;
+                } else {
+                    currentCache.data.galleryItems.push(...newItems.data.galleryItems);
+                }
+
+                currentCache.data.pagination = newItems.data.pagination;
+            },
+            staleTime: 600000,  // 10 minutes
             providesTags: ["Gallery"],
         }),
         addGalleryItem: builder.mutation({
@@ -53,7 +83,7 @@ export const galleryApiSlice = baseApiSlice.injectEndpoints({
             invalidatesTags: ["Gallery"],
         }),
         updateGalleryItem: builder.mutation({
-            query: ({id, ...body}) => ({
+            query: ({ id, ...body }) => ({
                 url: "/gallery/update",
                 method: "PATCH",
                 params: { id },
@@ -71,10 +101,10 @@ export const galleryApiSlice = baseApiSlice.injectEndpoints({
             invalidatesTags: ["Gallery"],
         }),
         deleteGalleryItem: builder.mutation({
-            query: ({itemId, cloudinaryPublicId}) => ({
+            query: (itemIds) => ({
                 url: "/gallery/delete",
                 method: "DELETE",
-                params: { id: itemId, cloudinaryPublicId },
+                body: itemIds
             }),
             onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
                 try {
@@ -93,7 +123,8 @@ export const galleryApiSlice = baseApiSlice.injectEndpoints({
 export const {
     useGetCategoriesQuery,
     useSyncCategoriesMutation,
-    useGetGalleryItemsQuery,
+    useGetGalleryPaginatedQuery,
+    useGetGalleryInfiniteQuery,
     useAddGalleryItemMutation,
     useUpdateGalleryItemMutation,
     useDeleteGalleryItemMutation

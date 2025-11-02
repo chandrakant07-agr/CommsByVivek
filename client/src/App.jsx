@@ -18,6 +18,7 @@ import AdminLayout from './admin/components/Admin.Layout';
 import ProjectType from './admin/pages/ProjectType';
 import ContactInfo from './admin/pages/ContactInfo';
 import Gallery from './admin/pages/Gallery';
+import HeroBanner from './admin/pages/HeroBanner';
 
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
@@ -62,6 +63,7 @@ function App() {
                         <Route path="projectType" element={<ProjectType />} />
                         <Route path="contactInfo" element={<ContactInfo />} />
                         <Route path="gallery" element={<Gallery />} />
+                        <Route path="heroBanner" element={<HeroBanner />} />
                     </Route>
                 </Route>
             </Routes>

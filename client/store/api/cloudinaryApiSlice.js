@@ -18,6 +18,7 @@ export const cloudinaryApiSlice = baseApiSlice.injectEndpoints({
                     toast.error(err?.message || 'Failed to obtain Cloudinary signature.');
                 }
             },
+            keepUnusedDataFor: 0,
         }),
     }),
 });

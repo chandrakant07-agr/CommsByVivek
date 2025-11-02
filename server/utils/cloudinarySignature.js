@@ -8,17 +8,18 @@ cloudinary.config({
     secure: true,
 });
 
-const cloudinarySignature = (timestamp, folder) => {
+const cloudinarySignature = (timestamp, folder, eager) => {
     const signature = cloudinary.utils.api_sign_request({
         timestamp,
-        folder
+        folder,
+        eager
     }, process.env.CLOUDINARY_API_SECRET);
 
     return signature;
 };
 
 const cloudinaryDelete = async (publicId) => {
-    const resource_type = publicId.split('/')[0] === "gallery_videos" ? "video" : "image";
+    const resource_type = /_videos/.test(publicId) ? "video" : "image";
     try {
         return await cloudinary.uploader.destroy(publicId, {
             resource_type

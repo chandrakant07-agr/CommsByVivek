@@ -4,9 +4,9 @@ import { LuMessageSquareMore, LuPanelsLeftBottom, LuUserRound } from "react-icon
 import { useAdminLogoutMutation, useGetAdminProfileQuery } from "../../../store/api/adminApiSlice";
 import styles from "./styles/Header.module.css";
 import { GoProjectRoadmap } from "react-icons/go";
-import { GrContactInfo, GrGallery } from "react-icons/gr";
+import { GrContactInfo, GrGallery, GrMultimedia } from "react-icons/gr";
 
-const Header = ({ isMobileMenuOpen }) => {
+const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
 
     const { data: admin, isSuccess: isAdminLoaded } = useGetAdminProfileQuery();
     const [logoutAdmin] = useAdminLogoutMutation();
@@ -18,6 +18,7 @@ const Header = ({ isMobileMenuOpen }) => {
         { name: 'Project Type', path: '/admin/projectType', icon: <GoProjectRoadmap /> },
         { name: 'Contact Info', path: '/admin/contactInfo', icon: <GrContactInfo /> },
         { name: 'Gallery', path: '/admin/gallery', icon: <GrGallery /> },
+        { name: 'Hero Banner', path: '/admin/heroBanner', icon: <GrMultimedia /> },
     ];
 
     return (
@@ -37,7 +38,7 @@ const Header = ({ isMobileMenuOpen }) => {
                             <NavLink to={item.path} className={({ isActive }) =>
                                 `${styles.navbarItem} ${isActive ? styles.active : ''}`
                             }
-                                onClick={() => setSidebarOpen(false)}
+                                onClick={() => setMobileMenuOpen(false)}
                             >
                                 {item.icon}
                                 <span className={styles.itemName}>{item.name}</span>

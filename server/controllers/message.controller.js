@@ -9,7 +9,7 @@ import { ApiError, ApiResponse } from "../utils/responseHandler.js";
 const fetchAllMessages = asyncHandler(async (req, res) => {
     const { search, status, prType, sortBy, pageNo, limit } = req.query;
 
-        
+    const query = {};
 
     // Search by name or email
     if(search) {

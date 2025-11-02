@@ -34,9 +34,15 @@ const gallerySchema = new Schema({
         type: Number,
         required: true,
     },
+    pageLocation: {
+        type: String,
+        enum: ["portfolio", "filmedByVivek"],
+        default: "portfolio"
+    },
     subTags: {
         type: [String],
-        default: []
+        default: [],
+        validate: [(val) => val.length <= 3, "Maximum of 3 subTags are allowed."]
     }
 }, { timestamps: true });
 

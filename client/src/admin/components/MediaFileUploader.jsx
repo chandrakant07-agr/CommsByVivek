@@ -8,6 +8,7 @@ const MediaFileUploader = ({
     name,
     label,
     required = false,
+    labelClass,
     uploadFileType,
     mediaFileControl,
     uploadFilePreview,
@@ -37,12 +38,13 @@ const MediaFileUploader = ({
 
     return (
         <>
-            <label htmlFor={`${label}_media`}>
+            <label htmlFor={`${label}_media`} className={labelClass}>
                 {label}{required && <span className="fromRequiredStar">*</span>}
             </label>
             {uploadFilePreview ? (
                 <div className={styles.imagePreviewContainer}>
-                    {uploadFileType === "gallery_videos" ? (
+                    {/* {uploadFileType?.split("_")[1] === "videos" ? ( */}
+                    {/_videos/.test(uploadFileType) ? (
                         <video controls className={styles.imagePreview}>
                             <source src={uploadFilePreview} type="video/mp4" />
                             Your browser does not support the video tag.
@@ -61,6 +63,7 @@ const MediaFileUploader = ({
                 <Controller
                     name={name}
                     control={mediaFileControl}
+                    rules={required ? { required: `${label} is required.` } : {}}
                     render={({ field }) => (
                         <div
                             className={`${styles.uploadArea} ${isDragging ? styles.dragging : ''}`}
@@ -79,9 +82,9 @@ const MediaFileUploader = ({
                             <IoCloudUploadOutline />
                             <h3>Drag & Drop Cover Media</h3>
                             <p>or click to browse</p>
-                            <small>JPG, PNG, GIF, WEBP</small>
-                            <small>MP4, AVI, MOV</small>
-                            <input type="file" id="media"
+                            <small>JPG, PNG, GIF, WEBP (max 100MB)</small>
+                            <small>MP4, AVI, MOV (max 100MB)</small>
+                            <input type="file" id={`${label}_media`}
                                 ref={fileInputRef}
                                 accept="image/*, video/*"
                                 onChange={(e) => (

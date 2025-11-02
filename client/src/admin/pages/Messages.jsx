@@ -12,23 +12,24 @@ import {
     useUpdateStatusMutation
 } from "../../../store/api/messageApiSlice";
 import styles from "./styles/Message.module.css"
+import { toast } from "react-toastify";
 
 const Messages = () => {
-    const { status } = useParams();
+    const { status: urlStatus } = useParams();
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
     const { register: filterRegister, watch: filterWatch } = useForm();
-    const { register: selectRegister, watch: selectWatch, setValue: setSelectValue } = useForm({
+    const { register: selectRegister, watch: selectWatch, reset: resetSelect } = useForm({
         defaultValues: { selectAllMessages: false, selectedCheckIds: [] }
     });
 
     const [updateStatus, { isLoading: isUpdating }] = useUpdateStatusMutation();
     const [deleteMessage, { isLoading: isDeleting }] = useDeleteMessageMutation();
-    const { data: projectTypes } = useGetProjectTypesQuery();
-    const { data: messages, isLoading: isMgsLoading, isError: isMsgError } = useGetMessagesQuery({
+    const { data: fetchProjectTypes } = useGetProjectTypesQuery();
+    const { data: fetchMessages, isLoading: isMgsLoading, isError: isMsgError } = useGetMessagesQuery({
         search: filterWatch("search") || "",
-        status: filterWatch("status") || status ? status : "all",
+        status: filterWatch("status") || urlStatus || "all",
         prType: filterWatch("prType") || "all",
         sortBy: filterWatch("sortBy") || "newest",
         pageNo: currentPage || 1,
@@ -38,11 +39,12 @@ const Messages = () => {
     const selectMsgLength = selectWatch("selectedCheckIds").length;
 
     const handleAllSelectMessages = () => {
-        const allIds = messages?.data.msgList.map(m => m._id) || [];
+        const allIds = fetchMessages?.data.msgList.map(m => m._id) || [];
+
         if(selectMsgLength === allIds.length) {
-            setSelectValue("selectedCheckIds", []);         // Uncheck all
+            resetSelect({selectedCheckIds: []});         // Uncheck all
         } else {
-            setSelectValue("selectedCheckIds", allIds);     // Check all
+            resetSelect({selectedCheckIds: allIds});     // Check all
         }
     }
 
@@ -52,8 +54,25 @@ const Messages = () => {
 
     const handleMarkAsRead = (id, isRead) => updateStatus({ ids: [id], isRead });
 
-    const handleBulkDelete = () => deleteMessage({ ids: selectWatch("selectedCheckIds") });
-    const handleDeleteMessage = (id) => deleteMessage({ ids: [id] });
+    const handleDeleteMessage = async(id) => {
+        if (window.confirm("Are you sure you want to delete this message?")) {
+            try {
+                await deleteMessage({ ids: [id] }).unwrap();
+            } catch (error) {
+                toast.error("Failed to delete message. Please try again.");
+            }
+        }
+    }
+
+    const handleBulkDelete = async() => {
+        if (window.confirm("Are you sure you want to delete the selected messages?")) {
+            try {
+                await deleteMessage({ ids: selectWatch("selectedCheckIds") }).unwrap();
+            } catch (error) {
+                toast.error("Failed to delete messages. Please try again.");
+            }
+        }
+    };
 
     const createSnippet = (htmlText, length) => {
         const plainText = htmlText.replace(/<[^>]+>/g, '');
@@ -62,9 +81,11 @@ const Messages = () => {
 
     // set selectedCheckIds to empty array when messages change
     useEffect(() => {
-        setSelectValue("selectAllMessages", false);
-        setSelectValue("selectedCheckIds", []);
-    }, [messages]);
+        resetSelect({
+            selectAllMessages: false,
+            selectedCheckIds: []
+        });
+    }, [fetchMessages, resetSelect]);
 
     if(isMgsLoading) {
         return <p>Loading...</p>
@@ -84,7 +105,7 @@ const Messages = () => {
                 </div>
                 <div className={styles.messagesMark}>
                     <span>
-                        {messages?.data.pagination.totalMsg || 0} total messages
+                        {fetchMessages?.data.pagination.totalMsg || 0} total messages
                     </span>
                     <div className={styles.markActions}>
                         <span>
@@ -143,7 +164,7 @@ const Messages = () => {
 
                         <select {...filterRegister("prType")} className={styles.filterByType}>
                             <option value="all">All Project Types</option>
-                            {projectTypes?.data.map((type) => (
+                            {fetchProjectTypes?.data.map((type) => (
                                 <option key={type._id} value={type._id}>{type.name}</option>
                             ))}
                         </select>
@@ -162,7 +183,7 @@ const Messages = () => {
 
             {/* Messages List */}
             <section className={styles.messagesList}>
-                {messages?.data.msgList.length === 0 ? (
+                {fetchMessages?.data.msgList.length === 0 ? (
                     <div className={`${styles.msgNotFound} px-6 py-12 text-center`}>
                         <LuMessageSquareText />
                         <h3>Messages not found</h3>
@@ -182,7 +203,7 @@ const Messages = () => {
                     </div>
 
                     {/* Messages */}
-                    {messages?.data.msgList.map((message) => (
+                    {fetchMessages?.data.msgList.map((message) => (
                         <div key={message._id} className={styles.msgContainer}>
                             <div className="d-flex a-start">
                                 {/* Checkbox */}
@@ -254,20 +275,20 @@ const Messages = () => {
             </section>
 
             {/* Pagination */}
-            {messages?.data.pagination.totalPages > 1 && (
+            {fetchMessages?.data.pagination.totalPages > 1 && (
                 <section className={styles.pagination}>
                     <div className="d-flex a-center justify-between">
                         <div className={styles.totalPages}>
                             {`Showing ${((currentPage - 1) * 10) + 1} 
-                            to ${Math.min(currentPage * 10, messages?.data.pagination.totalMsg)} 
-                            of ${messages?.data.pagination.totalMsg} results`}
+                            to ${Math.min(currentPage * 10, fetchMessages?.data.pagination.totalMsg)} 
+                            of ${fetchMessages?.data.pagination.totalMsg} results`}
                         </div>
 
                         <ReactPaginate
                             previousLabel="Previous"
                             nextLabel="Next"
                             breakLabel="..."
-                            pageCount={messages?.data.pagination.totalPages}
+                            pageCount={fetchMessages?.data.pagination.totalPages}
                             marginPagesDisplayed={2}
                             pageRangeDisplayed={3}
                             onPageChange={(data) => {

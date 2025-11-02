@@ -1,0 +1,85 @@
+.pageHeader h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 2rem;
+    color: var(--text-primary-color);
+}
+
+.pageHeader p {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: var(--text-secondary-color);
+}
+
+/* Card Container */
+.cardContainer {
+    margin-top: 1.5rem;
+    background-color: var(--bg-primary-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
+}
+
+/* Section Header */
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-primary-color);
+}
+
+.sectionHeader h2 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-primary-color);
+    margin: 0;
+    flex: 1;
+}
+
+.sectionIcon {
+    font-size: 1.5rem;
+    color: var(--indigo);
+}
+
+.formActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-primary-color);
+    position: sticky;
+    bottom: 0;
+    background-color: var(--bg-primary-color);
+}
+
+.submitButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #ffffff;
+    background-color: var(--indigo);
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.submitButton:hover {
+    background-color: var(--dark-blue);
+}
+
+.submitButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.responseInterfaceOverlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}

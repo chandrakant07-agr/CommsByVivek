@@ -1,116 +1,72 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { FaRegEye, FaRegPlayCircle } from 'react-icons/fa';
+import { IoImagesOutline } from 'react-icons/io5';
+import { FaRegCirclePause } from 'react-icons/fa6';
+import LoadingSpinner from '../components/LoadingSpinner';
+import PortfolioModal from '../components/PortfolioModal';
+import { generateThumbnailUrl } from '../../utils/cloudinaryUtils';
+import { useGetHeroBannerQuery } from '../../store/api/bannerApiSlice';
+import { useGetCategoriesQuery, useGetGalleryInfiniteQuery } from '../../store/api/galleryApiSlice';
 import styles from './styles/Portfolio.module.css';
-import { FaRegPlayCircle } from 'react-icons/fa';
 
 const Portfolio = () => {
+    const videoPlayerRef = useRef(null);
+
+    const inViewRef = useRef(null);
+    const isInView = useInView(inViewRef);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [isPlaying, setIsPlaying] = useState(false);
     const [activeFilter, setActiveFilter] = useState('all');
+    const [selectedItem, setSelectedItem] = useState(null);
 
-    const filters = [
-        { id: 'all', label: 'All Work' },
-        { id: 'commercial', label: 'Commercial' },
-        { id: 'brand', label: 'Brand Campaigns' },
-        { id: 'product', label: 'Product' },
-        { id: 'corporate', label: 'Corporate' },
-        { id: 'events', label: 'Events' }
-    ];
+    const fetchItemsLimit = currentPage === 1 ? 12 : 6;
 
-    const projects = [
-        {
-            id: 1,
-            title: 'Luxury Watch Campaign',
-            category: 'Brand Campaign',
-            type: 'commercial',
-            description: 'A cinematic brand campaign showcasing luxury timepieces with dramatic lighting and elegant compositions.',
-            year: '2024',
-            tags: ['Luxury', 'Product'],
-            icon: '⌚'
-        },
-        {
-            id: 2,
-            title: 'Tech Startup Branding',
-            category: 'Corporate Photography',
-            type: 'corporate',
-            description: 'Complete visual identity development for an innovative tech startup, including team portraits and office spaces.',
-            year: '2024',
-            tags: ['Tech', 'Startup'],
-            icon: '💻'
-        },
-        {
-            id: 3,
-            title: 'Fashion E-commerce Shoot',
-            category: 'Product Photography',
-            type: 'product',
-            description: 'High-impact product photography for a sustainable fashion brand, emphasizing texture and craftsmanship.',
-            year: '2023',
-            tags: ['Fashion', 'E-commerce'],
-            icon: '👗'
-        },
-        {
-            id: 4,
-            title: 'Annual Conference 2024',
-            category: 'Event Coverage',
-            type: 'events',
-            description: 'Comprehensive documentation of a three-day international business conference with 500+ attendees.',
-            year: '2024',
-            tags: ['Conference', 'Business'],
-            icon: '🎤'
-        },
-        {
-            id: 5,
-            title: 'Automotive Launch',
-            category: 'Brand Campaign',
-            type: 'brand',
-            description: 'Dynamic campaign for luxury automobile launch, featuring dramatic angles and cinematic storytelling.',
-            year: '2023',
-            tags: ['Automotive', 'Launch'],
-            icon: '🚗'
-        },
-        {
-            id: 6,
-            title: 'Culinary Arts Portfolio',
-            category: 'Commercial Photography',
-            type: 'commercial',
-            description: 'Mouth-watering food photography for award-winning restaurants and culinary professionals.',
-            year: '2024',
-            tags: ['Food', 'Restaurant'],
-            icon: '🍽️'
-        },
-        {
-            id: 7,
-            title: 'Healthcare Innovation',
-            category: 'Corporate Photography',
-            type: 'corporate',
-            description: 'Professional documentation of healthcare facilities and medical technology innovations.',
-            year: '2023',
-            tags: ['Healthcare', 'Innovation'],
-            icon: '🏥'
-        },
-        {
-            id: 8,
-            title: 'Music Festival Coverage',
-            category: 'Event Coverage',
-            type: 'events',
-            description: 'High-energy documentation of a three-day music festival, capturing performances and crowd moments.',
-            year: '2024',
-            tags: ['Music', 'Festival'],
-            icon: '🎸'
-        },
-        {
-            id: 9,
-            title: 'Cosmetics Campaign',
-            category: 'Product Photography',
-            type: 'product',
-            description: 'Elegant beauty product photography focusing on texture, color, and premium packaging design.',
-            year: '2024',
-            tags: ['Beauty', 'Cosmetics'],
-            icon: '💄'
+    const { data: fetchHeroBanner, isLoading: isFetchingHeroBanner } = useGetHeroBannerQuery();
+    const { data: fetchCategories, isLoading: isFetchingCategory } = useGetCategoriesQuery();
+
+    const {
+        data: fetchGallery, isLoading: isLoadingGallery, isFetching: isFetchingGallery
+    } = useGetGalleryInfiniteQuery({
+        category: activeFilter,
+        pageLocation: "portfolio",
+        pageNo: currentPage,
+        limit: fetchItemsLimit,
+        initialSkip: currentPage === 1 ? 0 : fetchItemsLimit
+    });
+
+    const paginationData = fetchGallery?.data.pagination;
+    const hasNextPage = paginationData?.currentPage < paginationData?.totalPages;
+
+    // console.log(fetchCategories)
+    // console.log(fetchGallery)
+    // console.log(isLoadingGallery, isFetchingGallery, hasNextPage)
+    // console.log(currentPage, isInView, paginationData)
+
+    const handlePlayPause = () => {
+        if (videoPlayerRef.current) {
+            if (videoPlayerRef.current.paused || videoPlayerRef.current.ended) {
+                videoPlayerRef.current.play();
+                setIsPlaying(true);
+            } else {
+                videoPlayerRef.current.pause();
+                setIsPlaying(false);
+            }
         }
-    ];
+    };
 
-    const filteredProjects = activeFilter === 'all'
-        ? projects
-        : projects.filter(project => project.type === activeFilter);
+    const handleCategoryChange = (categoryId) => {
+        if(categoryId === activeFilter) return;
+        setActiveFilter(categoryId);
+        setCurrentPage(1);
+    };
+
+    useEffect(() => {
+        if (isInView && hasNextPage) {
+            setCurrentPage((prevPage) => prevPage + 1);
+        }
+    }, [isInView, hasNextPage]);
 
     return (
         <>
@@ -129,21 +85,49 @@ const Portfolio = () => {
             </section>
 
             <section className="mb-10">
-                <motion.div
-                    className={styles.showreelVideo}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                    viewport={{ once: true }}
-                >
-                    <video controls poster="/placeholder-video-poster.jpg">
-                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-                        Your browser does not support the video tag.
-                    </video>
-                    <button className={styles.playButton} aria-label="Play showreel">
-                        <FaRegPlayCircle />
-                    </button>
-                </motion.div>
+                {isFetchingHeroBanner ? (
+                    <LoadingSpinner
+                        size="lg"
+                        color="var(--accent-color)"
+                        text="video loading..."
+                    />
+                ) : (
+                    <motion.div
+                        className={styles.showreelVideo}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        viewport={{ once: true }}
+                    >
+                        <video
+                            controls
+                            ref={videoPlayerRef}
+                            poster={generateThumbnailUrl(
+                                fetchHeroBanner?.data.cloudinaryData.secure_url,
+                                fetchHeroBanner?.data.cloudinaryData.resource_type,
+                                800,
+                                450
+                            )}
+                            className={styles.showreelVideoPlayer}
+                            onPlay={() => setIsPlaying(true)}
+                            onPause={() => setIsPlaying(false)}
+                            onEnded={() => setIsPlaying(false)}
+                            onContextMenu={(e) => e.preventDefault()}
+                        >
+                            <source
+                                src={fetchHeroBanner?.data.cloudinaryData.secure_url}
+                                type="video/mp4"
+                            />
+                            Your browser does not support the video tag.
+                        </video>
+                        <button aria-label={isPlaying ? "Pause showreel" : "Play showreel"}
+                            className={`${styles.playButton} ${isPlaying && "opacity-0"}`}
+                            onClick={handlePlayPause}
+                        >
+                            {isPlaying ? <FaRegCirclePause /> : <FaRegPlayCircle />}
+                        </button>
+                    </motion.div>
+                )}
             </section>
 
             {/* Portfolio Grid */}
@@ -167,48 +151,80 @@ const Portfolio = () => {
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
                 >
-                    {filters.map((filter) => (
-                        <button
-                            key={filter.id}
-                            className={`${styles.filterTab} ${activeFilter === filter.id ? styles.active : ''}`}
-                            onClick={() => setActiveFilter(filter.id)}
+                    <button key="all" className={`${styles.filterTab}
+                        ${activeFilter === "all" && styles.active}`}
+                        onClick={() => handleCategoryChange("all")}
+                    >
+                        All
+                    </button>
+                    {fetchCategories?.data.map((filter) => (
+                        <button key={filter._id} className={`${styles.filterTab}
+                            ${activeFilter === filter._id && styles.active}`}
+                            onClick={() => handleCategoryChange(filter._id)}
                         >
-                            {filter.label}
+                            {filter.name}
                         </button>
                     ))}
                 </motion.div>
 
                 {/* Projects Grid */}
-                <div className={styles.projectsGrid}>
-                    <AnimatePresence>
-                        {filteredProjects.map((project, index) => (
+                {isLoadingGallery ? (
+                    <LoadingSpinner size="lg" color="var(--accent-color)" />
+                ) : fetchGallery?.data.galleryItems.length === 0 ? (
+                    <div className="projectEmptyState">
+                        <IoImagesOutline />
+                        <h4>No portfolio items found</h4>
+                    </div>
+                ) : (
+                    <div className={styles.projectsGrid}>
+                        {/* <AnimatePresence> */}
+                        {fetchGallery?.data.galleryItems.map((item, index) => (
                             <motion.div
-                                key={project.id}
+                                key={item._id}
                                 className={styles.projectCard}
-                                layout
+                                // layout
                                 initial={{ opacity: 0, y: 50 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 50 }}
                                 transition={{ duration: 0.6, delay: index * 0.1 }}
                                 whileHover={{ scale: 1.02 }}
+                                onClick={() => setSelectedItem(item)}
                             >
                                 <div className={styles.projectThumbnail}>
-                                    {/* <span>{project.icon}</span> */}
+                                    <img
+                                        src={generateThumbnailUrl(
+                                            item.cloudinaryData.secure_url,
+                                            item.cloudinaryData.resource_type,
+                                            600,
+                                            337
+                                        )}
+                                        alt={item.title}
+                                        loading="lazy"
+                                        className={styles.projectImage}
+                                    />
                                     <div className={styles.projectOverlay}>
-                                        View Project
+                                        <FaRegEye /> View
                                     </div>
                                 </div>
 
                                 <div className={styles.projectContent}>
-                                    <h3 className={styles.projectTitle}>{project.title}</h3>
-                                    <h6 className={styles.projectCategory}>{project.category}</h6>
-                                    <p className={styles.projectDescription}>{project.description}</p>
+                                    <h3 className={styles.projectTitle}>
+                                        {item.title}
+                                    </h3>
+                                    <h6 className={styles.projectCategory}>
+                                        {item.category.name}
+                                    </h6>
+                                    <p className={styles.projectDescription}>
+                                        {item.shortDescription}
+                                    </p>
 
                                     <div className={styles.projectMeta}>
-                                        <span className={styles.projectYear}>{project.year}</span>
+                                        <span className={styles.projectYear}>
+                                            {item.year}
+                                        </span>
                                         <div className={styles.projectTags}>
-                                            {project.tags.map((tag, idx) => (
-                                                <span key={idx} className={styles.projectTag}>
+                                            {item.subTags?.map((tag) => (
+                                                <span key={tag} className={styles.projectTag}>
                                                     {tag}
                                                 </span>
                                             ))}
@@ -217,9 +233,28 @@ const Portfolio = () => {
                                 </div>
                             </motion.div>
                         ))}
-                    </AnimatePresence>
+                        {/* </AnimatePresence> */}
+                    </div>
+                )}
+                <div ref={inViewRef} className={`text-center mt-4 ${!hasNextPage && 'd-none'}`}>
+                    {isFetchingGallery && (
+                        <div className="inViewTriggerElement">
+                            <LoadingSpinner size="lg" color="var(--accent-color)" />
+                        </div>
+                    )}
+                    load more...
                 </div>
             </section>
+
+
+
+            {/* Portfolio Modal */}
+            {selectedItem && (
+                <PortfolioModal
+                    item={selectedItem}
+                    onClose={() => setSelectedItem(null)}
+                />
+            )}
         </>
     );
 };

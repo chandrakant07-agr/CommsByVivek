@@ -3,11 +3,15 @@ import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { motion, useInView } from 'framer-motion';
 import CountUp from 'react-countup';
+import LoadingSpinner from '../components/LoadingSpinner';
+import { useGetHeroBannerQuery } from '../../store/api/bannerApiSlice';
 import styles from './styles/Home.module.css';
 
 const Home = () => {
     const ref = useRef(null);
     const isInView = useInView(ref);
+
+    const { data: fetchHeroBanner, isLoading: isFetchingHeroBanner } = useGetHeroBannerQuery();
 
     const stats = [
         { number: '150', label: 'Projects Completed' },
@@ -20,16 +24,29 @@ const Home = () => {
         <div id="home" className={styles.homepage}>
             {/* Hero Section */}
             <section className={styles.hero}>
-                <video
-                    className={styles.heroVideo}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                >
-                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-                    Your browser does not support the video tag.
-                </video>
+                {isFetchingHeroBanner ? (
+                    <div className="absolute top-8">
+                        <LoadingSpinner
+                            size="xl"
+                            color="var(--accent-color)"
+                            text="video loading..."
+                        />
+                    </div>
+                ) : (
+                    <video
+                        className={styles.heroVideo}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                    >
+                        <source
+                            src={fetchHeroBanner?.data.cloudinaryData.secure_url}
+                            type="video/mp4"
+                        />
+                        Your browser does not support the video tag.
+                    </video>
+                )}
 
                 <div className={styles.heroOverlay}></div>
 

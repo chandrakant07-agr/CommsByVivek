@@ -9,10 +9,11 @@ import {
     IoSearchOutline,
     IoAddCircleOutline,
 } from "react-icons/io5";
+import { TbFilterSearch } from "react-icons/tb";
 import { MdEdit, MdDelete, MdCategory } from "react-icons/md";
 import {
     useGetCategoriesQuery,
-    useGetGalleryItemsQuery,
+    useGetGalleryPaginatedQuery,
     useSyncCategoriesMutation,
     useAddGalleryItemMutation,
     useUpdateGalleryItemMutation,
@@ -22,6 +23,7 @@ import {
     useGenerateSignatureMutation
 } from "../../../store/api/cloudinaryApiSlice";
 import Pagination from "../components/Pagination";
+import RadioInput from "../components/RadioInput";
 import FormInputError from "../../components/FormInputError";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import UploadProgressBar from "../components/UploadProgressBar";
@@ -46,26 +48,38 @@ const Gallery = () => {
     const { register: filterRegister, watch: filterWatch } = useForm();
     const { control: categoryControl, handleSubmit: categorySubmit, reset: resetCategory } = useForm();
 
+    const { register: selectRegister, watch: selectWatch, reset: resetSelect } = useForm({
+        defaultValues: {
+            selectedItems: [],
+            selectAllItems: false
+        }
+    });
+
     const {
         reset: resetGallery,
         control: galleryControl,
         register: galleryRegister,
         handleSubmit: gallerySubmit,
         formState: { errors: galleryErrors }
-    } = useForm();
+    } = useForm({
+        defaultValues: { pageLocation: "portfolio" }
+    });
 
     const { data: fetchCategories, isLoading: isFetchingCategory } = useGetCategoriesQuery();
     const [syncCategories, { isLoading: isSyncing }] = useSyncCategoriesMutation();
 
-    const { data: fetchGallery, isLoading: isFetchingGallery } = useGetGalleryItemsQuery({
+    const { data: fetchGallery, isLoading: isFetchingGallery } = useGetGalleryPaginatedQuery({
         search: filterWatch("searchQuery") || "",
         category: filterWatch("categoryFilter") || "all",
+        pageLocation: filterWatch("pageFilter") || "all",
         pageNo: currentPage,
         limit: itemsPerPage
     });
 
+    // console.log(fetchGallery?.data)
+
     const [
-        addGalleryItem, { isLoading: isAdding, isSuccess: isAddSuccess }
+        addGalleryItem, { isSuccess: isAddSuccess }
     ] = useAddGalleryItemMutation();
 
     const [
@@ -76,10 +90,9 @@ const Gallery = () => {
 
     const [generateSignature] = useGenerateSignatureMutation();
 
-    // console.log(fetchGallery);
-    // console.log(fetchCategories);
+    const selectedItemsLength = (selectWatch("selectedItems") || []).length;
 
-    // Submit gallery form (only file upload part shown)
+    // Submit gallery form
     const onSubmitGallery = async (data) => {
         try {
             setIsUploading(true);
@@ -90,6 +103,8 @@ const Gallery = () => {
                     data.coverFile, signatureData.data,
                     uploadFileType, setUploadProgress, setUploadCancelToken
                 );
+
+                // console.log("Upload Response:", responseUpload);
 
                 // extract necessary fields from responseUpload
                 const {
@@ -119,8 +134,13 @@ const Gallery = () => {
             else await addGalleryItem(data).unwrap();
 
         } catch (error) {
-            setIsUploading(false);
             toast.error("Failed to save gallery item. Please try again.");
+        } finally {
+            resetGallery();
+            setEditingItem(null);
+            setIsModalOpen(false);
+            setIsUploading(false);
+            setUploadFilePreview(null);
         }
     };
 
@@ -141,6 +161,7 @@ const Gallery = () => {
             title: item.title,
             subTags: item.subTags || [],
             category: item.category._id,
+            pageLocation: item.pageLocation,
             shortDescription: item.shortDescription
         }, { keepDefaultValues: true });
         setUploadFilePreview(item.cloudinaryData.secure_url);
@@ -151,10 +172,31 @@ const Gallery = () => {
     const handleDeleteItem = async (itemId) => {
         if(window.confirm("Are you sure you want to delete this item?")) {
             try {
-                await deleteGalleryItem({ itemId }).unwrap();
+                await deleteGalleryItem({ ids: [itemId] }).unwrap();
             } catch (error) {
                 toast.error("Failed to delete gallery item. Please try again.");
             }
+        }
+    };
+
+    const handleDeleteSelectedItems = async () => {
+        if(window.confirm("Are you sure you want to delete the selected items?")) {
+            try {
+                await deleteGalleryItem({ ids: selectWatch("selectedItems") }).unwrap();
+                resetSelect({ selectedItems: [], selectAllItems: false });
+            } catch (error) {
+                toast.error("Failed to delete selected gallery items. Please try again.");
+            }
+        }
+    };
+
+    const handleSelectAllGalleryItems = () => {
+        const allItemIds = fetchGallery?.data.galleryItems.map(item => item._id) || [];
+
+        if(selectedItemsLength === allItemIds.length) {
+            resetSelect({selectedItems: []});          // Uncheck all
+        } else {
+            resetSelect({selectedItems: allItemIds});  // Check all
         }
     };
 
@@ -182,12 +224,19 @@ const Gallery = () => {
     }, [fetchCategories, resetCategory]);
 
     useEffect(() => {
-        resetGallery();
-        setEditingItem(null);
-        setIsModalOpen(false);
-        setIsUploading(false);
-        setUploadFilePreview(null);
-    }, [isAddSuccess, isUpdateSuccess, resetGallery]);
+        resetSelect({
+            selectedItems: [],
+            selectAllItems: false
+        });
+    }, [fetchGallery, resetSelect]);
+
+    // useEffect(() => {
+    //     resetGallery();
+    //     setEditingItem(null);
+    //     setIsModalOpen(false);
+    //     setIsUploading(false);
+    //     setUploadFilePreview(null);
+    // }, [isAddSuccess, isUpdateSuccess, resetGallery]);
 
     return (
         <>
@@ -240,11 +289,11 @@ const Gallery = () => {
                 )}
             </section>
 
-            {/* Gallery List Section */}
+            {/* Gallery Add/Filter/Search Section */}
             <section className={styles.cardContainer}>
                 <div className={styles.sectionHeader}>
-                    <IoImagesOutline className={styles.sectionIcon} />
-                    <h2>Gallery Items</h2>
+                    <TbFilterSearch className={styles.sectionIcon} />
+                    <h2>Filter/Search</h2>
                     <button className={styles.addNewButton}
                         onClick={handleAddNewItem}
                     >
@@ -263,18 +312,59 @@ const Gallery = () => {
                                 {...filterRegister("searchQuery")}
                             />
                         </div>
-                        {isFetchingCategory ? (
-                            <LoadingSpinner size="sm" />
-                        ) : (
-                            <select className={styles.categoryFilter}
-                                {...filterRegister("categoryFilter")}
+                        <div>
+                            <select className={styles.pageFilter}
+                                {...filterRegister("pageFilter")}
                             >
-                                <option value="">All Categories</option>
-                                {fetchCategories?.data.map((cat) => (
-                                    <option key={cat._id} value={cat._id}>{cat.name}</option>
-                                ))}
+                                <option value="all">All</option>
+                                <option value="portfolio">Portfolio</option>
+                                <option value="filmedByVivek">FilmedByVivek</option>
                             </select>
-                        )}
+                            {isFetchingCategory ? (
+                                <LoadingSpinner size="sm" />
+                            ) : (
+                                <select className={`${styles.categoryFilter} ml-4`}
+                                    {...filterRegister("categoryFilter")}
+                                >
+                                    <option value="">All Categories</option>
+                                    {fetchCategories?.data.map((cat) => (
+                                        <option key={cat._id} value={cat._id}>{cat.name}</option>
+                                    ))}
+                                </select>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Gallery List Section */}
+            <section className={styles.cardContainer}>
+                <div className={styles.sectionHeader}>
+                    <IoImagesOutline className={styles.sectionIcon} />
+                    <h2>Gallery Items</h2>
+                    <button
+                        className={styles.deleteAllActionButton}
+                        onClick={handleDeleteSelectedItems}
+                        disabled={isDeleting}
+                    >
+                        <MdDelete />
+                    </button>
+                </div>
+                <div className="p-6">
+                    {/* Select All Gallery Items */}
+                    <div className={styles.selectAllContainer}>
+                        <div className={styles.selectedItemsInfo}>
+                            Selected:
+                            <span>{selectedItemsLength} item(s)</span>
+                        </div>
+                        <div className={styles.selectAllCheckbox}>
+                            <label htmlFor="selectAllItems">Select All</label>
+                            <input type="checkbox" id="selectAllItems"
+                                {...selectRegister("selectAllItems", {
+                                    onChange: handleSelectAllGalleryItems
+                                })}
+                            />
+                        </div>
                     </div>
 
                     {/* Gallery Grid */}
@@ -290,6 +380,10 @@ const Gallery = () => {
                         <div className={styles.galleryGrid}>
                             {fetchGallery?.data.galleryItems.map((item) => (
                                 <div key={item._id} className={styles.galleryCard}>
+                                    <input type="checkbox" value={item._id}
+                                        className={styles.cardCheckbox}
+                                        {...selectRegister("selectedItems")}
+                                    />
                                     <div className={styles.cardThumbnail}>
                                         <img src={generateThumbnailUrl(item.cloudinaryData.secure_url,
                                             item.cloudinaryData.resource_type, 300, 200)}
@@ -310,7 +404,7 @@ const Gallery = () => {
                                         </button>
                                         <button
                                             className={`${styles.actionButton} ${styles.deleteAction}`}
-                                            onClick={() => handleDeleteItem(item._id)}
+                                            onClick={() => handleDeleteItem(item._id, item.cloudinaryData.public_id)}
                                             disabled={isDeleting}
                                         >
                                             <MdDelete />
@@ -366,7 +460,7 @@ const Gallery = () => {
 
                             {/* Title */}
                             <div className="h-19 mb-4">
-                                <label htmlFor="title">
+                                <label htmlFor="title" className={styles.modelLabel}>
                                     Title<span className="fromRequiredStar">*</span>
                                 </label>
                                 <input type="text" id="title" className={`${styles.textInput}
@@ -382,7 +476,7 @@ const Gallery = () => {
 
                             {/* Main Category */}
                             <div className="h-19 mb-4">
-                                <label htmlFor="category">
+                                <label htmlFor="category" className={styles.modelLabel}>
                                     Category<span className="fromRequiredStar">*</span>
                                 </label>
                                 <select id="category" className={`${styles.categorySelect}
@@ -404,6 +498,7 @@ const Gallery = () => {
                                 <MediaFileUploader
                                     name="coverFile"
                                     label="Cover Media"
+                                    labelClass={styles.modelLabel}
                                     required={true}
                                     uploadFileType={uploadFileType}
                                     mediaFileControl={galleryControl}
@@ -415,7 +510,7 @@ const Gallery = () => {
 
                             {/* Short Description */}
                             <div className="mb-4">
-                                <label htmlFor="shortDescription">
+                                <label htmlFor="shortDescription" className={styles.modelLabel}>
                                     Short Description<span className="fromRequiredStar">*</span>
                                 </label>
                                 <textarea id="shortDescription" className={`${styles.textAreaInput}
@@ -431,26 +526,50 @@ const Gallery = () => {
 
                             {/* Year */}
                             <div className="h-19 mb-4">
-                                <label htmlFor="year">
+                                <label htmlFor="year" className={styles.modelLabel}>
                                     Year<span className="fromRequiredStar">*</span>
                                 </label>
-                                <input type="text" id="year" className={`${styles.textInput}
+                                <input type="number" id="year" className={`${styles.textInput}
                                     ${galleryErrors.year && "formInputErrorBorder"}`}
-                                    placeholder="e.g., 2024"
+                                    placeholder="e.g., 2008"
                                     {...galleryRegister("year", {
-                                        required: "Year is required"
+                                        required: "Year is required",
+                                        validate: value =>
+                                            (value > 1900 && value <= new Date().getFullYear()) ||
+                                            `Year must be between 1901 and ${new Date().getFullYear()}`
                                     })}
                                 />
                                 <FormInputError message={galleryErrors.year?.message} />
                             </div>
 
+                            {/* Display Location Switch Component */}
+                            <div className="mb-4">
+                                <RadioInput
+                                    name="pageLocation"
+                                    label="Display Content on"
+                                    labelClass={styles.modelLabel}
+                                    register={galleryRegister}
+                                />
+                                <small className={styles.tagsHelperText}>
+                                    The default page is set to Portfolio.
+                                </small>
+                            </div>
+
                             {/* Sub Tags */}
-                            <div className="h-19 mb-4">
-                                <label>Sub Tags</label>
+                            <div className="mb-4">
+                                <label className={styles.modelLabel}>
+                                    Sub Tags
+                                    <sup className="fromOptional">(optional)</sup>
+                                </label>
                                 <div className={styles.tagsInputWrapper}>
                                     <Controller
                                         name="subTags"
                                         control={galleryControl}
+                                        rules={{
+                                            validate: value =>
+                                                ((value?.length || 0) <= 3)
+                                                || "You can add up to 3 tags only"
+                                        }}
                                         render={({ field }) => (
                                             <TagsInput
                                                 value={field.value || []}
@@ -462,6 +581,7 @@ const Gallery = () => {
                                     <small className={styles.tagsHelperText}>
                                         Press Enter to add tags (e.g., Outdoor, Romantic, etc.)
                                     </small>
+                                    <FormInputError message={galleryErrors.subTags?.message} />
                                 </div>
                             </div>
 
@@ -469,15 +589,15 @@ const Gallery = () => {
                             <div className={styles.modalActions}>
                                 <button type="button" className={styles.cancelButton}
                                     onClick={() => setIsModalOpen(false)}
-                                    disabled={isAdding || isUpdating}
+                                    disabled={isUploading}
                                 >
                                     Cancel
                                 </button>
                                 <button type="submit" className={styles.submitButton}
-                                    disabled={isAdding || isUpdating}
+                                    disabled={isUploading}
                                 >
                                     <IoSave />
-                                    {(isAdding || isUpdating
+                                    {(isUploading
                                         ? "Saving..." : (!!editingItem ? "Update" : "Add New"))}
                                 </button>
                             </div>

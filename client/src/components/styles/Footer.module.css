@@ -6,10 +6,10 @@
 
 .footerGridContainer {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    grid-template-columns: repeat(1, minmax(0, 1fr));
     gap: 2.5vw;
     margin-bottom: 1.5rem;
-    padding: 0 2rem;
+    padding: 0 1rem;
 }
 
 .footerGridItem {
@@ -46,10 +46,11 @@
 .footerLinks span {
     width: 2.1em;
     height: 2.1em;
-    font-size: clamp(0.75rem, 2vw, 1rem);
+    font-size: clamp(0.75rem, 1.2vw, 1rem);
 }
 
 .footerLinks a {
+    font-size: 0.75rem;
     opacity: 0.8;
     transition: all 0.3s ease;
 }
@@ -104,4 +105,18 @@
 .footerBottom p {
     font-size: clamp(0.7rem, 1.75vw, 0.9rem);
     opacity: 0.75;
+}
+
+/* Responsive Design */
+@media (min-width: 640px) {
+    .footerGridContainer {
+        padding: 0 2rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 768px) {
+    .footerGridContainer {
+        grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    }
 }

@@ -58,7 +58,7 @@
 .loadingText {
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--text-secondary-color);
+    /* color: var(--text-secondary-color); */
     margin: 0;
     text-align: center;
 }

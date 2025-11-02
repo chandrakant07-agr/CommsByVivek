@@ -10,16 +10,19 @@ const generateSignature = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Folder is required.");
     }
 
+    const eager = "c_pad,h_300,w_400|c_crop,h_200,w_260";
+
     const api_Key = process.env.CLOUDINARY_API_KEY;
     const timestamp = Math.round((new Date).getTime() / 1000);
-    const signature = cloudinarySignature(timestamp, folder);
+    const signature = cloudinarySignature(timestamp, folder, eager);
     const uploadUrl = `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/upload`;
 
     return ApiResponse.sendSuccess(res, {
         api_Key,
         timestamp,
         signature,
-        uploadUrl
+        uploadUrl,
+        eager
     }, "Cloudinary upload signature successfully generated.");
 });
 
