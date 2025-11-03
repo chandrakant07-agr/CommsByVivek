@@ -4,19 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { RxMoon, RxSun } from "react-icons/rx";
 import { CiMenuKebab } from "react-icons/ci";
 import { themeToggle } from "../../../store/slices/Theme.Slice";
-import { useGetAdminProfileQuery } from "../../../store/api/adminApiSlice";
 import Header from "./Header";
 import styles from "./styles/Header.module.css";
 
 const AdminLayout = () => {
     const dispatch = useDispatch();
-    const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+
     const toggleTheme = () => dispatch(themeToggle());
+    
+    const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+    const { user: admin } = useSelector((state) => state.auth);
 
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
     const toggleMobileMenu = () => setMobileMenuOpen(!isMobileMenuOpen);
-
-    const { data: admin } = useGetAdminProfileQuery();
 
     return (
         <div className={styles.adminLayout}>
@@ -35,7 +35,7 @@ const AdminLayout = () => {
                             <h5>
                                 Welcome back,
                             </h5>
-                            <span>{admin?.data.fullName}</span>
+                            <span>{admin?.fullName}</span>
                         </div>
                         <button onClick={toggleTheme} className={styles.themeToggle}>
                             {isDarkMode ? <RxSun /> : <RxMoon />}

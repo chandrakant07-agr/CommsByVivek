@@ -1,14 +1,14 @@
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { motion } from 'framer-motion';
-import { LuMessageSquareMore, LuPanelsLeftBottom, LuUserRound } from "react-icons/lu";
-import { useAdminLogoutMutation, useGetAdminProfileQuery } from "../../../store/api/adminApiSlice";
-import styles from "./styles/Header.module.css";
 import { GoProjectRoadmap } from "react-icons/go";
 import { GrContactInfo, GrGallery, GrMultimedia } from "react-icons/gr";
+import { LuMessageSquareMore, LuPanelsLeftBottom, LuUserRound } from "react-icons/lu";
+import { useAdminLogoutMutation } from "../../../store/api/adminApiSlice";
+import styles from "./styles/Header.module.css";
 
 const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
-
-    const { data: admin, isSuccess: isAdminLoaded } = useGetAdminProfileQuery();
+    const { user: admin } = useSelector((state) => state.auth);
     const [logoutAdmin] = useAdminLogoutMutation();
 
     const navItems = [
@@ -53,16 +53,16 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                     <div className="f-shrink-0">
                         <div className={styles.sidebarFooterIcon}>
                             <span>
-                                {admin?.data.fullName.charAt(0).toUpperCase()}
+                                {admin?.fullName.charAt(0).toUpperCase()}
                             </span>
                         </div>
                     </div>
                     <div className="ml-3 overflow-hidden">
                         <p className={styles.userName}>
-                            {admin?.data.fullName}
+                            {admin?.fullName}
                         </p>
                         <p className={styles.userEmail}>
-                            {admin?.data.email}
+                            {admin?.email}
                         </p>
                     </div>
                 </div>

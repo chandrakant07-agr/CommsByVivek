@@ -72,27 +72,10 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
                     const err = error.error?.data;
                     toast.error(err?.message || "Failed to log out");
                 }
-            }
-        }),
-        // admin section endpoints
-        
-        getContent: builder.query({
-            query: () => ({
-                url: "/admin/content",
-                method: "GET",
-            }),
-            providesTags: ["Content"],
-        }),
-        updateContent: builder.mutation({
-            query: (contentData) => ({
-                url: "/admin/content",
-                method: "PUT",
-                body: contentData,
-            }),
-            invalidatesTags: ["Content"],
-        }),
-        
-    }),
+            },
+            invalidatesTags: ["Admin"]
+        })        
+    })
 });
 
 export const {
@@ -101,7 +84,4 @@ export const {
     useUpdateAdminProfileMutation,
     useChangeAdminPasswordMutation,
     useAdminLogoutMutation,
-
-    useGetContentQuery,
-    useUpdateContentMutation,
 } = adminApiSlice;

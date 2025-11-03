@@ -33,7 +33,8 @@ const LoadingSpinner = ({
     const containerClass = fullPage ? styles.fullPageContainer : styles.container;
 
     return (
-        <div className={containerClass} style={backgroundColor ? { backgroundColor } : {}}>
+        <div className={containerClass} style={backgroundColor ? { backgroundColor } : {}}
+            role="status" aria-live="polite" aria-busy="true">
             <motion.div
                 className={spinnerClass}
                 animate={{ rotate: 360 }}

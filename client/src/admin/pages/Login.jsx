@@ -21,6 +21,17 @@ const Login = () => {
     });
     const [adminLogin, { isLoading }] = useAdminLoginMutation();
 
+    const onLoginSubmit = async (data) => {
+        try {
+            await adminLogin(data).unwrap();
+            // navigate to dashboard on successful login
+            navigate("/admin/dashboard");
+        } catch (error) {
+            // error handling is done in the api slice using toast
+            console.error("Login failed:", error);
+        }
+    }
+
     return (
         <div className={styles.loginContainer}>
             {/* go back button */}
@@ -38,7 +49,7 @@ const Login = () => {
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit(adminLogin)} noValidate>
+                <form onSubmit={handleSubmit(onLoginSubmit)} noValidate>
                     <div className={`${styles.formGroup} h-18 mb-6`}>
                         <label htmlFor="email">
                             <MdOutlineMailOutline />
