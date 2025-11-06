@@ -2,7 +2,7 @@ const cookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     // "Strict": Highest security, "Lax": Default for most cases, or "None": No restriction with Secure
-    sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax",
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
 };
 
 
