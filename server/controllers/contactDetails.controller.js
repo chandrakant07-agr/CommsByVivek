@@ -108,10 +108,6 @@ const fetchContactAndSocialDetails = asyncHandler(async (req, res) => {
     const contactDetails = await ContactDetails.findOne().select("-_id -__v -createdAt -updatedAt");
     const socialMediaLinks = await SocialMedia.find().select("-__v -createdAt -updatedAt");
 
-    if (!contactDetails) {
-        return ApiError.sendNotFound(res, "Contact details not found.");
-    }
-
     return ApiResponse.sendSuccess(res, { contactDetails, socialMediaLinks }, "Contact and social media details successfully fetched.");
 });
 

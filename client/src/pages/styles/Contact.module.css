@@ -1,7 +1,7 @@
 .contentContainer {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 1.25rem;
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -10,7 +10,7 @@
 }
 
 .contactInfo {
-    padding: 2.5vw;
+    padding: 1.5rem;
     border: 2px solid var(--accent-color);
     border-radius: 1rem;
     background-color: var(--card-bg);
@@ -75,8 +75,9 @@
 }
 
 .socialLinks {
-    display: flex;
-    gap: 1vw;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    row-gap: 0.75rem;
 }
 
 .socialLink {
@@ -91,7 +92,7 @@
 
 .contactForm {
     background-color: var(--card-bg);
-    padding: 2rem 1.5rem;
+    padding: 1.5rem;
     border: 1px solid var(--border-color);
     border-radius: 1rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -179,9 +180,14 @@
     .contentContainer {
         grid-template-columns: 1fr 1fr;
         gap: 2.5vw;
+        padding: 0 2rem;
+    }
+
+    .contactInfo {
+        padding: 2.25rem;
     }
 
     .contactForm {
-        padding: 2.5vw;
+        padding: 2.25rem;
     }
 }

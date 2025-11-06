@@ -96,12 +96,12 @@
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 1rem;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 .storyCard:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px) scale(1.05) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 .storyCard h2 {

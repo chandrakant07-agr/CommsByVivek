@@ -28,14 +28,14 @@ const Footer = () => {
                     <ul className={styles.footerLinks}>
                         <li>
                             <span className='iconStyle'><MdAlternateEmail /></span>
-                            <Link to={`mailto:${getContactDetails?.data.contactDetails.email}`}>
-                                {getContactDetails?.data.contactDetails.email}
+                            <Link to={`mailto:${getContactDetails?.data.contactDetails?.email}`}>
+                                {getContactDetails?.data.contactDetails?.email}
                             </Link>
                         </li>
                         <li>
                             <span className='iconStyle'><MdLocalPhone /></span>
-                            <Link to={`tel:${getContactDetails?.data.contactDetails.phone}`}>
-                                {getContactDetails?.data.contactDetails.phone}
+                            <Link to={`tel:${getContactDetails?.data.contactDetails?.phone}`}>
+                                {getContactDetails?.data.contactDetails?.phone}
                             </Link>
                         </li>
                     </ul>

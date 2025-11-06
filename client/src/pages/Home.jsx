@@ -6,6 +6,7 @@ import CountUp from 'react-countup';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useGetHeroBannerQuery } from '../../store/api/bannerApiSlice';
 import styles from './styles/Home.module.css';
+import Ripples from '../components/Ripples';
 
 const Home = () => {
     const ref = useRef(null);
@@ -41,7 +42,7 @@ const Home = () => {
                         playsInline
                     >
                         <source
-                            src={fetchHeroBanner?.data.cloudinaryData.secure_url}
+                            src={fetchHeroBanner?.data?.cloudinaryData.secure_url}
                             type="video/mp4"
                         />
                         Your browser does not support the video tag.
@@ -80,12 +81,20 @@ const Home = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, delay: 1.4 }}
                     >
-                        <Link to="/portfolio" className={`${styles.ctaButton} ${styles.primaryCta}`}>
-                            View Our Work
-                        </Link>
-                        <Link to="/contact" className={`${styles.ctaButton} ${styles.secondaryCta}`}>
-                            Hire Us
-                        </Link>
+                        <Ripples duration={0.9}>
+                            <Link to="/portfolio"
+                                className={`${styles.ctaButton} ${styles.primaryCta}`}
+                            >
+                                View Our Work
+                            </Link>
+                        </Ripples>
+                        <Ripples color="rgba(0, 0, 0, 0.1)" duration={0.9}>
+                            <Link to="/contact"
+                                className={`${styles.ctaButton} ${styles.secondaryCta}`}
+                            >
+                                Hire Us
+                            </Link>
+                        </Ripples>
                     </motion.div>
                 </motion.div>
 
@@ -119,9 +128,11 @@ const Home = () => {
                         personal narratives, and experimental works that push creative
                         boundaries.
                     </p>
-                    <HashLink to="/#about" className={styles.introBtn}>
-                        Discover Our Story
-                    </HashLink>
+                    <Ripples duration={0.9}>
+                        <HashLink to="/#about" className={styles.introBtn}>
+                            Discover Our Story
+                        </HashLink>
+                    </Ripples>
                 </motion.div>
 
                 <motion.div

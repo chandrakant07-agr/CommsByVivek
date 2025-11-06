@@ -1,14 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useAdminLoginMutation } from "../../../store/api/adminApiSlice";
+import { toast } from "react-toastify";
 import {
-    MdAdminPanelSettings,
     MdLogin,
-    MdOutlineKeyboardDoubleArrowLeft,
     MdOutlineLock,
-    MdOutlineMailOutline
+    MdAdminPanelSettings,
+    MdOutlineMailOutline,
+    MdOutlineKeyboardDoubleArrowLeft
 } from "react-icons/md";
 import FormInputError from "../../components/FormInputError";
+import { useAdminLoginMutation } from "../../../store/api/adminApiSlice";
+import Ripples from "../../components/Ripples";
 import styles from "./styles/Login.module.css";
 
 const Login = () => {
@@ -28,7 +30,7 @@ const Login = () => {
             navigate("/admin/dashboard");
         } catch (error) {
             // error handling is done in the api slice using toast
-            console.error("Login failed:", error);
+            toast.error("Login failed. Please try again.");
         }
     }
 
@@ -59,8 +61,8 @@ const Login = () => {
                             </div>
                         </label>
                         <input type="email" id="email" placeholder="Enter your email"
-                            {
-                            ...register("email", {
+                            className={errors.email && "formInputErrorBorder"}
+                            {...register("email", {
                                 required: "Email is required", pattern: {
                                     value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                                     message: "Invalid email address"
@@ -79,8 +81,9 @@ const Login = () => {
                             </div>
                         </label>
                         <input type="password" id="password" placeholder="Enter your password"
+                            className={errors.password && "formInputErrorBorder"}
                             {...register("password", {
-                                required: "Password is required", 
+                                required: "Password is required",
                                 minLength: {
                                     value: 6,
                                     message: "Password must be at least 6 characters"
@@ -89,22 +92,24 @@ const Login = () => {
                         />
                         <FormInputError message={errors.password?.message} />
                     </div>
-                    <button type="submit" className={styles.btnLogin} disabled={isLoading}>
-                        <MdLogin />
-                        {
-                            isLoading ? (
-                                <span>
-                                    <i className="fas fa-spinner fa-spin"></i>
-                                    Logging in...
-                                </span>
-                            ) : (
-                                <span>
-                                    <i className="fas fa-sign-in-alt"></i>
-                                    Login
-                                </span>
-                            )
-                        }
-                    </button>
+                    <Ripples className={styles.btnLoginRipples} duration={1} size={100}>
+                        <button type="submit" className={styles.btnLogin} disabled={isLoading}>
+                            <MdLogin />
+                            {
+                                isLoading ? (
+                                    <span>
+                                        <i className="fas fa-spinner fa-spin"></i>
+                                        Logging in...
+                                    </span>
+                                ) : (
+                                    <span>
+                                        <i className="fas fa-sign-in-alt"></i>
+                                        Login
+                                    </span>
+                                )
+                            }
+                        </button>
+                    </Ripples>
                 </form>
             </div>
         </div>

@@ -101,11 +101,15 @@
     border: none;
     border-radius: 0.5rem;
     text-decoration: none;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease-in-out;
 }
 
-.btnLogin:hover {
-    background-color: #b8941f;
+.btnLoginRipples {
+    width: 100%;
+    transition: all 0.3s ease-in-out;
+}
+
+.btnLoginRipples:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
 }

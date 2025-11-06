@@ -1,14 +1,48 @@
-.pageItem {
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.75rem;
+    row-gap: 0.5rem;
+}
+
+.totalPages {
+    /* font-size: 0.9rem; */
+    line-height: 1.25rem;
+    color: var(--text-primary-color);
+}
+
+.paginationContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pageItem,
+.prevItem,
+.nextItem {
     display: inherit;
-    margin-left: 0.75rem;
     border-radius: 0.5rem;
+    transition: transform 0.3s ease-in-out;
+}
+
+.pageItem:hover,
+.prevItem:hover,
+.nextItem:hover {
+    transform: translateY(-3px) scale(1.175);
+}
+
+.prevItem svg,
+.nextItem svg {
+    display: inherit;
 }
 
 .prevLink,
 .pageLink,
 .nextLink {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.9rem;
+    padding: 0.5em 0.75em;
     line-height: 1rem;
     border-radius: 0.5rem;
     cursor: pointer;
@@ -21,13 +55,8 @@
 
 .prevLink,
 .nextLink {
-    /* color: var(--text-primary-color); */
-    background-color: var(--gray-light);
-}
-
-.prevLink:hover,
-.nextLink:hover {
-    background-color: #e5e7eb;
+    color: var(--text-primary-color);
+    background-color: var(--bg-secondary-color);
 }
 
 .ellipsis {
@@ -43,7 +72,19 @@
 }
 
 .disabledLink {
-    /* background-color: var(--gray-light); */
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (min-width: 480px) {
+    .pagination {
+        font-size: 0.9rem;
+    }
+}
+
+@media (min-width: 640px) {
+    .pagination {
+        flex-direction: row;
+    }
 }

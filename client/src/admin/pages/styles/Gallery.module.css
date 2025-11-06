@@ -1,55 +1,8 @@
-.pageHeader h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 2rem;
-    color: var(--text-primary-color);
-}
-
-.pageHeader p {
-    font-size: 1rem;
-    line-height: 1.5rem;
-    color: var(--text-secondary-color);
-}
-
-/* Card Container */
-.cardContainer {
-    margin-top: 1.5rem;
-    background-color: var(--bg-primary-color);
-    border-radius: 0.5rem;
-    box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
-}
-
-/* Section Header */
-.sectionHeader {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--border-primary-color);
-}
-
-.sectionHeader h2 {
-    font-size: 1.25rem;
-    font-weight: 500;
-    color: var(--text-primary-color);
-    margin: 0;
-    flex: 1;
-}
-
-.sectionIcon {
-    font-size: 1.5rem;
-    color: var(--indigo);
-}
-
-/* Tags Input Wrapper */
-.tagsInputWrapper {
-    margin-bottom: 1rem;
-}
-
+/* Tags Input Component Styling */
 .tagsInputWrapper :global(.rti--container) {
     --rti-bg: var(--input-bg-color, var(--card-secondary-bg));
     --rti-border: var(--input-border-color, var(--border-primary-color));
-    --rti-main: var(--accent-color, var(--indigo));
+    --rti-main: var(--indigo);
     --rti-radius: 0.375rem;
     --rti-s: 0.5rem;
     --rti-tag: var(--bg-secondary-color);
@@ -61,17 +14,17 @@
 }
 
 .tagsInputWrapper :global(.rti--container:focus-within) {
-    border-color: var(--accent-color, var(--indigo));
-    box-shadow: 0 0 0 1px var(--accent-color, var(--indigo));
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 1px var(--indigo);
 }
 
 .tagsInputWrapper :global(.rti--tag) {
     background-color: var(--bg-secondary-color);
     color: var(--text-primary-color);
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem 0.35rem;
     border-radius: 0.25rem;
     margin: 0.25rem;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
 }
 
 .tagsInputWrapper :global(.rti--tag button) {
@@ -94,14 +47,18 @@
     background: transparent;
     color: var(--text-primary-color);
     padding: 0.375rem;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     border: none;
     outline: none;
     min-width: 150px;
 }
 
+.tagsInputWrapper :global(.rti--input::placeholder) {
+    color: var(--text-secondary-color);
+}
+
 .tagsHelperText {
-    font-size: 0.75rem;
+    font-size: 0.575rem;
     color: var(--text-secondary-color);
     margin-top: 0.375rem;
 }
@@ -116,7 +73,7 @@
     color: #ffffff;
     background-color: var(--indigo);
     border-radius: 0.5rem;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .addNewButton:hover {
@@ -125,62 +82,60 @@
 
 /* Filter Bar */
 .filterBar {
-    display: flex;
-    gap: 1rem;
-    flex-direction: column;
-    /* margin-bottom: 1.5rem; */
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 0.75rem;
+    padding: 1rem;
 }
 
 .searchBox {
     position: relative;
-    flex: 1 1;
-    max-width: 16rem;
+    /* max-width: 200px; */
 }
 
 .searchIcon {
     position: absolute;
-    left: 0.75rem;
+    left: 0.5rem;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 1.125rem;
+    font-size: 1rem;
     color: var(--text-secondary-color);
 }
 
 .searchInput {
     width: 100%;
-    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
-    font-size: 0.875rem;
+    padding: 0.5rem 0.5rem 0.5rem 2rem;
+    font-size: 0.85rem;
     color: var(--text-primary-color);
     background-color: var(--input-bg-color, var(--card-secondary-bg));
     border: 1px solid var(--border-secondary-color);
     border-radius: 0.5rem;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 .searchInput:focus {
     outline: none;
-    border-color: var(--accent-color, var(--indigo));
-    box-shadow: 0 0 0 1px var(--accent-color, var(--indigo));
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 1px var(--indigo);
 }
 
 .pageFilter,
 .categoryFilter {
-    min-width: 200px;
+    /* max-width: 200px; */
     padding: 0.5rem 0.75rem;
-    /* font-size: 0.875rem; */
     color: var(--text-primary-color);
     background-color: var(--input-bg-color, var(--card-secondary-bg));
     border: 1px solid var(--border-secondary-color);
     border-radius: 0.5rem;
-    transition: border-color 0.3s ease;
+    transition: border-color 0.3s ease-in-out;
     cursor: pointer;
 }
 
 .pageFilter:focus,
 .categoryFilter:focus {
     outline: none;
-    border-color: var(--accent-color, var(--indigo));
-    box-shadow: 0 0 0 1px var(--accent-color, var(--indigo));
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 1px var(--indigo);
 }
 
 /* deleteAllActionButton */
@@ -188,8 +143,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.25rem;
-    font-size: 1.3rem;
+    padding: 0.25em;
+    font-size: 1.2rem;
     color: var(--white);
     background-color: var(--red);
     border-radius: 0.5rem;
@@ -205,24 +160,25 @@
 .selectAllContainer {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.75rem;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
 }
 
 .selectedItemsInfo {
+    font-size: 1rem;
     font-weight: 500;
     color: var(--text-primary-color);
 }
 
 .selectedItemsInfo span {
     margin-left: 0.5rem;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     font-weight: 400;
     color: var(--text-secondary-color);
 }
 
 .selectAllCheckbox label {
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-primary-color);
     text-transform: uppercase;
@@ -230,13 +186,13 @@
 
 .selectAllCheckbox {
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     gap: 0.5rem;
 }
 
 .selectAllCheckbox input {
-    width: 1.1rem;
-    height: 1.1rem;
+    width: 1rem;
+    height: 1rem;
     border-radius: 0.5rem;
     cursor: pointer;
 }
@@ -317,11 +273,11 @@
 }
 
 .cardContent {
-    padding: 1rem;
+    padding: 0.875rem;
 }
 
 .cardContent h3 {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: var(--text-primary-color);
     margin-bottom: 0.5rem;
@@ -329,9 +285,9 @@
 
 .categoryBadge {
     display: inline-block;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.75rem;
-    font-weight: 500;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 400;
     color: var(--indigo);
     background-color: rgba(99, 102, 241, 0.1);
     border-radius: 0.25rem;
@@ -343,6 +299,7 @@
     padding: 0 1rem 1rem;
 }
 
+/* Action Buttons */
 .actionButton {
     flex: 1;
     display: flex;
@@ -378,21 +335,6 @@
     cursor: not-allowed;
 }
 
-/* Pagination */
-/* .pagination {
-    margin-top: 1.5rem;
-    padding: 1rem 1.5rem;
-    background-color: var(--bg-primary-color);
-    border-radius: 0.5rem;
-    box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
-} */
-
-.totalPages {
-    font-size: 0.9rem;
-    line-height: 1.25rem;
-    color: var(--text-primary-color);
-}
-
 /* Modal */
 .modalOverlay {
     position: fixed;
@@ -407,8 +349,8 @@
 
 .modalContent {
     width: 100%;
-    min-width: 25rem;
-    max-width: 50rem;
+    /* min-width: 25rem; */
+    max-width: 45rem;
     max-height: 90vh;
     overflow-y: auto;
     border-radius: 0.75rem;
@@ -420,32 +362,28 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.25rem 1.5rem;
+    padding: 1.25rem;
     position: sticky;
     top: 0;
     background-color: var(--bg-primary-color);
     border-bottom: 1px solid var(--border-primary-color);
-    /* z-index: 10; */
 }
 
 .modalHeader h2 {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 500;
     color: var(--text-primary-color);
-    /* margin: 0; */
 }
 
 .closeButton {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2rem;
-    height: 2rem;
     font-size: 1.5rem;
     color: var(--text-secondary-color);
     background-color: transparent;
     border-radius: 0.5rem;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .closeButton:hover {
@@ -457,7 +395,7 @@
 .modalContent .modelLabel {
     display: block;
     margin-bottom: 0.5rem;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 500;
     line-height: 1.25rem;
     color: var(--text-primary-color);
@@ -466,8 +404,8 @@
 .textInput,
 .categorySelect {
     width: 100%;
-    padding: 0.5rem 0.75rem;
-    font-size: 1rem;
+    padding: 0.5rem;
+    font-size: 0.85rem;
     color: var(--text-primary-color);
     background-color: var(--input-bg-color, var(--card-secondary-bg));
     border: 1px solid var(--border-primary-color);
@@ -478,60 +416,70 @@
 .textInput:focus,
 .categorySelect:focus {
     outline: none;
-    border-color: var(--accent-color, var(--indigo));
-    box-shadow: 0 0 0 1px var(--accent-color, var(--indigo));
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 1px var(--indigo);
 }
 
 .textAreaInput {
     width: 100%;
     padding: 0.5rem 0.75rem;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--text-primary-color);
-    line-height: 1.25rem;
+    line-height: 1.2rem;
     background-color: var(--input-bg-color, var(--card-secondary-bg));
     border: 1px solid var(--border-primary-color);
     border-radius: 0.375rem;
     resize: vertical;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.3s ease;
 }
 
 .textAreaInput:focus {
     outline: none;
-    border-color: var(--accent-color, var(--indigo));
-    box-shadow: 0 0 0 1px var(--accent-color, var(--indigo));
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 1px var(--indigo);
 }
 
+/* Modal Actions Buttons */
 .modalActions {
     display: flex;
     justify-content: flex-end;
+    flex-direction: column;
     gap: 0.5rem;
-    padding: 1.5rem;
+    padding: 1.5rem 1rem;
     border-top: 1px solid var(--border-primary-color);
     position: sticky;
     bottom: 0;
     background-color: var(--bg-primary-color);
 }
 
+.modelTags :global(.rti--container) {
+    min-height: 0;
+}
+
 /* Buttons */
 .formButtons {
     display: flex;
     justify-content: flex-end;
+    flex-direction: column;
     gap: 0.5rem;
     margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-primary-color);
 }
 
 .saveButton,
 .submitButton {
-    display: inline-flex;
+    display: flex;
+    justify-content: center;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.7rem 1rem;
+    padding: 0.5rem 1rem;
     font-size: 0.9rem;
     font-weight: 500;
-    color: #ffffff;
+    color: var(--white);
     background-color: var(--indigo);
     border-radius: 0.5rem;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .saveButton:hover,
@@ -547,13 +495,13 @@
 
 .resetButton,
 .cancelButton {
-    padding: 0.7rem 1rem;
+    padding: 0.5rem 1rem;
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--text-primary-color);
     background-color: var(--bg-secondary-color);
     border-radius: 0.5rem;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .resetButton:hover,
@@ -572,26 +520,50 @@
 }
 
 /* Responsive Design */
+@media (min-width: 480px) {
+    .tagsInputWrapper :global(.rti--tag) {
+        font-size: 0.875rem;
+    }
+
+    .tagsHelperText {
+        font-size: 0.75rem;
+    }
+
+    .formButtons {
+        flex-direction: row;
+    }
+
+    .selectAllContainer {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .modalActions {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
 @media (min-width: 640px) {
+    .filterBar {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: center;
+        padding: 1.5rem;
+    }
+
     .galleryGrid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .modalHeader h2 {
+        font-size: 1.25rem;
     }
 }
 
 @media (min-width: 768px) {
-    .filterBar {
-        justify-content: space-between;
-        align-items: center;
-        flex-direction: row;
-    }
-
     .galleryGrid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
-@media (min-width: 1024px) {
-    /* .galleryGrid {
-        grid-template-columns: repeat(3, 1fr);
-    } */
-}
+@media (min-width: 1024px) {}

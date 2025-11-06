@@ -42,12 +42,14 @@ const FilmedByVivek = () => {
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1 }}
+                    viewport={{ once: false }}
                 >
                     <motion.h1
                         className="heroTitle"
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, delay: 0.3 }}
+                        viewport={{ once: false }}
                     >
                         FilmedByVivek
                     </motion.h1>
@@ -93,7 +95,7 @@ const FilmedByVivek = () => {
                                 initial={{ opacity: 0, y: 50 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: index * 0.2 }}
-                                viewport={{ once: true }}
+                                viewport={{ once: false }}
                             >
                                 <motion.div
                                     className={styles.projectVisual}

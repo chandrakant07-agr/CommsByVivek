@@ -1,7 +1,7 @@
 .progressContainer {
-    width: 75%;
+    width: 90%;
     margin: 1rem 0;
-    padding: 1.5rem;
+    padding: 1.25rem;
     background-color: var(--card-secondary-bg);
     border: 1px solid var(--border-primary-color);
     border-radius: 0.75rem;
@@ -17,8 +17,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 3rem;
-    height: 3rem;
+    width: 2.5rem;
+    height: 2.5rem;
     background: linear-gradient(135deg, var(--indigo), var(--dark-blue));
     border-radius: 0.75rem;
     flex-shrink: 0;
@@ -34,14 +34,14 @@
 }
 
 .progressTitle {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--text-primary-color);
-    margin: 0 0 0.25rem 0;
+    /* margin: 0 0 0.25rem 0; */
 }
 
 .progressSubtext {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     color: var(--text-secondary-color);
     margin: 0;
 }
@@ -95,7 +95,7 @@
 }
 
 .progressPercentage {
-    font-size: 1rem;
+    font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-primary-color);
     z-index: 2;
@@ -110,7 +110,7 @@
     padding: 0.75rem;
     font-size: 0.875rem;
     /* font-weight: 500; */
-    color: #166534;
+    color: var(--dark-green);
     background-color: var(--light-green);
     border: 1px solid var(--light-green);
     border-radius: 0.5rem;
@@ -122,8 +122,8 @@
 }
 
 .cancelButton {
-    padding: 0.7rem 1rem;
-    font-size: 0.9rem;
+    padding: 0.55rem 1rem;
+    font-size: 0.875rem;
     font-weight: 500;
     color: var(--white);
     background-color: var(--red);
@@ -132,5 +132,11 @@
 }
 
 .cancelButton:hover {
-    background-color: #dc2626;
+    background-color: var(--dark-red);
+}
+
+@media (min-width: 480px) {
+    .progressContainer {
+        width: 75%;
+    }
 }

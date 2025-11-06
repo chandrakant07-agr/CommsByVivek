@@ -1,45 +1,7 @@
-.profileHeader h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 2rem;
-    color: var(--text-primary-color);
-}
-
-.profileHeader p {
-    font-size: 1rem;
-    line-height: 1.5rem;
-    color: var(--text-secondary-color);
-}
-
-.profileInfo,
-.security,
-.accountStatistics {
-    margin-top: 1.5rem;
-    background-color: var(--bg-primary-color);
-    border-radius: 0.5rem;
-    box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
-}
-
-.profileInfoHeader,
-.securityHeader,
-.statisticsHeader {
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--border-primary-color);
-}
-
-.profileInfoHeader h2,
-.securityHeader h2,
-.statisticsHeader h2 {
-    font-size: 1.125rem;
-    font-weight: 500;
-    line-height: 1.75rem;
-    color: var(--text-primary-color);
-}
-
-.profileInfoHeader button,
-.securityHeader button,
+.profileEditBtn,
+.changePasswordBtn,
 .updateBtn {
-    padding: 0.7rem 1rem;
+    padding: 0.7em 1em;
     font-weight: 600;
     color: var(--white);
     border-radius: 0.5rem;
@@ -49,8 +11,8 @@
     transition-duration: 200ms;
 }
 
-.profileInfoHeader button:hover,
-.securityHeader button:hover,
+.profileEditBtn:hover,
+.changePasswordBtn:hover,
 .updateBtn:hover {
     background-color: var(--dark-blue);
 }
@@ -61,12 +23,12 @@
     cursor: not-allowed;
 }
 
-.profileInfoUpdateForm,
+.profileUpdateForm,
 .securityUpdateForm {
     max-width: 25rem;
 }
-    
-.profileInfoUpdateForm label,
+
+.profileUpdateForm label,
 .securityUpdateForm label {
     display: block;
     margin-bottom: 0.5rem;
@@ -76,7 +38,7 @@
     color: var(--text-primary-color);
 }
 
-.profileInfoUpdateForm input,
+.profileUpdateForm input,
 .securityUpdateForm input {
     width: 100%;
     padding: 0.5rem 0.75rem;
@@ -88,12 +50,12 @@
     transition: all 0.3s ease;
 }
 
-.profileInfoUpdateForm input::placeholder,
+.profileUpdateForm input::placeholder,
 .securityUpdateForm input::placeholder {
     color: var(--input-placeholder-color);
 }
 
-.profileInfoUpdateForm input:focus,
+.profileUpdateForm input:focus,
 .securityUpdateForm input:focus {
     outline: none;
     background-color: var(--input-focus-border-color);
@@ -117,23 +79,23 @@
 .profileInfoContainer {
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 1.5rem;
+    row-gap: 1.25rem;
+    padding: 1.5rem;
 }
 
 .profileLogo {
-    width: 4rem;
-    height: 4rem;
+    width: 2.25em;
+    height: 2.25em;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.25rem;
     background-color: var(--cornflower-blue);
     border-radius: 50%;
 }
 
 .profileIcon {
-    font-size: 1.5rem;
     font-weight: 500;
-    line-height: 2rem;
     color: var(--white);
 }
 
@@ -145,20 +107,28 @@
 }
 
 .profileEmail {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: var(--text-secondary-color);
 }
 
 .profileRole {
-    font-size: 0.9rem;
-    line-height: 1.25rem;
-    color: var(--text-secondary-color);
+    padding: 0.125rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--dark-green);
+    background-color: var(--light-green);
+    border-radius: 1rem;
     text-transform: capitalize;
+}
+
+.accountDetails {
+    display: flex;
+    justify-content: space-between;
 }
 
 .accountDetails .status,
 .accountDetails .memberSince {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 500;
     line-height: 1.25rem;
     color: var(--text-primary-color);
@@ -168,7 +138,6 @@
     padding: 0.125rem 0.625rem;
     font-size: 0.75rem;
     font-weight: 500;
-    line-height: 1rem;
     color: var(--dark-green);
     background-color: var(--light-green);
     border-radius: 1rem;
@@ -176,8 +145,7 @@
 
 .accountDetails .joinDate {
     margin-top: 0.25rem;
-    font-size: 0.9rem;
-    line-height: 1.25rem;
+    font-size: 0.75rem;
     color: var(--text-secondary-color);
 }
 
@@ -189,34 +157,33 @@
 }
 
 .securityDetails p {
-    font-size: 0.9rem;
-    line-height: 1.25rem;
-    color: var(--text-secondary-color);
-}
-
-.securityDetails .password {
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     line-height: 1.25rem;
     color: var(--text-secondary-color);
 }
 
 .securityWarning {
     margin-top: 1rem;
-    padding: 1rem;
+    padding: 1.25rem;
     background-color: var(--bg-security-warning-color);
     border: 1px solid #ccb720;
     border-radius: 0.5rem;
 }
 
-.securityWarning h3 {
-    font-size: 0.9rem;
+.warningContent {
+    padding-left: 0.5rem;
+    border-left: 4px solid #ccb720;
+}
+
+.warningContent h3 {
+    font-size: 0.85rem;
     font-weight: 500;
     line-height: 1.25rem;
     color: var(--text-security-warning-primary-color);
 }
 
-.securityWarning p {
-    font-size: 0.9rem;
+.warningContent p {
+    font-size: 0.75rem;
     line-height: 1.25rem;
     margin-top: 0.25rem;
     color: var(--text-security-warning-secondary-color);
@@ -224,61 +191,65 @@
 
 .statisticsGrids {
     display: grid;
-    row-gap: 1.5rem;
-    column-gap: 1rem;
+    gap: 1rem;
+    row-gap: 1rem;
     grid-template-columns: repeat(1, minmax(0, 1fr));
+    padding: 1.5rem;
 }
 
 .statisticsGrid {
-    padding: 1rem 1.5rem;
+    padding: 1rem 1.25rem;
     background-color: var(--card-secondary-bg);
     border: 1px solid var(--border-primary-color);
     border-radius: 0.5rem;
 }
 
 .statisticsGrid h3 {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 500;
-    line-height: 1.25rem;
     color: var(--text-primary-color);
 }
 
 .statisticsGrid p {
-    margin-top: 0.25rem;
-    font-size: 0.9rem;
+    margin-top: 0.1rem;
+    font-size: 0.75rem;
     line-height: 1.25rem;
     color: var(--text-secondary-color);
 }
 
 .statisticsGrid .roleBadge {
-    display: inline-flex;
-    align-items: center;
     padding: 0.125rem 0.625rem;
     font-size: 0.75rem;
     font-weight: 500;
     line-height: 1rem;
-    color: #000;
-    background-color: #d7e0ff;
+    color: var(--dark-green);
+    background-color: var(--light-green);
     border-radius: 1rem;
     text-transform: capitalize;
 }
 
 @media (min-width: 640px) {
+    .profileInfoContainer {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: center;
+    }
+
+    .profileLogo {
+        font-size: 1.5rem;
+    }
+
     .statisticsGrids {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
-@media (min-width: 768px) {
-    .profileInfoContainer {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
+@media (min-width: 768px) {}
 
 @media (min-width: 1024px) {
     .statisticsGrids {
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
+
     .statisticsGrid {
         padding: 1vw 1.5vw;
     }

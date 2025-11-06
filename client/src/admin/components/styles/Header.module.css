@@ -166,7 +166,7 @@
 .mobileMenuButton {
     display: inline-flex;
     flex-grow: 1;
-    padding-left: 0.5rem;
+    padding-left: 0.2rem;
     font-size: 1.5rem;
     color: var(--cornflower-blue);
     transition: all 0.3s ease-in-out;
@@ -184,7 +184,7 @@
 }
 
 .topBarGreeting h5 {
-    /* font-size: 0.9rem; */
+    font-size: 0.9rem;
     line-height: 1.25rem;
     color: var(--text-secondary-color);
 }
@@ -218,7 +218,7 @@
 
 .mainContainer main {
     flex: 1 1;
-    padding: 1.5rem;
+    padding: 1.25rem;
     overflow-y: auto;
 }
 
@@ -226,6 +226,12 @@
     position: fixed;
     inset: 0;
     background-color: rgba(0, 0, 0, 0.5);
+}
+
+@media (min-width: 640px) {
+    .mainContainer main {
+        padding: 1.5rem;
+    }
 }
 
 @media (min-width: 1024px) {

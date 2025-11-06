@@ -12,6 +12,7 @@ import socialPlatforms from '../constants/socialPlatforms';
 import FormInputError from '../components/FormInputError';
 import LoadingSpinner from '../components/LoadingSpinner';
 import TinyEditor from '../components/TinyEditor';
+import Ripples from '../components/Ripples';
 import styles from './styles/Contact.module.css';
 
 const Contact = () => {
@@ -32,17 +33,17 @@ const Contact = () => {
         {
             label: "Email",
             icon: <MdAlternateEmail />,
-            value: fetchContactDetails?.data.contactDetails.email
+            value: fetchContactDetails?.data.contactDetails?.email
         },
         {
             label: "Phone",
             icon: <FaPhone />,
-            value: fetchContactDetails?.data.contactDetails.phone
+            value: fetchContactDetails?.data.contactDetails?.phone
         },
         {
             label: "Address",
             icon: <FaLocationArrow />,
-            value: fetchContactDetails?.data.contactDetails.address
+            value: fetchContactDetails?.data.contactDetails?.address
         },
         {
             label: "Response Time",
@@ -76,7 +77,7 @@ const Contact = () => {
     return (
         <>
             {/* Contact Content */}
-            <section className="mb-10 text-center" data-aos="fade-up">
+            <section className="mb-8 text-center" data-aos="fade-up">
                 <h1 className="heroTitle">Contact</h1>
                 <div className="separatorHeroTitle"></div>
             </section>
@@ -235,17 +236,19 @@ const Contact = () => {
                             <FormInputError message={errors.message?.message} />
                         </div>
 
-                        <motion.button
-                            type="submit" disabled={isMessageSending}
-                            className={styles.submitButton}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                        >
-                            {isMessageSending ?
-                                <LoadingSpinner size="sm" color="var(--text-color)" />
-                                : <div className="py-4">Send Message</div>
-                            }
-                        </motion.button>
+                        <Ripples className="w-100" duration={0.8} size={120}>
+                            <motion.button
+                                type="submit" disabled={isMessageSending}
+                                className={styles.submitButton}
+                                whileHover={{ scale: 1.01 }}
+                                whileTap={{ scale: 0.8 }}
+                            >
+                                {isMessageSending ?
+                                    <LoadingSpinner size="sm" color="var(--text-color)" />
+                                    : <div className="py-4">Send Message</div>
+                                }
+                            </motion.button>
+                        </Ripples>
                     </form>
                 </motion.div>
             </section>

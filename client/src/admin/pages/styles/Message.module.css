@@ -3,54 +3,52 @@
     flex-direction: column;
 }
 
-.messagesHeader h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 2rem;
-    color: var(--text-primary-color);
-}
-
-.messagesHeader p {
-    font-size: 1rem;
-    line-height: 1.5rem;
-    color: var(--text-secondary-color);
-}
-
 .messagesMark {
     display: flex;
     align-items: start;
     flex-direction: column;
-    margin-top: 1.25rem;
+    row-gap: 0.35rem;
+    margin-top: 1rem;
 }
 
-.messagesMark span {
+.msgCountContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.msgCountContainer .selectMsg {
+    font-size: 0.8rem;
+    line-height: 1.25rem;
+    color: var(--text-secondary-color);
+}
+
+.msgCountContainer .totalMsg {
+    font-size: 0.8rem;
     font-weight: 500;
     line-height: 1.25rem;
     color: var(--text-primary-color);
 }
 
 .markActions {
+    width: 100%;
     display: flex;
+    justify-content: space-between;
     align-items: center;
 }
 
-.markActions span {
-    font-size: 0.8rem;
-    line-height: 1.25rem;
-    color: var(--text-secondary-color);
-}
-
 .readMarkBtn,
-.unreadMarkBtn {
-    margin-left: 0.5rem;
-    padding: 0.25rem;
-    font-size: 0.9rem;
+.unreadMarkBtn,
+.deleteMarkBtn {
+    padding: 0.3rem;
+    font-size: 0.75rem;
     line-height: 1.25rem;
     border-radius: 0.375rem;
 }
 
 .readMarkBtn {
     color: #15803d;
+    background-color: var(--light-green);
 }
 
 .readMarkBtn:hover {
@@ -58,26 +56,26 @@
 }
 
 .unreadMarkBtn {
-    color: var(--text-primary-color);
+    color: var(--yellow);
+    background-color: var(--light-yellow);
 }
 
 .unreadMarkBtn:hover {
-    color: var(--gray-light);
-    background-color: #ef4444;
+    background-color: #fff3d0;
+}
+
+.deleteMarkBtn {
+    color: var(--red);
+    background-color: var(--light-red);
+}
+
+.deleteMarkBtn:hover {
+    background-color: #ffc9c9;
 }
 
 .markBtnDisabled {
-    pointer-events: none;
-    cursor: auto;
+    cursor: not-allowed;
     opacity: 0.5;
-}
-
-.filterSearch {
-    margin-top: 1.5rem;
-    padding: 1.5rem;
-    background-color: var(--bg-primary-color);
-    box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
-    border-radius: 0.5rem;
 }
 
 .filterSearchContainer {
@@ -105,7 +103,7 @@
 
 .clearIcon {
     left: auto;
-    right:0.75rem;
+    right: 0.75rem;
 }
 
 .searchIcon svg,
@@ -118,7 +116,9 @@
 .filterSearchContainer input {
     width: 100%;
     padding: 0.75rem 2.5rem;
-    border: 1px solid var(--border-secondary-color);
+    color: var(--input-text-color);
+    background-color: var(--input-bg-color);
+    border: 2px solid var(--input-border-color);
     border-radius: 0.5rem;
 }
 
@@ -133,7 +133,9 @@
     min-width: 120px;
     width: 100%;
     padding: 0.5rem 0.75rem;
-    border: 1px solid var(--border-secondary-color);
+    color: var(--input-text-color);
+    background-color: var(--input-bg-color);
+    border: 2px solid var(--input-border-color);
     border-radius: 0.5rem;
 }
 
@@ -141,12 +143,9 @@
     margin-top: 0.5rem;
 }
 
-.messagesList {
-    margin-top: 1.5rem;
-    background-color: var(--bg-primary-color);
-    border-radius: 0.5rem;
-    box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
-    overflow: hidden;
+.filterByRead:focus-visible,
+.filterByType:focus-visible {
+    outline: none;
 }
 
 .msgNotFound svg {
@@ -172,73 +171,51 @@
     color: var(--text-secondary-color);
 }
 
-.msgSelectAll {
-    padding: 0.75rem 1.5rem;
-    background-color: #f9fafb;
-    border-bottom: 1px solid var(--border-primary-color);
+.selectAllContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.msgSelectAll input {
+.selectAllCheckbox {
     width: 1rem;
     height: 1rem;
-    color: var(--indigo);
+    /* color: var(--indigo); */
     border-radius: 0.25rem;
 }
 
-.msgSelectAll span {
-    margin-left: 0.75rem;
-    font-size: 0.75rem;
-    font-weight: 500;
+.selectAllContainer span {
+    font-size: 0.57rem;
+    font-weight: 600;
     line-height: 1rem;
     color: var(--text-primary-color);
     letter-spacing: 0.05em;
     text-transform: uppercase;
 }
 
-.msgContainer {
-    padding: 1rem 1.5rem;
+.messageContainer {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border-secondary-color);
     transition-duration: 150ms;
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.msgContainer:hover {
-    background-color: var(--gray-light);
-}
-
-.msgContainer input {
-    width: 1rem;
-    height: 1rem;
-    margin-top: 0.25rem;
-    color: var(--indigo);
-}
-
-.readStatus {
-    margin-left: 1rem;
-    margin-top: 0.25rem;
-}
-
-.readStatus .msgIsRead {
-    width: 0.75rem;
-    height: 0.75rem;
-    border-radius: 50%;
-}
-
-.msgIsRead.yes {
-    background-color: #d1d5db;
-}
-
-.msgIsRead.no {
-    background-color: var(--red);
-}
-
-.msgContent {
+.singleMessage {
     min-width: 0px;
-    margin-left: 1rem;
     flex: 1 1;
 }
 
-.msgContent h3 {
+.messageMeta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+}
+
+.singleMessage h3 {
     font-size: 0.9rem;
     font-weight: 500;
     line-height: 1.25rem;
@@ -248,136 +225,123 @@
     white-space: nowrap;
 }
 
-.msgContent .statusBadge {
-    display: inline-flex;
-    align-items: center;
-    margin-left: 0.75rem;
+.singleMessage .statusBadge {
     padding: 0.125rem 0.625rem;
     font-size: 0.75rem;
     font-weight: 500;
     line-height: 1rem;
-    /* color: #1f2937; */
-    color: var(--accent-success-bg-color);
-    background-color: var(--accent-success-text-color);
+    color: var(--dark-green);
+    background-color: var(--light-green);
     border-radius: 2rem;
+    text-transform: capitalize;
 }
 
-.msgContent .receiveDate {
-    font-size: 0.9rem;
-    line-height: 1.25rem;
-    color: var(--text-secondary-color);
+.statusBadge.unread {
+    color: var(--red);
+    background-color: var(--light-red);
 }
 
-.msgContent .receiveTime {
-    margin-left: 0.5rem;
-    font-size: 0.75rem;
-    line-height: 1rem;
-    color: #9ca3af;
-}
-
-.msgContent .senderEmail {
+.messageCheckbox {
+    width: 0.75rem;
+    height: 0.75rem;
     margin-top: 0.25rem;
-    font-size: 0.9rem;
-    line-height: 1.25rem;
-    color: var(--text-secondary-color);
-}
-
-.msgContent .emailMessage {
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-    line-height: 1.25rem;
-    color: #1f2937;
-    overflow: hidden;
-}
-
-.mailActionBtn .mailView {
-    font-size: 0.9rem;
-    font-weight: 500;
-    line-height: 1.25rem;
     color: var(--indigo);
 }
 
-.mailActionBtn .markReadBtn {
-    margin-left: 1rem;
-    font-size: 0.9rem;
-    line-height: 1.25rem;
+.receiveDate {
     color: var(--text-secondary-color);
 }
 
-.mailActionBtn .mailDeleteBtn {
-    margin-left: 1rem;
-    font-size: 0.9rem;
-    line-height: 1.25rem;
-    color: #dc2626;
+.receiveTime {
+    color: #9ca3af;
 }
 
-/* Pagination */
-.pagination {
-    margin-top: 1.5rem;
-    padding: 1rem 1.5rem;
-    background-color: var(--bg-primary-color);
-    border-radius: 0.5rem;
-    box-shadow: 0 0 #000, 0 0 #000, var(--box-shadow);
+.senderEmail {
+    font-size: inherit;
+    color: var(--text-secondary-color);
 }
 
-.totalPages {
-    font-size: 0.9rem;
-    line-height: 1.25rem;
+.messageSnippet {
+    font-size: inherit;
     color: var(--text-primary-color);
+    overflow: hidden;
 }
 
-.pageItem {
-    display: inherit;
-    margin-left: 0.75rem;
-    border-radius: 0.5rem;
+.messageActionBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
-.prevLink,
-.pageLink,
-.nextLink {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.9rem;
-    line-height: 1rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
+.messageView,
+.messageReadBtn,
+.messageDeleteBtn {
+    font-size: 0.75rem;
+    transition: all 0.3s ease;
 }
 
-.pageLink {
-    color: var(--white);
-    background-color: var(--cornflower-blue);
+.messageView {
+    font-weight: 500;
+    color: var(--indigo);
 }
 
-.prevLink,
-.nextLink {
-    /* color: var(--text-primary-color); */
-    background-color: var(--gray-light);
-}
-
-.prevLink:hover,
-.nextLink:hover {
-    background-color: #e5e7eb;
-}
-
-.ellipsis {
-    margin-left: 0.5rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+.messageReadBtn {
     color: var(--text-secondary-color);
 }
 
-.activePage {
-    padding: 0.1rem;
-    border: 2px solid var(--indigo);
+.messageDeleteBtn {
+    color: var(--red);
 }
 
-.disabledLink {
-    /* background-color: var(--gray-light); */
-    opacity: 0.5;
-    cursor: not-allowed;
+.messageView:hover,
+.messageReadBtn:hover,
+.messageDeleteBtn:hover {
+    font-size: 0.8rem;
+    font-weight: 600;
 }
 
 /* Responsive Design */
+@media (min-width: 480px) {
+    .msgCountContainer {
+        justify-content: start;
+        gap: 0.75rem;
+    }
+
+    .markActions {
+        justify-content: start;
+        gap: 0.5rem;
+    }
+
+    .selectAllContainer span {
+        font-size: 0.75rem;
+    }
+
+    .messageMeta {
+        font-size: 0.9rem;
+    }
+
+    .messageView,
+    .messageReadBtn,
+    .messageDeleteBtn {
+        font-size: 0.9rem;
+    }
+}
+
 @media (min-width: 640px) {
+    .messagesHeader {
+        align-items: center;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .msgCountContainer {
+        justify-content: end;
+    }
+
+    .markActions {
+        justify-content: end;
+    }
+
     .filterSearchContainer .filter {
         flex-direction: row;
     }
@@ -389,12 +353,6 @@
 }
 
 @media (min-width: 768px) {
-    .messagesHeader {
-        align-items: center;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-
     .messagesMark {
         align-items: end;
         margin-top: 0px;

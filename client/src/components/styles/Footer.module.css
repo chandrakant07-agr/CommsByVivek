@@ -7,16 +7,17 @@
 .footerGridContainer {
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 2.5vw;
+    gap: 1rem;
+    row-gap: 0.75rem;
     margin-bottom: 1.5rem;
     padding: 0 1rem;
 }
 
 .footerGridItem {
-    height: 15rem;
+    /* height: 15rem; */
     padding: 1.5rem;
-    border: 1px solid black;
     border-radius: 0.5rem;
+    box-shadow: 0px 0px 5px 0px rgba(68, 67, 61, 0.1);
 }
 
 .footerLogo {
@@ -63,8 +64,17 @@
 .footerNav ul {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5vw;
+    gap: 0.75rem;
     list-style: none;
+}
+
+.footerNav a {
+    padding: 0.2rem 1rem;
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+    color: var(--text-dark);
+    border: 1px solid var(--accent-color);
+    border-radius: 0.25rem;
+    transition: all 0.3s ease;
 }
 
 .footerNav a:hover {
@@ -72,12 +82,13 @@
 }
 
 .footerSocial {
-    display: flex;
-    /* justify-content: flex-end; */
-    gap: 1.7vw;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    row-gap: 0.5rem;
 }
 
 .footerSocial a {
+    justify-self: center;
     color: var(--text-dark);
     font-size: clamp(1rem, 1.9vw, 1.2rem);
     transition: all 0.3s ease;

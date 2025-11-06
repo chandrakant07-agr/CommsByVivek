@@ -93,17 +93,19 @@ const HeroBanner = () => {
 
     return (
         <>
-            <section className={styles.pageHeader}>
+            <section className="pageHeader">
                 <h1>Hero Banner Management</h1>
                 <p>Manage your hero banners and their settings</p>
             </section>
 
-            <section className={styles.cardContainer}>
-                <div className={styles.sectionHeader}>
-                    <IoImagesOutline className={styles.sectionIcon} />
-                    <h2>Manage Hero Banner</h2>
+            <section className="cardContainer">
+                <div className="sectionHeader">
+                    <div className="sectionHeading">
+                        <IoImagesOutline className="sectionIcon" />
+                        <h2>Manage Hero Banner</h2>
+                    </div>
                 </div>
-                <div className="p-6">
+                <div className="p-4 p-sm-6">
                     {isFetchingHeroBanner && <LoadingSpinner size="lg" />}
                     <form onSubmit={bannerSubmit(onSubmitBanner)}>
                         <div className="mb-6">

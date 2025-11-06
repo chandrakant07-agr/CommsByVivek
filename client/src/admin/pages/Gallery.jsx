@@ -68,7 +68,7 @@ const Gallery = () => {
     const { data: fetchCategories, isLoading: isFetchingCategory } = useGetCategoriesQuery();
     const [syncCategories, { isLoading: isSyncing }] = useSyncCategoriesMutation();
 
-    const { data: fetchGallery, isLoading: isFetchingGallery } = useGetGalleryPaginatedQuery({
+    const { data: fetchGallery, isLoading: isLoadingGallery } = useGetGalleryPaginatedQuery({
         search: filterWatch("searchQuery") || "",
         category: filterWatch("categoryFilter") || "all",
         pageLocation: filterWatch("pageFilter") || "all",
@@ -194,9 +194,9 @@ const Gallery = () => {
         const allItemIds = fetchGallery?.data.galleryItems.map(item => item._id) || [];
 
         if(selectedItemsLength === allItemIds.length) {
-            resetSelect({selectedItems: []});          // Uncheck all
+            resetSelect({ selectedItems: [] });          // Uncheck all
         } else {
-            resetSelect({selectedItems: allItemIds});  // Check all
+            resetSelect({ selectedItems: allItemIds });  // Check all
         }
     };
 
@@ -230,26 +230,20 @@ const Gallery = () => {
         });
     }, [fetchGallery, resetSelect]);
 
-    // useEffect(() => {
-    //     resetGallery();
-    //     setEditingItem(null);
-    //     setIsModalOpen(false);
-    //     setIsUploading(false);
-    //     setUploadFilePreview(null);
-    // }, [isAddSuccess, isUpdateSuccess, resetGallery]);
-
     return (
         <>
-            <section className={styles.pageHeader}>
+            <section className="pageHeader">
                 <h1>Gallery Management</h1>
                 <p>Manage your gallery items and categories</p>
             </section>
 
             {/* Category Management Section */}
-            <section className={styles.cardContainer}>
-                <div className={styles.sectionHeader}>
-                    <MdCategory className={styles.sectionIcon} />
-                    <h2>Manage Categories</h2>
+            <section className="cardContainer">
+                <div className="sectionHeader">
+                    <div className="sectionHeading">
+                        <MdCategory className="sectionIcon" />
+                        <h2>Manage Categories</h2>
+                    </div>
                 </div>
                 {isFetchingCategory ? (
                     <LoadingSpinner />
@@ -290,10 +284,12 @@ const Gallery = () => {
             </section>
 
             {/* Gallery Add/Filter/Search Section */}
-            <section className={styles.cardContainer}>
-                <div className={styles.sectionHeader}>
-                    <TbFilterSearch className={styles.sectionIcon} />
-                    <h2>Filter/Search</h2>
+            <section className="cardContainer">
+                <div className="sectionHeader">
+                    <div className="sectionHeading">
+                        <TbFilterSearch className="sectionIcon" />
+                        <h2>Filter/Search</h2>
+                    </div>
                     <button className={styles.addNewButton}
                         onClick={handleAddNewItem}
                     >
@@ -302,46 +298,50 @@ const Gallery = () => {
                     </button>
                 </div>
 
-                <div className="p-6">
-                    {/* Search and Filter Bar */}
-                    <div className={styles.filterBar}>
-                        <div className={styles.searchBox}>
-                            <IoSearchOutline className={styles.searchIcon} />
-                            <input type="text" className={styles.searchInput}
-                                placeholder="Search by title..."
-                                {...filterRegister("searchQuery")}
-                            />
-                        </div>
-                        <div>
-                            <select className={styles.pageFilter}
-                                {...filterRegister("pageFilter")}
-                            >
-                                <option value="all">All</option>
-                                <option value="portfolio">Portfolio</option>
-                                <option value="filmedByVivek">FilmedByVivek</option>
-                            </select>
-                            {isFetchingCategory ? (
-                                <LoadingSpinner size="sm" />
-                            ) : (
-                                <select className={`${styles.categoryFilter} ml-4`}
-                                    {...filterRegister("categoryFilter")}
-                                >
-                                    <option value="">All Categories</option>
-                                    {fetchCategories?.data.map((cat) => (
-                                        <option key={cat._id} value={cat._id}>{cat.name}</option>
-                                    ))}
-                                </select>
-                            )}
-                        </div>
+                {/* Search and Filter Bar */}
+                <div className={styles.filterBar}>
+                    <div className={styles.searchBox}>
+                        <IoSearchOutline className={styles.searchIcon} />
+                        <input type="text" className={styles.searchInput}
+                            placeholder="Search by title..."
+                            {...filterRegister("searchQuery", {
+                                onChange: () => setCurrentPage(1)
+                            })}
+                        />
                     </div>
+                    <select className={styles.pageFilter}
+                        {...filterRegister("pageFilter", {
+                            onChange: () => setCurrentPage(1)
+                        })}
+                    >
+                        <option value="all">All</option>
+                        <option value="portfolio">Portfolio</option>
+                        <option value="filmedByVivek">FilmedByVivek</option>
+                    </select>
+                    {isFetchingCategory ? (
+                        <LoadingSpinner size="sm" />
+                    ) : (
+                        <select className={styles.categoryFilter}
+                            {...filterRegister("categoryFilter", {
+                                onChange: () => setCurrentPage(1)
+                            })}
+                        >
+                            <option value="">All Categories</option>
+                            {fetchCategories?.data.map((cat) => (
+                                <option key={cat._id} value={cat._id}>{cat.name}</option>
+                            ))}
+                        </select>
+                    )}
                 </div>
             </section>
 
             {/* Gallery List Section */}
-            <section className={styles.cardContainer}>
-                <div className={styles.sectionHeader}>
-                    <IoImagesOutline className={styles.sectionIcon} />
-                    <h2>Gallery Items</h2>
+            <section className="cardContainer">
+                <div className="sectionHeader flex-row">
+                    <div className="sectionHeading">
+                        <IoImagesOutline className="sectionIcon" />
+                        <h2>Gallery Items</h2>
+                    </div>
                     <button
                         className={styles.deleteAllActionButton}
                         onClick={handleDeleteSelectedItems}
@@ -350,7 +350,7 @@ const Gallery = () => {
                         <MdDelete />
                     </button>
                 </div>
-                <div className="p-6">
+                <div className="p-4 p-sm-6">
                     {/* Select All Gallery Items */}
                     <div className={styles.selectAllContainer}>
                         <div className={styles.selectedItemsInfo}>
@@ -368,7 +368,7 @@ const Gallery = () => {
                     </div>
 
                     {/* Gallery Grid */}
-                    {isFetchingGallery ? (
+                    {isLoadingGallery ? (
                         <LoadingSpinner size="lg" />
                     ) : fetchGallery?.data.galleryItems.length === 0 ? (
                         <div className={styles.galleryEmptyState}>
@@ -419,24 +419,17 @@ const Gallery = () => {
 
             {/* Pagination */}
             {fetchGallery?.data.pagination.totalPages > 1 && (
-                <section className={`${styles.cardContainer} px-6 py-4`}>
-                    {isFetchingGallery ? (
+                <section className="cardContainer p-4">
+                    {isLoadingGallery ? (
                         <LoadingSpinner />
                     ) : (
-                        <div className="d-flex a-center justify-between">
-                            <div className={styles.totalPages}>
-                                {`Showing ${((currentPage - 1) * itemsPerPage) + 1} 
-                                to ${Math.min(currentPage * itemsPerPage,
-                                    fetchGallery?.data.pagination.totalItems)} 
-                            of ${fetchGallery?.data.pagination.totalItems} results`}
-                            </div>
-
-                            <Pagination
-                                pageCount={fetchGallery?.data.pagination.totalPages}
-                                currentPage={currentPage}
-                                setCurrentPage={setCurrentPage}
-                            />
-                        </div>
+                        <Pagination
+                            pageCount={fetchGallery?.data.pagination.totalPages}
+                            currentPage={currentPage}
+                            itemsPerPage={itemsPerPage}
+                            totalItems={fetchGallery?.data.pagination.totalItems}
+                            setCurrentPage={setCurrentPage}
+                        />
                     )}
                 </section>
             )}
@@ -456,10 +449,10 @@ const Gallery = () => {
                         </div>
 
                         <form onSubmit={gallerySubmit(onSubmitGallery)}
-                            className="p-6 pb-0" noValidate>
+                            className="p-4 p-sm-6 pb-0" noValidate>
 
                             {/* Title */}
-                            <div className="h-19 mb-4">
+                            <div className="h-19 mb-2">
                                 <label htmlFor="title" className={styles.modelLabel}>
                                     Title<span className="fromRequiredStar">*</span>
                                 </label>
@@ -475,7 +468,7 @@ const Gallery = () => {
                             </div>
 
                             {/* Main Category */}
-                            <div className="h-19 mb-4">
+                            <div className="h-19 mb-2">
                                 <label htmlFor="category" className={styles.modelLabel}>
                                     Category<span className="fromRequiredStar">*</span>
                                 </label>
@@ -494,7 +487,7 @@ const Gallery = () => {
                             </div>
 
                             {/* Cover Image */}
-                            <div className="mb-6">
+                            <div className="mb-4">
                                 <MediaFileUploader
                                     name="coverFile"
                                     label="Cover Media"
@@ -509,7 +502,7 @@ const Gallery = () => {
                             </div>
 
                             {/* Short Description */}
-                            <div className="mb-4">
+                            <div className="mb-2">
                                 <label htmlFor="shortDescription" className={styles.modelLabel}>
                                     Short Description<span className="fromRequiredStar">*</span>
                                 </label>
@@ -525,7 +518,7 @@ const Gallery = () => {
                             </div>
 
                             {/* Year */}
-                            <div className="h-19 mb-4">
+                            <div className="h-19 mb-2">
                                 <label htmlFor="year" className={styles.modelLabel}>
                                     Year<span className="fromRequiredStar">*</span>
                                 </label>
@@ -543,7 +536,7 @@ const Gallery = () => {
                             </div>
 
                             {/* Display Location Switch Component */}
-                            <div className="mb-4">
+                            <div className="mb-2">
                                 <RadioInput
                                     name="pageLocation"
                                     label="Display Content on"
@@ -556,12 +549,12 @@ const Gallery = () => {
                             </div>
 
                             {/* Sub Tags */}
-                            <div className="mb-4">
+                            <div className="mb-2">
                                 <label className={styles.modelLabel}>
                                     Sub Tags
                                     <sup className="fromOptional">(optional)</sup>
                                 </label>
-                                <div className={styles.tagsInputWrapper}>
+                                <div className={`${styles.tagsInputWrapper} ${styles.modelTags}`}>
                                     <Controller
                                         name="subTags"
                                         control={galleryControl}

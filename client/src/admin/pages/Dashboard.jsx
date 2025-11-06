@@ -1,9 +1,23 @@
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { LiaMailBulkSolid } from 'react-icons/lia';
-import { BsCalendar4Week, BsEnvelopeOpen } from 'react-icons/bs';
-import { LuMessageSquareMore, LuMessageSquareText, LuUserRound } from 'react-icons/lu';
-import { MdOutlineCalendarMonth, MdOutlineMarkUnreadChatAlt, MdOutlineToday } from 'react-icons/md';
+import {
+    BsEnvelopeOpen,
+    BsCalendar4Week
+} from 'react-icons/bs';
+import {
+    LuUserRound,
+    LuMessageSquareMore,
+    LuMessageSquareText
+} from 'react-icons/lu';
+import {
+    MdOutlineToday,
+    MdOutlineCalendarMonth,
+    MdOutlineMarkUnreadChatAlt
+} from 'react-icons/md';
+import { TbMessage2Plus } from 'react-icons/tb';
+import { VscGithubAction } from 'react-icons/vsc';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import { useGetTodayMsgStatsQuery } from '../../../store/api/messageApiSlice';
 import styles from "./styles/Dashboard.module.css"
 
@@ -16,43 +30,39 @@ const Dashboard = () => {
             title: 'Read Messages',
             value: messageStats?.data.readMsg || 0,
             icon: <BsEnvelopeOpen />,
-            bgColor: 'bg-red-50',
+            iconColor: styles.readStatIconColor,
         },
         {
             title: 'Unread Messages',
             value: messageStats?.data.unreadMsg || 0,
             icon: <MdOutlineMarkUnreadChatAlt />,
-            bgColor: 'bg-red-50',
+            iconColor: styles.unreadStatIconColor,
         },
         {
             title: 'Total Messages',
             value: messageStats?.data.totalMsg || 0,
             icon: <LiaMailBulkSolid />,
-            bgColor: 'bg-blue-50',
+            iconColor: styles.totalStatIconColor,
         },
         {
             title: 'Today',
             value: messageStats?.data.todayMsg || 0,
             icon: <MdOutlineToday />,
-            bgColor: 'bg-green-50',
+            iconColor: styles.todayStatIconColor,
         },
         {
             title: 'This Week',
             value: messageStats?.data.thisWeekMsg || 0,
             icon: <BsCalendar4Week />,
-            bgColor: 'bg-purple-50',
+            iconColor: styles.thisWeekStatIconColor,
         },
         {
             title: 'This Month',
             value: messageStats?.data.thisMonthMsg || 0,
             icon: <MdOutlineCalendarMonth />,
-            bgColor: 'bg-green-50',
+            iconColor: styles.thisMonthStatIconColor,
         },
     ];
-
-    if(isLoading) {
-        return <div>Loading...</div>;
-    }
 
     if(error) {
         return <div>Error loading data</div>;
@@ -61,7 +71,7 @@ const Dashboard = () => {
     return (
         <>
             {/* Header */}
-            <section className={styles.dashboardHeader}>
+            <section className="pageHeader">
                 <h1>Dashboard</h1>
                 <p>Overview of your contact form activity</p>
             </section>
@@ -70,11 +80,11 @@ const Dashboard = () => {
             <section className={styles.statusCards}>
                 {statCards.map((stat, index) => (
                     <div key={index} className={styles.statusCard}>
-                        <div className={`d-flex a-center`}>
-                            <div className={`${stat.bgColor} ${styles.statIcon}`}>
+                        <div className={styles.statusCardContent}>
+                            <div className={`${stat.iconColor} ${styles.statIcon}`}>
                                 {stat.icon}
                             </div>
-                            <div className={`${styles.statContent} ml-4`}>
+                            <div className={styles.statContent}>
                                 <p className={styles.title}>{stat.title}</p>
                                 <p className={styles.value}>{stat.value}</p>
                             </div>
@@ -84,11 +94,15 @@ const Dashboard = () => {
             </section>
 
             {/* Recent Messages */}
-            <section className={styles.recentMsg}>
-                <div className={styles.recentMsgHeader}>
-                    <h2>Recent Messages</h2>
+            <section className="cardContainer">
+                <div className="sectionHeader">
+                    <div className="sectionHeading">
+                        <TbMessage2Plus className="sectionIcon" />
+                        <h2>Recent Messages</h2>
+                    </div>
                 </div>
                 <div>
+                    {isLoading && <LoadingSpinner size="lg" />}
                     {messageStats?.data.todayMsgList.length === 0 ? (
                         <div className={`${styles.msgNotFound} px-6 py-8 text-center`}>
                             <LuMessageSquareText />
@@ -127,19 +141,15 @@ const Dashboard = () => {
                     </>
                     )}
                 </div>
-                {/* {recentMessages.length > 0 && (
-                    <div className={styles.viewAllMsg}>
-                        <Link to="../messages">
-                            View all messages →
-                        </Link>
-                    </div>
-                )} */}
             </section>
 
             {/* Quick Actions */}
-            <section className={styles.quickActions}>
-                <div className={styles.quickActionsHeader}>
-                    <h2>Quick Actions</h2>
+            <section className="cardContainer">
+                <div className="sectionHeader">
+                    <div className="sectionHeading">
+                        <VscGithubAction className="sectionIcon" />
+                        <h2>Quick Actions</h2>
+                    </div>
                 </div>
                 <div className={styles.quickCards}>
                     <Link to="../messages" className={styles.quickCard}>

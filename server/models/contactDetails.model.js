@@ -12,7 +12,7 @@ const contactDetailsSchema = new Schema({
         type: String,
         required: true,
         trim: true,
-        match: [/^\+?\d{1,3}[\s-]?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}$/,
+        match: [/^(\+?\d{1,3}[\s-]?\(?\d{2,4}\)?[\s-]?\d{2,4}[\s-]?\d{4,5}|\d{10})$/,
                 'Please enter a valid phone number.']
     },
     address: {

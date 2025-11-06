@@ -13,7 +13,7 @@ import {
 const router = express.Router();
 
 // create default admin user
-router.route("/seed").get(createAdmin);
+// router.route("/seed").get(createAdmin);
 
 // admin login
 router.route("/login").post(loginAdmin);

@@ -71,7 +71,7 @@ const Portfolio = () => {
     return (
         <>
             {/* Master Showreel Section */}
-            <section className="mb-10 text-center">
+            <section className="mb-8 text-center">
                 <motion.h1
                     className="heroTitle"
                     initial={{ opacity: 0, y: 30 }}
@@ -84,7 +84,7 @@ const Portfolio = () => {
                 <div className="separatorHeroTitle"></div>
             </section>
 
-            <section className="mb-10">
+            <section className="mb-8">
                 {isFetchingHeroBanner ? (
                     <LoadingSpinner
                         size="lg"
@@ -103,8 +103,8 @@ const Portfolio = () => {
                             controls
                             ref={videoPlayerRef}
                             poster={generateThumbnailUrl(
-                                fetchHeroBanner?.data.cloudinaryData.secure_url,
-                                fetchHeroBanner?.data.cloudinaryData.resource_type,
+                                fetchHeroBanner?.data?.cloudinaryData.secure_url,
+                                fetchHeroBanner?.data?.cloudinaryData.resource_type,
                                 800,
                                 450
                             )}
@@ -115,7 +115,7 @@ const Portfolio = () => {
                             onContextMenu={(e) => e.preventDefault()}
                         >
                             <source
-                                src={fetchHeroBanner?.data.cloudinaryData.secure_url}
+                                src={fetchHeroBanner?.data?.cloudinaryData.secure_url}
                                 type="video/mp4"
                             />
                             Your browser does not support the video tag.

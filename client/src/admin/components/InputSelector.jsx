@@ -6,6 +6,8 @@ const customStyle = {
     input: (provided) => ({
         ...provided,
         width: "12.5rem",
+        padding: "0",
+        fontSize: "0.9rem",
     }),
     menu: (provided) => ({
         ...provided,
@@ -23,21 +25,22 @@ const customStyle = {
         color: state.isFocused ? "var(--white)" : "var(--text-color)",
         cursor: "pointer",
         "&:active": {
-            backgroundColor: "var(--cornflower-blue)",
+            backgroundColor: "var(--indigo)",
         },
         transition: "all 0.3s ease"
     }),
     control: (provided, state) => ({
         ...provided,
         backgroundColor: "var(--input-bg-color)",
+        fontSize: "0.875rem",
         color: "var(--text-color)",
-        border: state.isFocused ? "1px solid var(--cornflower-blue)"
+        border: state.isFocused ? "2px solid var(--indigo)"
             : "1px solid var(--input-border-color)",
         borderRadius: "0.5rem",
         boxShadow: "var(--box-shadow)",
         transition: "all 0.3s ease",
         "&:focus": {
-            borderColor: "var(--cornflower-blue)",
+            borderColor: "var(--indigo)",
         }
     }),
     singleValue: (provided) => ({
@@ -71,7 +74,7 @@ const InputSelector = ({ handleAddSocialLink }) => {
             // className={styles.selectButton}
             formatOptionLabel={({ label, icon }) => (
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <span style={{ display: "inherit", fontSize: "1.1em" }}>{icon}</span>
+                    <span style={{ display: "inherit", fontSize: "1rem" }}>{icon}</span>
                     <p>{label}</p>
                 </div>
             )}

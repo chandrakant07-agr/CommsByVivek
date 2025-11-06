@@ -24,7 +24,7 @@
     gap: 0.5rem;
     margin-top: 1rem;
     padding: 0.5rem 1rem;
-    font-size: 0.875rem;
+    font-size: 0.7rem;
     color: var(--red);
     background-color: rgba(239, 68, 68, 0.1);
     border-radius: 0.5rem;
@@ -41,7 +41,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 1.75rem;
+    padding: 1.25rem;
     background-color: var(--card-secondary-bg);
     border: 2px dashed var(--border-primary-color);
     border-radius: 0.5rem;
@@ -62,25 +62,25 @@
 }
 
 .uploadArea svg {
-    font-size: 3rem;
+    font-size: 2.75rem;
     color: var(--indigo);
     margin-bottom: 0.5rem;
 }
 
 .uploadArea h3 {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--text-primary-color);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
 .uploadArea p {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     color: var(--text-secondary-color);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
 .uploadArea small {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: var(--text-secondary-color);
 }
