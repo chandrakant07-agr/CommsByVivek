@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { format } from "date-fns";
+import { Editor } from "primereact/editor";
 import { FaEnvelopeOpenText } from "react-icons/fa";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { HiOutlineExclamation } from "react-icons/hi";
@@ -158,8 +159,14 @@ const MessageDetail = () => {
                             <h5 className={styles.messageTitle}>
                                 {fetchMessageData?.data.projectType?.name}
                             </h5>
-                            <div className={styles.messageBody}
+                            {/* <div className={styles.messageBody}
                                 dangerouslySetInnerHTML={{ __html: fetchMessageData?.data.message }}
+                            /> */}
+                            <Editor
+                                value={fetchMessageData?.data.message}
+                                readOnly={true}
+                                header={null}
+                                style={{ border: 'none' }}
                             />
                         </div>
                     </>

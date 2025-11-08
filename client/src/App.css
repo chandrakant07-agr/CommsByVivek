@@ -469,7 +469,7 @@ video {
 }
 
 /* tiny mce editor style overrides */
-.tox .tox-edit-area::before {
+/* .tox .tox-edit-area::before {
     border: 2px solid var(--accent-color) !important;
     border-radius: 0.25rem !important;
 }
@@ -481,6 +481,21 @@ video {
 .error-message .tox .tox-edit-area::before {
     border: 1px solid #ff0000 !important;
     opacity: 1;
+} */
+
+/* PrimeReact Editor Custom Styles */
+.error-message .primeReaceEditorClass {
+    border: 1px solid #ff0000 !important;
+    opacity: 1;
+}
+
+.ql-editor.ql-blank::before {
+    font-size: 0.875rem;
+    color: var(--input-placeholder-color) !important;
+}
+
+[data-pc-section="toolbar"] {
+    display: none;
 }
 
 .iconStyle {

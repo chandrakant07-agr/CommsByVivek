@@ -33,6 +33,10 @@ const ContactInfo = lazy(() => import('./admin/pages/ContactInfo'));
 const ProjectType = lazy(() => import('./admin/pages/ProjectType'));
 const MessageDetail = lazy(() => import('./admin/pages/MessageDetail'));
 
+import "primereact/resources/themes/saga-blue/theme.css";
+import "primereact/resources/primereact.min.css";
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 

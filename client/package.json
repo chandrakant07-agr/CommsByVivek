@@ -11,10 +11,11 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
-    "@tinymce/tinymce-react": "^6.3.0",
     "axios": "^1.12.2",
     "date-fns": "^4.1.0",
     "framer-motion": "^11.18.2",
+    "primereact": "^10.9.7",
+    "quill": "^2.0.3",
     "react": "^19.1.1",
     "react-countup": "^6.5.3",
     "react-dom": "^19.1.1",

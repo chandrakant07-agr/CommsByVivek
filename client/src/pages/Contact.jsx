@@ -3,15 +3,16 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Controller, useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 import { MdAlternateEmail } from 'react-icons/md';
 import { FaPhone, FaClock, FaLocationArrow, } from 'react-icons/fa';
 import { useSendMessageMutation } from '../../store/api/messageApiSlice';
 import { useGetProjectTypesQuery } from '../../store/api/projectTypeApiSlice';
 import { useGetContactDetailsQuery } from '../../store/api/contactDetailsApiSlice';
+import PrimeReactEditor from '../components/PrimeReactEditor';
 import socialPlatforms from '../constants/socialPlatforms';
 import FormInputError from '../components/FormInputError';
 import LoadingSpinner from '../components/LoadingSpinner';
-import TinyEditor from '../components/TinyEditor';
 import Ripples from '../components/Ripples';
 import styles from './styles/Contact.module.css';
 
@@ -51,6 +52,14 @@ const Contact = () => {
             value: "Within 24 hours"
         }
     ];
+
+    const onSubmitMessage = async (data) => {
+        try {
+            await sendMessage(data).unwrap();
+        } catch (error) {
+            toast.error("Failed to send message:", error);
+        }
+    };
 
     // Clear the form if the message is successfully sent
     useEffect(() => {
@@ -148,7 +157,7 @@ const Contact = () => {
                 >
                     <h2 className={styles.formTitle}>Tell Us Your Story</h2>
 
-                    <form onSubmit={handleSubmit(sendMessage)} noValidate>
+                    <form onSubmit={handleSubmit(onSubmitMessage)} noValidate>
                         <div className="h-18 mb-6">
                             <label htmlFor="name" className={styles.formLabel}>Full Name
                                 <span className="fromRequiredStar">*</span>
@@ -218,18 +227,12 @@ const Contact = () => {
                                     required: "Message is required"
                                 }}
                                 render={({ field }) => (
-                                    <TinyEditor
+                                    <PrimeReactEditor
                                         id="message"
-                                        key={isDarkMode ? "dark" : "light"}
-                                        height="22rem"
+                                        height={300}
                                         value={field.value}
                                         onChange={field.onChange}
-                                        placeholder="Tell us about your project, vision, timeline,
-                                                and any specific requirements..."
-                                        customConfig={{
-                                            skin: isDarkMode ? 'oxide-dark' : 'oxide',
-                                            content_css: isDarkMode ? 'dark' : 'default'
-                                        }}
+                                        placeholder="Tell us about your project, vision, timeline, and any specific requirements..."
                                     />
                                 )}
                             />
