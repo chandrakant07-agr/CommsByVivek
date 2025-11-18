@@ -4,10 +4,9 @@ import { toast } from "react-toastify";
 export const bannerApiSlice = baseApiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getHeroBanner: builder.query({
-            query: (params) => ({
+            query: () => ({
                 url: "/hero-banner/get",
-                method: "GET",
-                params
+                method: "GET"
             }),
             providesTags: ["Banner"],
         }),

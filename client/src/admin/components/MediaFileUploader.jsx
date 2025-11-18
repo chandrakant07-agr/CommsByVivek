@@ -39,7 +39,7 @@ const MediaFileUploader = ({
     return (
         <>
             <label htmlFor={`${label}_media`} className={labelClass}>
-                {label}{required && <span className="fromRequiredStar">*</span>}
+                {label}{required && <span className="formRequiredStar">*</span>}
             </label>
             {uploadFilePreview ? (
                 <div className={styles.imagePreviewContainer}>

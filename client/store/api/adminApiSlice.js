@@ -19,6 +19,21 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
                 }
             }
         }),
+        adminRefreshLogin: builder.mutation({
+            query: () => ({
+                url: "/admin/refresh-login",
+                method: "POST"
+            }),
+            onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+                try {
+                    const { data } = await queryFulfilled;
+                    // Optionally notify user of successful refresh
+                } catch (error) {
+                    const err = error.error?.data;
+                    toast.error(err?.message || "Session refresh failed");
+                }
+            }
+        }),
         getAdminProfile: builder.query({
             query: () => ({
                 url: "/admin/me",
@@ -80,6 +95,7 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
 
 export const {
     useAdminLoginMutation,
+    useAdminRefreshLoginMutation,
     useGetAdminProfileQuery,
     useUpdateAdminProfileMutation,
     useChangeAdminPasswordMutation,

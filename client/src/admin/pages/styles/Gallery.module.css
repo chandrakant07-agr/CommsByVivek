@@ -47,7 +47,7 @@
     background: transparent;
     color: var(--text-primary-color);
     padding: 0.375rem;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     border: none;
     outline: none;
     min-width: 150px;
@@ -82,8 +82,8 @@
 
 /* Filter Bar */
 .filterBar {
-    display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 0.75rem;
     padding: 1rem;
 }
@@ -119,20 +119,16 @@
     box-shadow: 0 0 0 1px var(--indigo);
 }
 
-.pageFilter,
-.categoryFilter {
-    /* max-width: 200px; */
+.filterSelect {
     padding: 0.5rem 0.75rem;
     color: var(--text-primary-color);
     background-color: var(--input-bg-color, var(--card-secondary-bg));
     border: 1px solid var(--border-secondary-color);
     border-radius: 0.5rem;
     transition: border-color 0.3s ease-in-out;
-    cursor: pointer;
 }
 
-.pageFilter:focus,
-.categoryFilter:focus {
+.filterSelect:focus {
     outline: none;
     border-color: var(--indigo);
     box-shadow: 0 0 0 1px var(--indigo);
@@ -156,6 +152,11 @@
     transform: translateY(-2px) scale(1.1);
 }
 
+.deleteAllActionButton:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 /* Gallery Item Actions */
 .selectAllContainer {
     display: flex;
@@ -177,53 +178,6 @@
     color: var(--text-secondary-color);
 }
 
-.selectAllCheckbox label {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-primary-color);
-    text-transform: uppercase;
-}
-
-.selectAllCheckbox {
-    display: flex;
-    /* align-items: center; */
-    gap: 0.5rem;
-}
-
-.selectAllCheckbox input {
-    width: 1rem;
-    height: 1rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-}
-
-/* Gallery Empty State */
-.galleryEmptyState {
-    padding: 2rem;
-    text-align: center;
-    background-color: var(--card-secondary-bg);
-    border-radius: 0.375rem;
-}
-
-.galleryEmptyState svg {
-    width: 4rem;
-    height: 4rem;
-    margin: 0 auto 1rem;
-    color: var(--text-secondary-color);
-}
-
-.galleryEmptyState h4 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--text-primary-color);
-    margin-bottom: 0.5rem;
-}
-
-.galleryEmptyState p {
-    font-size: 0.875rem;
-    color: var(--text-secondary-color);
-}
-
 /* Gallery Grid */
 .galleryGrid {
     display: grid;
@@ -241,7 +195,7 @@
 }
 
 .galleryCard:hover {
-    transform: translateY(-4px);
+    transform: translateY(-1px) scale(1.01);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -249,13 +203,7 @@
     position: absolute;
     top: 0.75rem;
     right: 0.75rem;
-    width: 1.1rem;
-    height: 1.1rem;
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid var(--border-primary-color);
-    border-radius: 0.25rem;
     z-index: 5;
-    cursor: pointer;
 }
 
 .cardThumbnail {
@@ -287,9 +235,9 @@
     display: inline-block;
     padding: 0.2rem 0.5rem;
     font-size: 0.7rem;
-    font-weight: 400;
-    color: var(--indigo);
-    background-color: rgba(99, 102, 241, 0.1);
+    font-weight: 500;
+    color: var(--white);
+    background-color: var(--dark-blue);
     border-radius: 0.25rem;
 }
 
@@ -307,32 +255,46 @@
     justify-content: center;
     padding: 0.5rem;
     font-size: 1rem;
-    color: var(--text-secondary-color);
-    background-color: var(--bg-secondary-color);
     border-radius: 0.5rem;
     transition: all 0.3s ease;
 }
 
-.actionButton:hover {
-    color: var(--text-primary-color);
-    background-color: var(--border-secondary-color);
-    transform: translateY(-2px) scale(1.1);
+.editAction {
+    color: var(--indigo);
+    background-color: var(--light-blue);
+}
+
+.editAction:hover {
+    color: var(--white);
+    background-color: var(--indigo);
+    transform: translateY(-2px) scale(1.05);
+}
+
+.ratingLinkAction {
+    color: var(--yellow);
+    background-color: var(--light-yellow);
+}
+
+.ratingLinkAction:hover {
+    color: var(--white);
+    background-color: var(--yellow);
+    transform: translateY(-2px) scale(1.05);
 }
 
 .deleteAction {
     color: var(--red);
-    background-color: rgba(239, 68, 68, 0.1);
+    background-color: var(--delete-btn-bg);
 }
 
 .deleteAction:hover {
     color: var(--white);
     background-color: var(--red);
-    transform: translateY(-2px) scale(1.1);
+    transform: translateY(-2px) scale(1.05);
 }
 
 .actionButton:disabled {
     opacity: 0.5;
-    cursor: not-allowed;
+    pointer-events: none;
 }
 
 /* Modal */
@@ -345,6 +307,17 @@
     justify-content: center;
     z-index: 10;
     padding: 1rem;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .modalContent {
@@ -356,22 +329,32 @@
     border-radius: 0.75rem;
     background-color: var(--bg-primary-color);
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .modalHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.25rem;
-    position: sticky;
-    top: 0;
-    background-color: var(--bg-primary-color);
+    padding: 1.25rem 1.5rem;
     border-bottom: 1px solid var(--border-primary-color);
 }
 
 .modalHeader h2 {
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-primary-color);
 }
 
@@ -383,12 +366,13 @@
     color: var(--text-secondary-color);
     background-color: transparent;
     border-radius: 0.5rem;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 .closeButton:hover {
-    background-color: var(--bg-secondary-color);
     color: var(--text-primary-color);
+    background-color: var(--bg-secondary-color);
+    transform: rotate(90deg);
 }
 
 /* Form Elements */
@@ -490,7 +474,7 @@
 .saveButton:disabled,
 .submitButton:disabled {
     opacity: 0.5;
-    cursor: not-allowed;
+    pointer-events: none;
 }
 
 .resetButton,
@@ -519,6 +503,120 @@
     z-index: 100;
 }
 
+/* Rating Link Modal Styles */
+.ratingLinkModalContent {
+    width: 100%;
+    max-width: 35rem;
+    background-color: var(--bg-primary-color);
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modalDescription {
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    color: var(--text-secondary-color);
+}
+
+.linkDisplayContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.linkTextBox {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--card-secondary-bg);
+    border: 1px solid var(--border-primary-color);
+    border-radius: 0.5rem;
+}
+
+.linkIcon {
+    font-size: 1.25rem;
+    color: var(--indigo);
+    flex-shrink: 0;
+}
+
+.linkInput {
+    flex: 1;
+    font-size: 0.875rem;
+    color: var(--text-primary-color);
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Courier New', monospace;
+}
+
+.copyButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--white);
+    background-color: var(--indigo);
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.copyButton:hover {
+    background-color: var(--dark-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 55, 212, 0.3);
+}
+
+.copyButton.copied {
+    background-color: #16a34a;
+}
+
+.copyButton.copied:hover {
+    background-color: #15803d;
+}
+
+.copyButton svg {
+    font-size: 1.1rem;
+}
+
+.infoBox {
+    padding: 1rem;
+    background-color: rgba(99, 102, 241, 0.1);
+    border-left: 3px solid var(--indigo);
+    border-radius: 0.375rem;
+}
+
+.infoBox p {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--text-primary-color);
+    margin: 0;
+}
+
+.infoBox strong {
+    font-weight: 600;
+    color: var(--indigo);
+}
+
 /* Responsive Design */
 @media (min-width: 480px) {
     .tagsInputWrapper :global(.rti--tag) {
@@ -544,9 +642,27 @@
     }
 }
 
+/* Scrollbar Styling */
+.modalContent::-webkit-scrollbar {
+    width: 4px;
+}
+
+.modalContent::-webkit-scrollbar-track {
+    background: var(--bg-secondary-color);
+}
+
+.modalContent::-webkit-scrollbar-thumb {
+    background: var(--indigo);
+    border-radius: 4px;
+}
+
+.modalContent::-webkit-scrollbar-thumb:hover {
+    background: #b8941f;
+}
+
 @media (min-width: 640px) {
     .filterBar {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        flex-direction: row;
         align-items: center;
         padding: 1.5rem;
     }
@@ -557,6 +673,16 @@
 
     .modalHeader h2 {
         font-size: 1.25rem;
+    }
+
+    .linkDisplayContainer {
+        flex-direction: row;
+        align-items: stretch;
+    }
+
+    .copyButton {
+        width: auto;
+        min-width: 120px;
     }
 }
 

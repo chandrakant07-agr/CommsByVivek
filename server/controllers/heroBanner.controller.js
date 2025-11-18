@@ -1,4 +1,4 @@
-import HeroBanner from "../models/HeroBanner.model.js";
+import HeroBanner from "../models/heroBanner.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { ApiError, ApiResponse } from "../utils/responseHandler.js";
 import { cloudinaryDelete } from "../utils/cloudinarySignature.js";

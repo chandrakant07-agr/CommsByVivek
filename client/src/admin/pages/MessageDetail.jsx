@@ -6,7 +6,7 @@ import { Editor } from "primereact/editor";
 import { FaEnvelopeOpenText } from "react-icons/fa";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { HiOutlineExclamation } from "react-icons/hi";
-import { MdDelete, MdOutlineMail } from "react-icons/md";
+import { MdDelete, MdMarkAsUnread } from "react-icons/md";
 import {
     useDeleteMessageMutation,
     useGetMessageByIdQuery,
@@ -67,7 +67,7 @@ const MessageDetail = () => {
                     <h1>Message Details</h1>
                     <p>View and respond to contact messages</p>
                 </div>
-                <button className={styles.backButton} onClick={() => navigate(-1)}>
+                <button className={styles.backButton} onClick={() => navigate(-1)} title="Back">
                     <IoMdArrowRoundBack />
                 </button>
             </section>
@@ -88,7 +88,7 @@ const MessageDetail = () => {
                     </div>
                 ) : (
                     <>
-                        <div className="sectionHeader">
+                        <div className="sectionHeader flex-row">
                             <div className="sectionHeading">
                                 <FaEnvelopeOpenText className="sectionIcon" />
                                 <h2>Message</h2>
@@ -98,15 +98,17 @@ const MessageDetail = () => {
                                     className={styles.markButton}
                                     onClick={handleMarkAsUnread}
                                     disabled={isUpdating}
+                                    title="Mark as Unread"
                                 >
-                                    <MdOutlineMail /> Mark as Unread
+                                    <MdMarkAsUnread />
                                 </button>
                                 <button
                                     className={styles.deleteButton}
                                     onClick={handleDelete}
                                     disabled={isDeleting}
+                                    title="Delete this Message"
                                 >
-                                    <MdDelete /> Delete
+                                    <MdDelete />
                                 </button>
                             </div>
                         </div>
@@ -141,7 +143,7 @@ const MessageDetail = () => {
                                         <span>
                                             {format(new Date(
                                                 fetchMessageData?.data.createdAt),
-                                                "MMMM dd, yyyy"
+                                                "PP"
                                             )}
                                         </span>
                                         <span>

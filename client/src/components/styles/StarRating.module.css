@@ -1,0 +1,48 @@
+/* Star Rating */
+.starRatingContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+}
+
+.starButton {
+    background: none;
+    border: none;
+    padding: 0.15rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.starButton:disabled {
+    cursor: default;
+}
+
+.starButton.xl {
+    font-size: 2.5rem;
+}
+
+.starButton.lg {
+    font-size: 2rem;
+}
+
+.starButton.md {
+    font-size: 1.5rem;
+}
+
+.starButton.sm {
+    font-size: 1.25rem;
+}
+
+.starButton.xs {
+    font-size: 0.9rem;
+}
+
+.starEmpty {
+    color: var(--text-secondary-color);
+}
+
+.ratingValue {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+    margin-left: 0.5rem;
+}

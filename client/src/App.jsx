@@ -7,10 +7,12 @@ import { ToastContainer } from 'react-toastify';
 import Layout from './components/Layout';
 import LoadingSpinner from './components/LoadingSpinner';
 import AdminLayout from './admin/components/Admin.Layout';
+import PersistLogin from './admin/components/PersistLogin';
 import ProtectedRoute from './admin/components/ProtectedRoute';
 import AdminLoginRoute from './admin/components/AdminLoginRoute';
 
 // Public and non-lazy loaded pages
+import Testimonials from './pages/Testimonials';
 import LandingPage from './pages/Landing.Page';
 import Portfolio from './pages/Portfolio';
 import Page404 from './pages/Page404';
@@ -21,9 +23,12 @@ import Page404 from './pages/Page404';
 
 // public page
 const Contact = lazy(() => import('./pages/Contact'));
+const RateProject = lazy(() => import('./pages/RateProject'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 
 // admin pages
 const Login = lazy(() => import('./admin/pages/Login'));
+const Backup = lazy(() => import('./admin/pages/Backup'));
 const Gallery = lazy(() => import('./admin/pages/Gallery'));
 const Profile = lazy(() => import('./admin/pages/Profile'));
 const Messages = lazy(() => import('./admin/pages/Messages'));
@@ -32,7 +37,9 @@ const HeroBanner = lazy(() => import('./admin/pages/HeroBanner'));
 const ContactInfo = lazy(() => import('./admin/pages/ContactInfo'));
 const ProjectType = lazy(() => import('./admin/pages/ProjectType'));
 const MessageDetail = lazy(() => import('./admin/pages/MessageDetail'));
+const ReviewManagement = lazy(() => import('./admin/pages/ReviewManagement'));
 
+// Styles
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import 'quill/dist/quill.core.css';
@@ -71,9 +78,20 @@ function App() {
                         </Suspense>
                     } />
                     <Route path="/portfolio" element={<Portfolio />} />
+                    <Route path="/testimonials" element={<Testimonials />} />
+                    <Route path="/rate-project/:token" element={
+                        <Suspense fallback={<LoadingSpinner color="var(--accent-color)" />}>
+                            <RateProject />
+                        </Suspense>
+                    } />
+                    <Route path="/privacy-policy" element={
+                        <Suspense fallback={<LoadingSpinner color="var(--accent-color)" />}>
+                            <PrivacyPolicy />
+                        </Suspense>
+                    } />
                     <Route path="*" element={<Page404 />} />
                 </Route>
-                <Route path="/admin">
+                <Route path="/admin" element={<PersistLogin />}>
                     <Route element={<AdminLoginRoute />}>
                         <Route index element={
                             <Suspense fallback={<LoadingSpinner />}>
@@ -86,6 +104,11 @@ function App() {
                             <Route path="gallery" element={
                                 <Suspense fallback={<LoadingSpinner />}>
                                     <Gallery />
+                                </Suspense>
+                            } />
+                            <Route path="backup" element={
+                                <Suspense fallback={<LoadingSpinner />}>
+                                    <Backup />
                                 </Suspense>
                             } />
                             <Route path="profile" element={
@@ -126,6 +149,11 @@ function App() {
                             <Route path="messageView/:id" element={
                                 <Suspense fallback={<LoadingSpinner />}>
                                     <MessageDetail />
+                                </Suspense>
+                            } />
+                            <Route path="review" element={
+                                <Suspense fallback={<LoadingSpinner />}>
+                                    <ReviewManagement />
                                 </Suspense>
                             } />
                         </Route>

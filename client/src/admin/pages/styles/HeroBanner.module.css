@@ -1,14 +1,14 @@
 .formActions {
     display: flex;
     justify-content: flex-end;
+    gap: 0.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--border-primary-color);
-    /* position: sticky;
-    bottom: 0; */
     background-color: var(--bg-primary-color);
 }
 
-.submitButton {
+.submitButton,
+.resetButton {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -28,6 +28,15 @@
 .submitButton:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.resetButton {
+    color: var(--text-primary-color);
+    background-color: var(--bg-secondary-color);
+}
+
+.resetButton:hover {
+    background-color: var(--border-secondary-color);
 }
 
 .responseInterfaceOverlay {

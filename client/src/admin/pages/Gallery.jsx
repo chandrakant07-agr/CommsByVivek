@@ -8,22 +8,28 @@ import {
     IoImagesOutline,
     IoSearchOutline,
     IoAddCircleOutline,
+    IoLink,
 } from "react-icons/io5";
 import { TbFilterSearch } from "react-icons/tb";
 import { MdEdit, MdDelete, MdCategory } from "react-icons/md";
+import { IoCopy, IoCheckmarkDone } from "react-icons/io5";
 import {
     useGetCategoriesQuery,
-    useGetGalleryPaginatedQuery,
-    useSyncCategoriesMutation,
     useAddGalleryItemMutation,
+    useSyncCategoriesMutation,
+    useGetGalleryPaginatedQuery,
     useUpdateGalleryItemMutation,
     useDeleteGalleryItemMutation
 } from "../../../store/api/galleryApiSlice";
 import {
     useGenerateSignatureMutation
 } from "../../../store/api/cloudinaryApiSlice";
+import {
+    useGenerateRatingLinkMutation
+} from "../../../store/api/ratingApiSlice";
 import Pagination from "../components/Pagination";
 import RadioInput from "../components/RadioInput";
+import CheckboxInput from "../components/CheckboxInput";
 import FormInputError from "../../components/FormInputError";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import UploadProgressBar from "../components/UploadProgressBar";
@@ -32,8 +38,12 @@ import { generateThumbnailUrl, uploadFileCloudinary } from "../../../utils/cloud
 import styles from "./styles/Gallery.module.css";
 
 const Gallery = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+
+    const [isRatingLinkModalOpen, setIsRatingLinkModalOpen] = useState(false);
+    const [currentRatingLink, setCurrentRatingLink] = useState("");
+    const [isCopied, setIsCopied] = useState(false);
 
     const [editingItem, setEditingItem] = useState(null);
     const [uploadProgress, setUploadProgress] = useState(0);
@@ -89,6 +99,7 @@ const Gallery = () => {
     const [deleteGalleryItem, { isLoading: isDeleting }] = useDeleteGalleryItemMutation();
 
     const [generateSignature] = useGenerateSignatureMutation();
+    const [generateRatingLink, { isLoading: isGeneratingLink }] = useGenerateRatingLinkMutation();
 
     const selectedItemsLength = (selectWatch("selectedItems") || []).length;
 
@@ -138,7 +149,7 @@ const Gallery = () => {
         } finally {
             resetGallery();
             setEditingItem(null);
-            setIsModalOpen(false);
+            setIsGalleryModalOpen(false);
             setIsUploading(false);
             setUploadFilePreview(null);
         }
@@ -147,14 +158,36 @@ const Gallery = () => {
     // Open modal for adding new item
     const handleAddNewItem = () => {
         resetGallery();
-        setIsModalOpen(true);
+        setIsGalleryModalOpen(true);
         setEditingItem(null);
         setUploadFilePreview(null);
     };
 
+    // Generate Rating Link Handler (Dummy Implementation)
+    const handleGenerateRatingLink = async (itemId) => {
+        try {
+            setIsRatingLinkModalOpen(true);
+
+            const { data } = await generateRatingLink(itemId).unwrap();
+
+            if(data?.status === "pending") {
+                const ratingLink = `${window.location.origin}/rate-project/${data?.token}`;
+
+                toast.success(`Rating link generated for "${data?.project.title}"!`);
+                setCurrentRatingLink(ratingLink);
+            } else {
+                toast.info("Rating already submitted for this project.");
+                setIsRatingLinkModalOpen(false);
+            }
+        } catch (error) {
+            toast.error("Failed to generate rating link. Please try again.");
+            setIsRatingLinkModalOpen(false);
+        }
+    };
+
     // Open modal for editing
     const handleUpdateItem = (item) => {
-        setIsModalOpen(true);
+        setIsGalleryModalOpen(true);
         setEditingItem(item);
         resetGallery({
             year: item.year,
@@ -169,6 +202,7 @@ const Gallery = () => {
         if(item.cloudinaryData.resource_type === "video") setUploadFileType("gallery_videos");
     };
 
+    // Delete single item
     const handleDeleteItem = async (itemId) => {
         if(window.confirm("Are you sure you want to delete this item?")) {
             try {
@@ -179,6 +213,7 @@ const Gallery = () => {
         }
     };
 
+    // Delete selected items
     const handleDeleteSelectedItems = async () => {
         if(window.confirm("Are you sure you want to delete the selected items?")) {
             try {
@@ -190,16 +225,18 @@ const Gallery = () => {
         }
     };
 
+    // Select All / Unselect All Gallery Items
     const handleSelectAllGalleryItems = () => {
         const allItemIds = fetchGallery?.data.galleryItems.map(item => item._id) || [];
 
         if(selectedItemsLength === allItemIds.length) {
-            resetSelect({ selectedItems: [] });          // Uncheck all
+            resetSelect({ selectedItems: [], selectAllItems: false });          // Uncheck all
         } else {
-            resetSelect({ selectedItems: allItemIds });  // Check all
+            resetSelect({ selectedItems: allItemIds, selectAllItems: true });   // Check all
         }
     };
 
+    // Handle file preview and type
     const handleUploadFilePreview = (file) => {
         if(file) {
             setUploadFilePreview(URL.createObjectURL(file));
@@ -208,14 +245,37 @@ const Gallery = () => {
         }
     };
 
+    // Handle media removal
     const handleMediaRemove = () => {
         setUploadFilePreview(null);
         resetGallery({ coverFile: null });
     };
 
+    // Cancel Upload Handler
     const handleCancelUpload = () => {
         if(uploadCancelToken) uploadCancelToken.cancel("Upload canceled by user.");
         setUploadProgress(0);
+    };
+
+    // Copy to Clipboard Handler
+    const handleCopyToClipboard = async () => {
+        try {
+            await navigator.clipboard.writeText(currentRatingLink);
+            setIsCopied(true);
+            toast.success("Link copied to clipboard!");
+
+            // Reset copied state after 2 seconds
+            setTimeout(() => setIsCopied(false), 2000);
+        } catch (error) {
+            toast.error("Failed to copy link. Please try again.");
+        }
+    };
+
+    // Close Rating Link Modal
+    const handleCloseRatingLinkModal = () => {
+        setIsRatingLinkModalOpen(false);
+        setCurrentRatingLink("");
+        setIsCopied(false);
     };
 
     // Load categories from API
@@ -309,7 +369,7 @@ const Gallery = () => {
                             })}
                         />
                     </div>
-                    <select className={styles.pageFilter}
+                    <select className={styles.filterSelect}
                         {...filterRegister("pageFilter", {
                             onChange: () => setCurrentPage(1)
                         })}
@@ -321,7 +381,7 @@ const Gallery = () => {
                     {isFetchingCategory ? (
                         <LoadingSpinner size="sm" />
                     ) : (
-                        <select className={styles.categoryFilter}
+                        <select className={styles.filterSelect}
                             {...filterRegister("categoryFilter", {
                                 onChange: () => setCurrentPage(1)
                             })}
@@ -345,7 +405,8 @@ const Gallery = () => {
                     <button
                         className={styles.deleteAllActionButton}
                         onClick={handleDeleteSelectedItems}
-                        disabled={isDeleting}
+                        disabled={isDeleting || selectedItemsLength === 0}
+                        title="Delete Selected Items"
                     >
                         <MdDelete />
                     </button>
@@ -357,21 +418,20 @@ const Gallery = () => {
                             Selected:
                             <span>{selectedItemsLength} item(s)</span>
                         </div>
-                        <div className={styles.selectAllCheckbox}>
-                            <label htmlFor="selectAllItems">Select All</label>
-                            <input type="checkbox" id="selectAllItems"
-                                {...selectRegister("selectAllItems", {
-                                    onChange: handleSelectAllGalleryItems
-                                })}
-                            />
-                        </div>
+                        <CheckboxInput
+                            id="selectAllItems"
+                            label="Select All"
+                            name="selectAllItems"
+                            register={selectRegister}
+                            onChange={handleSelectAllGalleryItems}
+                        />
                     </div>
 
                     {/* Gallery Grid */}
                     {isLoadingGallery ? (
                         <LoadingSpinner size="lg" />
                     ) : fetchGallery?.data.galleryItems.length === 0 ? (
-                        <div className={styles.galleryEmptyState}>
+                        <div className="emptyState">
                             <IoImagesOutline />
                             <h4>No gallery items found</h4>
                             <p>Add your first gallery item to get started</p>
@@ -380,10 +440,15 @@ const Gallery = () => {
                         <div className={styles.galleryGrid}>
                             {fetchGallery?.data.galleryItems.map((item) => (
                                 <div key={item._id} className={styles.galleryCard}>
-                                    <input type="checkbox" value={item._id}
-                                        className={styles.cardCheckbox}
-                                        {...selectRegister("selectedItems")}
-                                    />
+                                    <div className={styles.cardCheckbox}>
+                                        <CheckboxInput
+                                            size="sm"
+                                            id={`selectItem_${item._id}`}
+                                            value={item._id}
+                                            name="selectedItems"
+                                            register={selectRegister}
+                                        />
+                                    </div>
                                     <div className={styles.cardThumbnail}>
                                         <img src={generateThumbnailUrl(item.cloudinaryData.secure_url,
                                             item.cloudinaryData.resource_type, 300, 200)}
@@ -392,13 +457,23 @@ const Gallery = () => {
                                     </div>
                                     <div className={styles.cardContent}>
                                         <h3>{item.title}</h3>
-                                        <span className={styles.categoryBadge}>{item.category.name}</span>
+                                        <span className={styles.categoryBadge}>
+                                            {item.category.name}
+                                        </span>
                                     </div>
                                     <div className={styles.cardActions}>
                                         <button
-                                            className={styles.actionButton}
+                                            className={`${styles.actionButton} ${styles.ratingLinkAction}`}
+                                            onClick={() => handleGenerateRatingLink(item._id)}
+                                            title="Get Rating Link"
+                                        >
+                                            <IoLink />
+                                        </button>
+                                        <button
+                                            className={`${styles.actionButton} ${styles.editAction}`}
                                             onClick={() => handleUpdateItem(item)}
                                             disabled={isUpdating}
+                                            title="Edit Item"
                                         >
                                             <MdEdit />
                                         </button>
@@ -406,6 +481,7 @@ const Gallery = () => {
                                             className={`${styles.actionButton} ${styles.deleteAction}`}
                                             onClick={() => handleDeleteItem(item._id, item.cloudinaryData.public_id)}
                                             disabled={isDeleting}
+                                            title="Delete Item"
                                         >
                                             <MdDelete />
                                         </button>
@@ -435,14 +511,14 @@ const Gallery = () => {
             )}
 
             {/* Add/Edit Modal */}
-            {isModalOpen && (
+            {isGalleryModalOpen && (
                 <section className={styles.modalOverlay}>
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                         <div className={styles.modalHeader}>
                             <h2>{!!editingItem ? "Edit Gallery Item" : "Add New Gallery Item"}</h2>
                             <button
                                 className={styles.closeButton}
-                                onClick={() => setIsModalOpen(false)}
+                                onClick={() => setIsGalleryModalOpen(false)}
                             >
                                 <IoCloseOutline />
                             </button>
@@ -454,7 +530,7 @@ const Gallery = () => {
                             {/* Title */}
                             <div className="h-19 mb-2">
                                 <label htmlFor="title" className={styles.modelLabel}>
-                                    Title<span className="fromRequiredStar">*</span>
+                                    Title<span className="formRequiredStar">*</span>
                                 </label>
                                 <input type="text" id="title" className={`${styles.textInput}
                                     ${galleryErrors.title && "formInputErrorBorder"}
@@ -470,7 +546,7 @@ const Gallery = () => {
                             {/* Main Category */}
                             <div className="h-19 mb-2">
                                 <label htmlFor="category" className={styles.modelLabel}>
-                                    Category<span className="fromRequiredStar">*</span>
+                                    Category<span className="formRequiredStar">*</span>
                                 </label>
                                 <select id="category" className={`${styles.categorySelect}
                                     ${galleryErrors.category && "formInputErrorBorder"}`}
@@ -499,12 +575,13 @@ const Gallery = () => {
                                     handleMediaRemove={handleMediaRemove}
                                     handleUploadFilePreview={handleUploadFilePreview}
                                 />
+                                <FormInputError message={galleryErrors.coverFile?.message} />
                             </div>
 
                             {/* Short Description */}
                             <div className="mb-2">
                                 <label htmlFor="shortDescription" className={styles.modelLabel}>
-                                    Short Description<span className="fromRequiredStar">*</span>
+                                    Short Description<span className="formRequiredStar">*</span>
                                 </label>
                                 <textarea id="shortDescription" className={`${styles.textAreaInput}
                                     ${galleryErrors.shortDescription && "formInputErrorBorder"}`}
@@ -520,7 +597,7 @@ const Gallery = () => {
                             {/* Year */}
                             <div className="h-19 mb-2">
                                 <label htmlFor="year" className={styles.modelLabel}>
-                                    Year<span className="fromRequiredStar">*</span>
+                                    Year<span className="formRequiredStar">*</span>
                                 </label>
                                 <input type="number" id="year" className={`${styles.textInput}
                                     ${galleryErrors.year && "formInputErrorBorder"}`}
@@ -552,7 +629,7 @@ const Gallery = () => {
                             <div className="mb-2">
                                 <label className={styles.modelLabel}>
                                     Sub Tags
-                                    <sup className="fromOptional">(optional)</sup>
+                                    <sup className="formOptional">(optional)</sup>
                                 </label>
                                 <div className={`${styles.tagsInputWrapper} ${styles.modelTags}`}>
                                     <Controller
@@ -581,7 +658,7 @@ const Gallery = () => {
                             {/* Form Actions */}
                             <div className={styles.modalActions}>
                                 <button type="button" className={styles.cancelButton}
-                                    onClick={() => setIsModalOpen(false)}
+                                    onClick={() => setIsGalleryModalOpen(false)}
                                     disabled={isUploading}
                                 >
                                     Cancel
@@ -610,6 +687,69 @@ const Gallery = () => {
                             />)}
                         </div>
                     )}
+                </section>
+            )}
+
+            {/* Rating Link Modal */}
+            {isRatingLinkModalOpen && (
+                <section className={styles.modalOverlay} onClick={handleCloseRatingLinkModal}>
+                    <div className={styles.ratingLinkModalContent} onClick={(e) => e.stopPropagation()}>
+                        <div className={styles.modalHeader}>
+                            <h2>Rating Link Generated</h2>
+                            <button className={styles.closeButton}
+                                onClick={handleCloseRatingLinkModal}
+                            >
+                                <IoCloseOutline />
+                            </button>
+                        </div>
+
+                        <div className="p-4 p-sm-6">
+                            {isGeneratingLink ? (
+                                <LoadingSpinner size="lg" text="Generating link..." />
+                            ) : (
+                                <>
+                                    <p className={styles.modalDescription}>
+                                        Share this unique link with your client to get their feedback and rating for the project:
+                                    </p>
+
+                                    <div className={styles.linkDisplayContainer}>
+                                        <div className={styles.linkTextBox}>
+                                            <IoLink className={styles.linkIcon} />
+                                            <input
+                                                type="text"
+                                                value={currentRatingLink}
+                                                readOnly
+                                                className={styles.linkInput}
+                                            />
+                                        </div>
+                                        <button className={`${styles.copyButton}
+                                            ${isCopied ? styles.copied : ''}`}
+                                            onClick={handleCopyToClipboard}
+                                        >
+                                            {isCopied ? (
+                                                <>
+                                                    <IoCheckmarkDone />
+                                                    <span>Copied!</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <IoCopy />
+                                                    <span>Copy</span>
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
+
+                                    <div className={styles.infoBox}>
+                                        <p>
+                                            💡 <strong>Tip:</strong>
+                                            This link is unique to this project and can be used by the client to submit their rating and feedback.
+                                        </p>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </div>
                 </section>
             )}
         </>

@@ -9,6 +9,7 @@ import {
     updateAdminProfile,
     changeAdminPassword,
 } from '../controllers/admin.controller.js';
+import { downloadBackup } from '../controllers/backup.controller.js';
 
 const router = express.Router();
 
@@ -32,5 +33,8 @@ router.route("/updateAdminInfo").patch(authorization, updateAdminProfile);
 
 // change admin password
 router.route("/change-password").put(authorization, changeAdminPassword);
+
+// download database backup
+router.get('/backup/download', authorization, downloadBackup);
 
 export default router;

@@ -3,6 +3,7 @@ import { authorization } from '../middlewares/auth.middleware.js';
 import {
     addGalleryItem,
     fetchGalleryItems,
+    fetchTotalGallery,
     updateGalleryItem,
     deleteGalleryItem,
     syncGalleryCategory,
@@ -14,11 +15,14 @@ const router = express.Router();
 // fetch gallery items (for public use)
 router.route('/get').get(fetchGalleryItems);
 
+// fetch total gallery items count
+router.route("/total-items").get(fetchTotalGallery);
+
 // admin: add new gallery item
 router.route('/add').post(authorization, addGalleryItem);
 
 // admin: update gallery item
-router.route('/update').patch(authorization, updateGalleryItem);
+router.route('/update/:id').patch(authorization, updateGalleryItem);
 
 // admin: delete gallery item (single/bulk)
 router.route('/delete').delete(authorization, deleteGalleryItem);

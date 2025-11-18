@@ -4,12 +4,13 @@ const gallerySchema = new Schema({
     title: {
         type: String,
         required: true,
+        unique: true,
         trim: true,
         index: true
     },
     category: {
         type: Schema.Types.ObjectId,
-        ref: "Category",
+        ref: "Category",    // refer category model
         required: true,
         index: true
     },

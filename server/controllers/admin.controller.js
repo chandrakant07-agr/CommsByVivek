@@ -1,5 +1,6 @@
 import Admin from "../models/admin.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
+import sanitizeInput from "../utils/sanitizeInputField.js";
 import { ApiError, ApiResponse } from "../utils/responseHandler.js";
 import { clearCookieOptions, sessionCookieOptions } from "../config/cookieConfig.js";
 import { jwtGenerateAccessToken, jwtGenerateRefreshToken } from "../utils/jwtUtils.js";
@@ -168,8 +169,8 @@ const updateAdminProfile = asyncHandler(async (req, res) => {
     // Update only the available fields
     const updatedFields = {};
 
-    if(fullName) updatedFields.fullName = fullName;
-    if(email) updatedFields.email = email;
+    if(fullName) updatedFields.fullName = sanitizeInput(fullName);
+    if(email) updatedFields.email = sanitizeInput(email);
 
     const updatedAdmin = await Admin.findByIdAndUpdate(adminId, {
         $set: updatedFields
@@ -208,7 +209,7 @@ const changeAdminPassword = asyncHandler(async (req, res) => {
         throw new ApiError(401, "Current password is incorrect.");
     }
 
-    admin.password = newPassword;
+    admin.password = sanitizeInput(newPassword);
     await admin.save();
 
     return ApiResponse.sendSuccess(res, "", "password changed successfully.");

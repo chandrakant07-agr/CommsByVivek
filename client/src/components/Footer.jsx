@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { motion } from 'framer-motion';
+import { FaLinkedin } from 'react-icons/fa';
 import { MdAlternateEmail, MdLocalPhone } from 'react-icons/md';
 import { useGetContactDetailsQuery } from '../../store/api/contactDetailsApiSlice';
 import socialPlatforms from '../constants/socialPlatforms';
@@ -27,13 +28,13 @@ const Footer = () => {
                     </div>
                     <ul className={styles.footerLinks}>
                         <li>
-                            <span className='iconStyle'><MdAlternateEmail /></span>
+                            <span className="iconStyle"><MdAlternateEmail /></span>
                             <Link to={`mailto:${getContactDetails?.data.contactDetails?.email}`}>
                                 {getContactDetails?.data.contactDetails?.email}
                             </Link>
                         </li>
                         <li>
-                            <span className='iconStyle'><MdLocalPhone /></span>
+                            <span className="iconStyle"><MdLocalPhone /></span>
                             <Link to={`tel:${getContactDetails?.data.contactDetails?.phone}`}>
                                 {getContactDetails?.data.contactDetails?.phone}
                             </Link>
@@ -50,15 +51,17 @@ const Footer = () => {
                             <li><HashLink to="/#filmed-by-vivek">FilmedByVivek</HashLink></li>
                             <li><Link to="/contact">Contact</Link></li>
                             <li><Link to="/portfolio">Portfolio</Link></li>
+                            <li><Link to="/testimonials">Testimonials</Link></li>
+                            <li><Link to="/privacy-policy">Privacy Policy</Link></li>
                         </ul>
                     </div>
                 </div>
 
                 <div className={styles.footerGridItem}>
-                    <div className={styles.footerSocial}>
+                    <div className="socialLinks">
                         {getContactDetails?.data.socialMediaLinks?.map((media) => (
                             <Link to={media.url} key={media._id} target='_blank'
-                                className={`${styles.socialLink} iconStyle`}
+                                className="socialLink"
                             >
                                 {
                                     socialPlatforms.find(platform =>
@@ -71,7 +74,20 @@ const Footer = () => {
             </div>
 
             <div className={styles.footerBottom}>
+                <div className={styles.dummyLeft} />
                 <p>© {currentYear} Comms<span>By</span>Vivek. All Rights Reserved.</p>
+                <div className={styles.developerCredit}>
+                    <span>Developed by:</span>
+                    <Link
+                        to="https://www.linkedin.com/in/chandrakant-agrawal07"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.developerLink}
+                    >
+                        Chandrakant Agrawal
+                        <FaLinkedin className={styles.linkedinIcon} />
+                    </Link>
+                </div>
             </div>
         </motion.footer>
     );

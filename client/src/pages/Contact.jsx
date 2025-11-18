@@ -76,7 +76,7 @@ const Contact = () => {
     const platformIcons = useMemo(() => {
         return fetchContactDetails?.data.socialMediaLinks?.map((media) => (
             <Link to={media.url} key={media._id} target='_blank'
-                className={`${styles.socialLink} iconStyle`}
+                className="socialLink"
             >
                 {socialPlatforms.find(platform => platform.name === media.platform)?.icon}
             </Link>
@@ -122,7 +122,7 @@ const Contact = () => {
                                     transition={{ duration: 0.5, delay: index * 0.1 }}
                                     viewport={{ once: true }}
                                 >
-                                    <div className={`${styles.contactIcon} iconStyle`}>
+                                    <div className="iconStyle">
                                         {detail.icon}
                                     </div>
                                     <div className={styles.contactText}>
@@ -135,7 +135,7 @@ const Contact = () => {
 
                     <div className={styles.socialSection}>
                         <h5 className={styles.socialTitle}>Follow Our Journey</h5>
-                        <div className={styles.socialLinks}>
+                        <div className="socialLinks">
                             {isContactLoading ? (
                                 <LoadingSpinner color="var(--accent-color)" />
                             ) : isContactError ? (
@@ -160,7 +160,7 @@ const Contact = () => {
                     <form onSubmit={handleSubmit(onSubmitMessage)} noValidate>
                         <div className="h-18 mb-6">
                             <label htmlFor="name" className={styles.formLabel}>Full Name
-                                <span className="fromRequiredStar">*</span>
+                                <span className="formRequiredStar">*</span>
                             </label>
                             <input type="text" id="name" className={`${styles.formInput}
                                 ${errors.name && "formInputErrorBorder"}`}
@@ -174,7 +174,7 @@ const Contact = () => {
 
                         <div className="h-18 mb-6">
                             <label htmlFor="email" className={styles.formLabel}>Email ID
-                                <span className="fromRequiredStar">*</span>
+                                <span className="formRequiredStar">*</span>
                             </label>
                             <input type="email" id="email" className={`${styles.formInput}
                                 ${errors.email && "formInputErrorBorder"}`}
@@ -192,7 +192,7 @@ const Contact = () => {
 
                         <div className="h-18 mb-7">
                             <label htmlFor="projectType" className={styles.formLabel}>Project Type
-                                <span className="fromRequiredStar">*</span>
+                                <span className="formRequiredStar">*</span>
                             </label>
                             {isProjectLoading ? (
                                 <LoadingSpinner size="sm" color="var(--accent-color)" />
@@ -218,7 +218,7 @@ const Contact = () => {
                                 ${styles.formSelect} ${errors.message && "error-message"}`
                         }>
                             <label htmlFor="message" className={styles.formLabel}>Message
-                                <span className="fromRequiredStar">*</span>
+                                <span className="formRequiredStar">*</span>
                             </label>
                             <Controller
                                 name="message"

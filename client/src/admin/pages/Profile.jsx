@@ -118,7 +118,7 @@ const Profile = () => {
                         <div className="h-18 mb-4">
                             <label htmlFor="name">
                                 Full Name
-                                <sup className="fromOptional">(optional)</sup>
+                                <sup className="formOptional">(optional)</sup>
                             </label>
                             <input type="text" id="name" placeholder="Enter your full name"
                                 {...infoRegister("fullName")}
@@ -128,7 +128,7 @@ const Profile = () => {
                         <div className="h-18">
                             <label htmlFor="email">
                                 Email Address
-                                <sup className="fromOptional">(optional)</sup>
+                                <sup className="formOptional">(optional)</sup>
                             </label>
                             <input type="email" id="email" placeholder="Enter your email"
                                 className={infoErrs.email && "formInputErrorBorder"}
@@ -182,14 +182,12 @@ const Profile = () => {
                                 </div>
                             </div>
 
-                            <div>
+                            <div className="d-flex flex-column a-end">
                                 <div className={styles.memberSince}>Member Since</div>
                                 <div className={styles.joinDate}>
-                                    {
-                                        admin?.data.createdAt
-                                            ? format(new Date(admin?.data.createdAt),
-                                                'MMMM dd, yyyy')
-                                            : 'Not available'
+                                    {admin?.data.createdAt
+                                        ? format(new Date(admin?.data.createdAt), 'PP')
+                                        : 'Not available'
                                     }
                                 </div>
                             </div>
@@ -222,7 +220,7 @@ const Profile = () => {
                         <div className="h-18 mb-4">
                             <label htmlFor="currentPassword">
                                 Current Password
-                                <span className="fromRequiredStar">*</span>
+                                <span className="formRequiredStar">*</span>
                             </label>
                             <input type="password" id="currentPassword"
                                 placeholder="Enter current password"
@@ -241,7 +239,7 @@ const Profile = () => {
                         <div className="h-18 mb-4">
                             <label htmlFor="newPassword">
                                 New Password
-                                <span className="fromRequiredStar">*</span>
+                                <span className="formRequiredStar">*</span>
                             </label>
                             <input type="password" id="newPassword"
                                 placeholder="Enter new password"
@@ -260,7 +258,7 @@ const Profile = () => {
                         <div className="h-18">
                             <label htmlFor="confirmPassword">
                                 Confirm New Password
-                                <span className="fromRequiredStar">*</span>
+                                <span className="formRequiredStar">*</span>
                             </label>
                             <input type="password" id="confirmPassword"
                                 placeholder="Confirm new password"
@@ -294,11 +292,9 @@ const Profile = () => {
                             <h3>Password</h3>
                             <p>Last changed on
                                 <span className="ml-1">
-                                    {
-                                        admin?.data.updatedAt
-                                            ? format(new Date(admin?.data.passwordUpdatedAt),
-                                                'MMMM dd, yyyy h:mm a')
-                                            : 'Not available'
+                                    {admin?.data.updatedAt
+                                        ? format(new Date(admin?.data.passwordUpdatedAt), 'PP p')
+                                        : 'Not available'
                                     }
                                 </span>
                             </p>
@@ -330,11 +326,9 @@ const Profile = () => {
                         <div className={styles.statisticsGrid}>
                             <h3>Account Created</h3>
                             <p>
-                                {
-                                    admin?.data.createdAt
-                                        ? format(new Date(admin?.data.createdAt),
-                                            'MMMM dd, yyyy h:mm a')
-                                        : 'Not available'
+                                {admin?.data.createdAt
+                                    ? format(new Date(admin?.data.createdAt), 'PP p')
+                                    : 'Not available'
                                 }
                             </p>
                         </div>
@@ -342,11 +336,9 @@ const Profile = () => {
                         <div className={styles.statisticsGrid}>
                             <h3>Last Updated</h3>
                             <p>
-                                {
-                                    admin?.data.updatedAt
-                                        ? format(new Date(admin?.data.updatedAt),
-                                            "MMMM dd, yyyy h:mm a")
-                                        : 'Not available'
+                                {admin?.data.updatedAt
+                                    ? format(new Date(admin?.data.updatedAt), 'PP p')
+                                    : 'Not available'
                                 }
                             </p>
                         </div>
@@ -354,11 +346,9 @@ const Profile = () => {
                         <div className={styles.statisticsGrid}>
                             <h3>Last Login</h3>
                             <p>
-                                {
-                                    admin?.data.lastLogin
-                                        ? format(new Date(admin?.data.lastLogin),
-                                            "MMMM dd, yyyy h:mm a")
-                                        : 'Not available'
+                                {admin?.data.lastLogin
+                                    ? format(new Date(admin?.data.lastLogin), 'PP p')
+                                    : 'Not available'
                                 }
                             </p>
                         </div>

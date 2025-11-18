@@ -1,13 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { FaRegEye, FaRegPlayCircle } from 'react-icons/fa';
 import { IoImagesOutline } from 'react-icons/io5';
 import { FaRegCirclePause } from 'react-icons/fa6';
+import {
+    useGetHeroBannerQuery
+} from '../../store/api/bannerApiSlice';
+import {
+    useGetCategoriesQuery, useGetGalleryInfiniteQuery
+} from '../../store/api/galleryApiSlice';
 import LoadingSpinner from '../components/LoadingSpinner';
 import PortfolioModal from '../components/PortfolioModal';
 import { generateThumbnailUrl } from '../../utils/cloudinaryUtils';
-import { useGetHeroBannerQuery } from '../../store/api/bannerApiSlice';
-import { useGetCategoriesQuery, useGetGalleryInfiniteQuery } from '../../store/api/galleryApiSlice';
 import styles from './styles/Portfolio.module.css';
 
 const Portfolio = () => {
@@ -45,8 +49,8 @@ const Portfolio = () => {
     // console.log(currentPage, isInView, paginationData)
 
     const handlePlayPause = () => {
-        if (videoPlayerRef.current) {
-            if (videoPlayerRef.current.paused || videoPlayerRef.current.ended) {
+        if(videoPlayerRef.current) {
+            if(videoPlayerRef.current.paused || videoPlayerRef.current.ended) {
                 videoPlayerRef.current.play();
                 setIsPlaying(true);
             } else {
@@ -63,7 +67,7 @@ const Portfolio = () => {
     };
 
     useEffect(() => {
-        if (isInView && hasNextPage) {
+        if(isInView && hasNextPage) {
             setCurrentPage((prevPage) => prevPage + 1);
         }
     }, [isInView, hasNextPage]);
@@ -157,14 +161,18 @@ const Portfolio = () => {
                     >
                         All
                     </button>
-                    {fetchCategories?.data.map((filter) => (
-                        <button key={filter._id} className={`${styles.filterTab}
+                    {isFetchingCategory ? (
+                        <LoadingSpinner size="sm" color="var(--accent-color)" />
+                    ) : (
+                        fetchCategories?.data.map((filter) => (
+                            <button key={filter._id} className={`${styles.filterTab}
                             ${activeFilter === filter._id && styles.active}`}
-                            onClick={() => handleCategoryChange(filter._id)}
-                        >
-                            {filter.name}
-                        </button>
-                    ))}
+                                onClick={() => handleCategoryChange(filter._id)}
+                            >
+                                {filter.name}
+                            </button>
+                        ))
+                    )}
                 </motion.div>
 
                 {/* Projects Grid */}
@@ -177,7 +185,6 @@ const Portfolio = () => {
                     </div>
                 ) : (
                     <div className={styles.projectsGrid}>
-                        {/* <AnimatePresence> */}
                         {fetchGallery?.data.galleryItems.map((item, index) => (
                             <motion.div
                                 key={item._id}
@@ -233,9 +240,10 @@ const Portfolio = () => {
                                 </div>
                             </motion.div>
                         ))}
-                        {/* </AnimatePresence> */}
                     </div>
                 )}
+
+                {/* Load More */}
                 <div ref={inViewRef} className={`text-center mt-4 ${!hasNextPage && 'd-none'}`}>
                     {isFetchingGallery && (
                         <div className="inViewTriggerElement">
@@ -245,8 +253,6 @@ const Portfolio = () => {
                     load more...
                 </div>
             </section>
-
-
 
             {/* Portfolio Modal */}
             {selectedItem && (

@@ -171,39 +171,21 @@
     color: var(--text-secondary-color);
 }
 
-.selectAllContainer {
+.messageRow {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.selectAllCheckbox {
-    width: 1rem;
-    height: 1rem;
-    /* color: var(--indigo); */
-    border-radius: 0.25rem;
-}
-
-.selectAllContainer span {
-    font-size: 0.57rem;
-    font-weight: 600;
-    line-height: 1rem;
-    color: var(--text-primary-color);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-}
-
-.messageContainer {
-    padding: 1rem 1.25rem;
+    flex-direction: column;
+    padding: 1rem 0.5rem;
     border-bottom: 1px solid var(--border-secondary-color);
-    transition-duration: 150ms;
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease-in-out;
 }
 
-.singleMessage {
-    min-width: 0px;
-    flex: 1 1;
+.messageRow:last-child {
+    border-bottom: none;
+}
+
+.messageRow:hover {
+    background-color: var(--bg-secondary-color);
+    transform: scale(1.01);
 }
 
 .messageMeta {
@@ -215,7 +197,7 @@
     line-height: 1.25rem;
 }
 
-.singleMessage h3 {
+.messageRow h3 {
     font-size: 0.9rem;
     font-weight: 500;
     line-height: 1.25rem;
@@ -225,7 +207,7 @@
     white-space: nowrap;
 }
 
-.singleMessage .statusBadge {
+.messageRow .statusBadge {
     padding: 0.125rem 0.625rem;
     font-size: 0.75rem;
     font-weight: 500;
@@ -239,13 +221,6 @@
 .statusBadge.unread {
     color: var(--red);
     background-color: var(--light-red);
-}
-
-.messageCheckbox {
-    width: 0.75rem;
-    height: 0.75rem;
-    margin-top: 0.25rem;
-    color: var(--indigo);
 }
 
 .receiveDate {
@@ -273,16 +248,10 @@
     gap: 0.75rem;
 }
 
-.messageView,
 .messageReadBtn,
 .messageDeleteBtn {
     font-size: 0.75rem;
     transition: all 0.3s ease;
-}
-
-.messageView {
-    font-weight: 500;
-    color: var(--indigo);
 }
 
 .messageReadBtn {
@@ -293,11 +262,16 @@
     color: var(--red);
 }
 
-.messageView:hover,
 .messageReadBtn:hover,
 .messageDeleteBtn:hover {
     font-size: 0.8rem;
     font-weight: 600;
+}
+
+.messageReadBtn:disabled,
+.messageDeleteBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* Responsive Design */
@@ -312,15 +286,10 @@
         gap: 0.5rem;
     }
 
-    .selectAllContainer span {
-        font-size: 0.75rem;
-    }
-
     .messageMeta {
         font-size: 0.9rem;
     }
 
-    .messageView,
     .messageReadBtn,
     .messageDeleteBtn {
         font-size: 0.9rem;

@@ -14,7 +14,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 2vw;
+    padding: 0.75rem 1.875vw;
     max-width: calc(90vw - 2.5vw);
     margin: 0 auto;
 }
@@ -25,14 +25,14 @@
 }
 
 .logo img {
-    max-width: 3.75rem;
+    max-width: 3.5rem;
 }
 
 .navLinks {
     display: none;
     gap: 1.5em;
     align-items: center;
-    font-size: clamp(0.85rem, 1.12vw, 2rem);
+    font-size: clamp(0.75rem, 1.12vw, 2rem);
     list-style: none;
 }
 
@@ -40,7 +40,6 @@
     position: relative;
     font-weight: 500;
     letter-spacing: 0.5px;
-    /* font-size: 1rem; */
     transition: color 0.3s ease;
 }
 
@@ -67,20 +66,17 @@
 }
 
 .themeToggle {
-    /* width: 1.75em;
-    height: 1.75em; */
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0.4rem;
-    font-size: clamp(1.2rem, 1.5vw, 1.5rem);
+    font-size: clamp(1.1rem, 1.5vw, 1.5rem);
     color: var(--accent-color);
     background: none;
     border: 2px solid var(--accent-color);
     border-radius: 50%;
     clip-path: circle();
-    transition: all 0.3s ease;
-    /* margin-left: 2rem; */
+    transition: all 0.3s ease-in-out;
 }
 
 .themeToggle:hover {
@@ -89,9 +85,8 @@
 }
 
 /* Mobile Menu */
-
 .mobileMenu {
-    display: none;
+    margin-right: -0.5rem;
 }
 
 .navRight {
@@ -106,7 +101,6 @@
     font-size: 1.5rem;
     color: var(--accent-color);
     border: none;
-    /* background: none; */
     clip-path: circle();
     transition: all 0.3s ease-in-out;
 }
@@ -134,15 +128,13 @@
     display: flex;
     flex-direction: column;
     list-style: none;
-    /* gap: 1.5rem; */
-    /* align-items: center; */
 }
 
 .mobileNavLink {
-    padding: 0.7em 2em;
+    padding: 0.7rem 2rem;
     display: inline-block;
     width: 100%;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
 }
 
 /* .mobileNavLink:hover {
@@ -153,7 +145,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    height: 2px;
+    height: 3px;
     background-color: var(--accent-color);
     width: 100%;
     transform-origin: 0%;
@@ -164,19 +156,8 @@
     .navLinks {
         display: flex;
     }
-}
 
-@media (max-width: 768px) {
     .mobileMenu {
-        display: block;
-        margin-right: -0.5rem;
-    }
-
-    /* .themeToggle {
-        margin-left: 1rem;
-    } */
-
-    .scrollProgress {
-        height: 3px;
+        display: none;
     }
 }

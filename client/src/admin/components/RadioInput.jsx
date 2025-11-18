@@ -12,8 +12,8 @@ const RadioInput = ({
             <div className={labelClass}>
                 {label}{
                     required
-                        ? <span className="fromRequiredStar">*</span>
-                        : <sup className="fromOptional">(optional)</sup>
+                        ? <span className="formRequiredStar">*</span>
+                        : <sup className="formOptional">(optional)</sup>
                 }
             </div>
 
@@ -22,7 +22,7 @@ const RadioInput = ({
                     <input type="radio" id="locPortfolio" value="portfolio"
                         className={styles.customRadioInput}
                         {...register(name, {
-                            required: "Display location is required",
+                            required: required ? "Display location is required" : false,
                         })}
                     />
                     <label htmlFor="locPortfolio" className={styles.customRadioLabel}>
@@ -34,7 +34,7 @@ const RadioInput = ({
                     <input type="radio" id="locFilmedByVivek" value="filmedByVivek"
                         className={styles.customRadioInput}
                         {...register(name, {
-                            required: "Display location is required"
+                            required: required ? "Display location is required" : false,
                         })}
                     />
                     <label htmlFor="locFilmedByVivek" className={styles.customRadioLabel}>

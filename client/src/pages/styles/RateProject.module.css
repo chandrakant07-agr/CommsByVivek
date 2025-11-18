@@ -1,0 +1,295 @@
+/* Rating Section */
+.ratingSection {
+    padding: 1.5rem 1rem 3rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.submittedContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    background-color: var(--card-primary-bg);
+    border: 2px solid var(--accent-color);
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.submittedTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+    margin: 0;
+}
+
+.submittedMessage {
+    font-size: 0.875rem;
+    color: var(--text-secondary-color);
+}
+
+.ratingContainer {
+    background-color: var(--card-primary-bg);
+    border: 2px solid var(--accent-color);
+    border-radius: 1rem;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Project Header */
+.projectHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 2px solid var(--border-primary-color);
+}
+
+.projectHeading {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.projectIcon {
+    font-size: 1.75rem;
+    color: var(--accent-color);
+}
+
+.projectTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.projectHeader span {
+    font-size: 1rem;
+    color: var(--accent-color);
+}
+
+/* Rating Form */
+.ratingForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.formSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sectionLabel {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+}
+
+.sectionHint {
+    font-size: 0.8rem;
+    color: var(--text-secondary-color);
+    margin: 0;
+}
+
+/* Parameter Ratings */
+.parameterRatings {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    background-color: var(--card-secondary-bg);
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-primary-color);
+}
+
+.parameterItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    row-gap: 0.25rem;
+}
+
+.parameterLabel {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary-color);
+    flex: 1;
+}
+
+/* Form Inputs */
+.testimonialInput,
+.nameInput,
+.companyInput {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--text-primary-color);
+    background-color: var(--card-secondary-bg);
+    border: 2px solid var(--border-primary-color);
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    resize: vertical;
+}
+
+.testimonialInput:focus,
+.nameInput:focus,
+.companyInput:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.testimonialInput::placeholder,
+.nameInput::placeholder,
+.companyInput::placeholder {
+    color: var(--text-secondary-color);
+}
+
+.testimonialCharCount {
+    margin-top: -0.25rem;
+    font-size: 0.7rem;
+    color: var(--text-secondary-color);
+    text-align: right;
+}
+
+/* Form Actions */
+.formActions {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+.submitButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111111;
+    background-color: var(--accent-color);
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    letter-spacing: 0.5px;
+}
+
+.submitButton:hover:not(:disabled) {
+    background-color: #b8941f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+}
+
+.submitButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.submitButton svg {
+    font-size: 1.25rem;
+}
+
+/* Success Container */
+.successContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+.successIcon {
+    margin-bottom: -1.25rem;
+    font-size: 3.25rem;
+    color: var(--accent-color);
+}
+
+.successTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+    margin: 0;
+}
+
+.successMessage {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text-secondary-color);
+    max-width: 500px;
+    margin: 0;
+}
+
+.homeButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111111;
+    background-color: var(--accent-color);
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.homeButton:hover {
+    background-color: #b8941f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+}
+
+/* Responsive Design */
+@media (min-width: 480px) {
+    .ratingSection {
+        padding: 2rem 1.5rem 4rem;
+    }
+
+    .projectHeader {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .projectIcon {
+        font-size: 2rem;
+    }
+
+    .projectTitle {
+        font-size: 1.5rem;
+    }
+
+    .projectTitle span {
+        font-size: 1.3rem;
+    }
+
+    .starLarge {
+        font-size: 1.75rem;
+    }
+
+    .parameterItem {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .successIcon {
+        font-size: 5rem;
+    }
+
+    .successTitle {
+        font-size: 2rem;
+    }
+
+    .successMessage {
+        font-size: 1rem;
+    }
+}

@@ -26,7 +26,8 @@ const Header = () => {
         { link: "hash", label: "Services", path: "/#services" },
         { link: "hash", label: "Filmed By Vivek", path: "/#filmed-by-vivek" },
         { link: "page", label: "Contact", path: "/contact" },
-        { link: "page", label: "PortFolio", path: "/portfolio" },
+        { link: "page", label: "Portolio", path: "/portfolio" },
+        { link: "page", label: "Testimonials", path: "/testimonials" },
     ];
 
     const toggleMobileMenu = () => setMobileMenuOpen(!isMobileMenuOpen);
@@ -51,19 +52,20 @@ const Header = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
-                            {(item.link === "hash")
-                                ? <HashLink to={item.path} smooth className={`${styles.navLink}
+                            {(item.link === "hash") ? (
+                                <HashLink to={item.path} smooth className={`${styles.navLink}
                                     ${((location.pathname + location.hash) === item.path)
-                                        ? styles.active : ''}`
+                                        && styles.active}`
                                 }>
                                     {item.label}
                                 </HashLink>
-                                : <NavLink to={item.path} className={({ isActive }) =>
-                                    `${styles.navLink} ${isActive ? styles.active : ''}`
+                            ) : (
+                                <NavLink to={item.path} className={({ isActive }) =>
+                                    `${styles.navLink} ${isActive && styles.active}`
                                 }>
                                     {item.label}
                                 </NavLink>
-                            }
+                            )}
                         </motion.li>
                     ))}
                     <motion.li
@@ -106,33 +108,29 @@ const Header = () => {
                 <ul className={styles.mobileNavLinks}>
                     {navItems.map((item) => (
                         <li key={item.path}>
-                            {(item.link === "hash")
-                                ? <HashLink to={item.path} smooth className={`${styles.mobileNavLink}
+                            {(item.link === "hash") ? (
+                                <HashLink to={item.path} smooth className={`${styles.mobileNavLink}
                                     ${(location.pathname + location.hash) === item.path
-                                        ? styles.active : ''}`
-                                    }
-                                        onClick={() => setMobileMenuOpen(false)}
+                                        && styles.active}`
+                                }
+                                    onClick={() => setMobileMenuOpen(false)}
                                 >
                                     {item.label}
                                 </HashLink>
-                                : <NavLink to={item.path} className={({ isActive }) =>
-                                        `${styles.mobileNavLink} ${isActive ? styles.active : ''}`
-                                    }
-                                        onClick={() => setMobileMenuOpen(false)}
+                            ) : (
+                                <NavLink to={item.path} className={({ isActive }) =>
+                                    `${styles.mobileNavLink} ${isActive && styles.active}`
+                                }
+                                    onClick={() => setMobileMenuOpen(false)}
                                 >
                                     {item.label}
                                 </NavLink>
-                            }
+                            )}
                         </li>
                     ))}
                 </ul>
             </motion.div>
-            <motion.div
-                className={styles.scrollProgress}
-                style={{
-                    scaleX: scrollYProgress
-                }}
-            />
+            <motion.div className={styles.scrollProgress} style={{ scaleX: scrollYProgress }} />
         </motion.header>
     );
 };

@@ -1,49 +1,7 @@
-import sanitize from "sanitize-html";
 import ProjectType from "../models/projectType.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
+import sanitizeInput from "../utils/sanitizeInputField.js";
 import { ApiError, ApiResponse } from "../utils/responseHandler.js";
-
-const addProjectType = asyncHandler(async (req, res) => {
-    // const { projectTypes } = req.body;
-
-    // if(!Array.isArray(projectTypes) || projectTypes.length === 0) {
-    //     throw new ApiError(400, "Project types must be a non-empty array.");
-    // }
-
-    // // Trim whitespace, filter out empty types and remove duplicates
-    // const cleanedList = [...new Set(projectTypes.map(type => type.trim()).filter(Boolean))];
-
-    // if(cleanedList.length === 0) {
-    //     throw new ApiError(400, "Project types list must contain valid non-empty types.");
-    // }
-
-    // // sanitize project type names removing any HTML tags
-    // const sanitizedList = cleanedList.map(
-    //     type => sanitize(type, { allowedTags: [], allowedAttributes: {} })).filter(Boolean);
-
-    // if(sanitizedList.length === 0) {
-    //     throw new ApiError(400, "HTML tags are not allowed in Project types.");
-    // }
-
-    // // Find existing project types in the database
-    // const existingTypes = await ProjectType.find({ name: { $in: sanitizedList } }).select("-_id name");
-    // const existingTypesNames = existingTypes.map(type => type.name);
-
-    // // Filter out names that already exist
-    // const newTypesNames = sanitizedList.filter(name => !existingTypesNames.includes(name));
-
-    // if(newTypesNames.length === 0) {
-    //     throw new ApiError(400, "All provided project types already exist.");
-    // }
-
-    // // Prepare documents for insertion
-    // const newTypeDocs = newTypesNames.map(name => ({ name }));
-
-    // // Insert new project types
-    // const insertedTypes = await ProjectType.insertMany(newTypeDocs);
-
-    // return ApiResponse.sendSuccess(res, insertedTypes, "Project types successfully added.", 201);
-});
 
 // admin sends a new project type array to sync the existing project type
 const syncProjectType = asyncHandler(async (req, res) => {
@@ -56,17 +14,9 @@ const syncProjectType = asyncHandler(async (req, res) => {
     // Trim whitespace, filter out empty types and remove duplicates
     const cleanedList = [...new Set(projectTypes.map(type => type.trim()).filter(Boolean))];
 
-    // if(cleanedList.length === 0) {
-    //     throw new ApiError(400, "Project types list must contain valid non-empty types.");
-    // }
-
     // sanitize project type names removing any HTML tags
     const sanitizedList = cleanedList.map(
-        type => sanitize(type, { allowedTags: [], allowedAttributes: {} })).filter(Boolean);
-
-    // if(sanitizedList.length === 0) {
-    //     throw new ApiError(400, "HTML tags are not allowed in Project types.");
-    // }
+        type => sanitizeInput(type)).filter(Boolean);
 
     // Find existing project types in the database
     const existingTypes = await ProjectType.find().select("-_id name");
@@ -116,4 +66,4 @@ const fetchProjectTypes = asyncHandler(async (_, res) => {
     return ApiResponse.sendSuccess(res, projectTypes, "Project types successfully fetched.");
 });
 
-export { addProjectType, syncProjectType, fetchProjectTypes };
+export { syncProjectType, fetchProjectTypes };

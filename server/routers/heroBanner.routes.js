@@ -3,7 +3,7 @@ import { authorization } from '../middlewares/auth.middleware.js';
 import {
     syncHeroBanner,
     fetchHeroBanners
-} from '../controllers/HeroBanner.controller.js';
+} from '../controllers/heroBanner.controller.js';
 
 const router = express.Router();
 

@@ -1,9 +1,9 @@
-import Category from "../models/category.model.js";
 import Gallery from "../models/gallery.model.js";
+import Category from "../models/category.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import sanitizeInput from "../utils/sanitizeInputField.js";
-import { ApiError, ApiResponse } from "../utils/responseHandler.js";
 import { cloudinaryDelete } from "../utils/cloudinarySignature.js";
+import { ApiError, ApiResponse } from "../utils/responseHandler.js";
 
 // fetch gallery items (for public use)
 const fetchGalleryItems = asyncHandler(async (req, res) => {
@@ -47,6 +47,12 @@ const fetchGalleryItems = asyncHandler(async (req, res) => {
     }, "Gallery items successfully fetched.");
 });
 
+// fetch total gallery items count
+const fetchTotalGallery = asyncHandler(async (req, res) => {
+    const totalItems = await Gallery.countDocuments();
+    return ApiResponse.sendSuccess(res, { totalItems }, "Total gallery items count fetched successfully.");
+});
+
 // admin: add new gallery item
 const addGalleryItem = asyncHandler(async (req, res) => {
     const { title, category, cloudinaryData, shortDescription, year, pageLocation, subTags } = req.body;
@@ -83,7 +89,7 @@ const addGalleryItem = asyncHandler(async (req, res) => {
 
 // admin: update gallery item
 const updateGalleryItem = asyncHandler(async (req, res) => {
-    const { id } = req.query;
+    const { id } = req.params;
     const { title, category, cloudinaryData, shortDescription, year, pageLocation, subTags } = req.body;
 
     if (!title || !category || !shortDescription || !year) {
@@ -216,6 +222,7 @@ const fetchGalleryCategories = asyncHandler(async (req, res) => {
 export {
     addGalleryItem,
     fetchGalleryItems,
+    fetchTotalGallery,
     updateGalleryItem,
     deleteGalleryItem,
     syncGalleryCategory,

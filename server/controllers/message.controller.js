@@ -2,8 +2,8 @@ import sanitize from "sanitize-html";
 import Message from "../models/message.model.js";
 import ProjectType from "../models/projectType.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
+import sanitizeInput from "../utils/sanitizeInputField.js";
 import { ApiError, ApiResponse } from "../utils/responseHandler.js";
-
 
 // Fetch all messages (admin)
 const fetchAllMessages = asyncHandler(async (req, res) => {
@@ -171,9 +171,9 @@ const sendMessage = asyncHandler(async (req, res) => {
     }
 
     // sanitize name, email, projectTypeId removing any HTML tags
-    const sanitizedName = sanitize(name, { allowedTags: [], allowedAttributes: {} });
-    const sanitizedEmail = sanitize(email, { allowedTags: [], allowedAttributes: {} });
-    const sanitizedProjectTypeId = sanitize(projectTypeId, { allowedTags: [], allowedAttributes: {} });
+    const sanitizedName = sanitizeInput(name);
+    const sanitizedEmail = sanitizeInput(email);
+    const sanitizedProjectTypeId = sanitizeInput(projectTypeId);
 
     // Sanitize message content allowing html tags and preventing XSS
     const sanitizedMessage = sanitize(message, {

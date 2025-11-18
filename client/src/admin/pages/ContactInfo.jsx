@@ -46,7 +46,7 @@ const ContactInfo = () => {
 
     const handleAddSocialLink = (selectedOption) => {
         const exists = fields.some((field) => field.platform === selectedOption.label);
-        if(exists) alert("This social media link is already added.");
+        if (exists) alert("This social media link is already added.");
         else append({ platform: selectedOption.label, url: "" });
     };
 
@@ -75,7 +75,7 @@ const ContactInfo = () => {
         )
     }, [fetchContactDetails, resetContact, resetSocial]);
 
-    if(isError) {
+    if (isError) {
         return <p>Failed to load contact details. Please try again later.</p>;
     }
 
@@ -101,10 +101,11 @@ const ContactInfo = () => {
                             <div className={styles.digitalContact}>
                                 <div>
                                     <label htmlFor="email">
-                                        Email Address<span className="fromRequiredStar">*</span>
+                                        Email Address<span className="formRequiredStar">*</span>
                                     </label>
                                     <div className={styles.inputWithIcon}>
                                         <input type="email" id="email" placeholder="contact@example.com"
+                                            className={contactErrors.email && "formInputErrorBorder"}
                                             {...registerContact("email", {
                                                 required: "Email is required",
                                                 pattern: {
@@ -119,10 +120,11 @@ const ContactInfo = () => {
 
                                 <div>
                                     <label htmlFor="phone">
-                                        Phone Number<span className="fromRequiredStar">*</span>
+                                        Phone Number<span className="formRequiredStar">*</span>
                                     </label>
                                     <div className={styles.inputWithIcon}>
                                         <input type="text" id="phone" placeholder="+1 (123) 456-7890"
+                                            className={contactErrors.phone && "formInputErrorBorder"}
                                             {...registerContact("phone", {
                                                 required: "Phone number is required"
                                             })}
@@ -134,9 +136,10 @@ const ContactInfo = () => {
 
                             <div>
                                 <label htmlFor="address">
-                                    Address<span className="fromRequiredStar">*</span>
+                                    Address<span className="formRequiredStar">*</span>
                                 </label>
                                 <textarea id="address" placeholder="Enter your address"
+                                    className={contactErrors.address && "formInputErrorBorder"}
                                     {...registerContact("address", {
                                         required: "Address is required"
                                     })}
@@ -173,7 +176,7 @@ const ContactInfo = () => {
                         {isContactLoading ? (
                             <LoadingSpinner text="Contact Loading..." />
                         ) : fields.length === 0 ? (
-                            <div className={styles.emptyState}>
+                            <div className="emptyState">
                                 <RxLinkNone2 />
                                 <h4>No social media links</h4>
                                 <p>Add your social media links to display on your website.</p>

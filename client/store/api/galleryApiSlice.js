@@ -28,6 +28,14 @@ export const galleryApiSlice = baseApiSlice.injectEndpoints({
             },
             invalidatesTags: ["Gallery"]
         }),
+        getTotalGalleryItems: builder.query({
+            query: () => ({
+                url: "/gallery/total-items",
+                method: "GET"
+            }),
+            staleTime: 86400000,  // 1 day
+            providesTags: ["Gallery"],
+        }),
         getGalleryPaginated: builder.query({
             query: (params) => ({
                 url: "/gallery/get",
@@ -54,7 +62,7 @@ export const galleryApiSlice = baseApiSlice.injectEndpoints({
             merge: (currentCache, newItems) => {
                 const isFirstPage = newItems.data.pagination.currentPage === 1;
 
-                if (isFirstPage) {
+                if(isFirstPage) {
                     currentCache.data.galleryItems = newItems.data.galleryItems;
                 } else {
                     currentCache.data.galleryItems.push(...newItems.data.galleryItems);
@@ -84,9 +92,8 @@ export const galleryApiSlice = baseApiSlice.injectEndpoints({
         }),
         updateGalleryItem: builder.mutation({
             query: ({ id, ...body }) => ({
-                url: "/gallery/update",
+                url: `/gallery/update/${id}`,
                 method: "PATCH",
-                params: { id },
                 body,
             }),
             onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
@@ -123,6 +130,7 @@ export const galleryApiSlice = baseApiSlice.injectEndpoints({
 export const {
     useGetCategoriesQuery,
     useSyncCategoriesMutation,
+    useGetTotalGalleryItemsQuery,
     useGetGalleryPaginatedQuery,
     useGetGalleryInfiniteQuery,
     useAddGalleryItemMutation,

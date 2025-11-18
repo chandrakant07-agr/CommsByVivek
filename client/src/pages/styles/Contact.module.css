@@ -37,11 +37,8 @@
 .contactItem {
     display: flex;
     align-items: center;
+    gap: 1rem;
     margin-bottom: 1.2rem;
-}
-
-.contactIcon {
-    margin-right: 1rem;
 }
 
 .contactText {
@@ -72,22 +69,6 @@
     margin-bottom: 1rem;
     letter-spacing: 1px;
     /* font-size: 1rem; */
-}
-
-.socialLinks {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    row-gap: 0.75rem;
-}
-
-.socialLink {
-    transition: all 0.3s ease;
-    text-decoration: none;
-}
-
-.socialLink:hover {
-    background-color: #b8941f;
-    transform: translateY(-3px);
 }
 
 .contactForm {

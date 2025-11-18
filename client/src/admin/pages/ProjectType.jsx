@@ -49,7 +49,6 @@ const ProjectType = () => {
                 ) : (
                     <>
                         <div className={styles.formSection}>
-
                             <form onSubmit={handleSubmit(onSubmitProjectTypes)}>
                                 <div className={styles.tagsInputWrapper}>
                                     <Controller
@@ -86,7 +85,7 @@ const ProjectType = () => {
 
                         {/* Empty State (shown when no project types exist) */}
                         {watch("projectTypes")?.length === 0 && (
-                        <div className={styles.projectTypeEmptyState}>
+                        <div className="emptyState">
                             <HiOutlineDocumentText />
                             <h4>No project types defined</h4>
                             <p>Add your first project type above to get started.</p>

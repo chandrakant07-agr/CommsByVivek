@@ -124,6 +124,12 @@ const HeroBanner = () => {
                         </div>
 
                         <div className={styles.formActions}>
+                            <button type="button" className={styles.resetButton}
+                                onClick={() =>
+                                    setUploadFilePreview(fetchHeroBanner?.data?.cloudinaryData.secure_url || null)
+                                }>
+                                Reset
+                            </button>
                             <button type="submit" className={styles.submitButton}
                                 disabled={isUploading}
                             >

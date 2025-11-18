@@ -8,19 +8,14 @@ import {
     MdOutlineMailOutline,
     MdOutlineKeyboardDoubleArrowLeft
 } from "react-icons/md";
-import FormInputError from "../../components/FormInputError";
 import { useAdminLoginMutation } from "../../../store/api/adminApiSlice";
+import FormInputError from "../../components/FormInputError";
 import Ripples from "../../components/Ripples";
 import styles from "./styles/Login.module.css";
 
 const Login = () => {
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors } } = useForm({
-        defaultValues: {
-            email: "girish@gmail.com",
-            password: "12345678"
-        }
-    });
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const [adminLogin, { isLoading }] = useAdminLoginMutation();
 
     const onLoginSubmit = async (data) => {
@@ -57,7 +52,7 @@ const Login = () => {
                             <MdOutlineMailOutline />
                             <div className="d-flex">
                                 <h5>Email Address</h5>
-                                <span className="fromRequiredStar">*</span>
+                                <span className="formRequiredStar">*</span>
                             </div>
                         </label>
                         <input type="email" id="email" placeholder="Enter your email"
@@ -77,7 +72,7 @@ const Login = () => {
                             <MdOutlineLock />
                             <div className="d-flex">
                                 <h5>Password</h5>
-                                <span className="fromRequiredStar">*</span>
+                                <span className="formRequiredStar">*</span>
                             </div>
                         </label>
                         <input type="password" id="password" placeholder="Enter your password"

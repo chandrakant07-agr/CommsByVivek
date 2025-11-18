@@ -11,8 +11,11 @@ import {
     useGetMessagesQuery,
     useUpdateStatusMutation
 } from "../../../store/api/messageApiSlice";
-import { useGetProjectTypesQuery } from "../../../store/api/projectTypeApiSlice";
+import {
+    useGetProjectTypesQuery
+} from "../../../store/api/projectTypeApiSlice";
 import Pagination from "../components/Pagination";
+import CheckboxInput from "../components/CheckboxInput";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import styles from "./styles/Message.module.css"
 
@@ -23,7 +26,7 @@ const Messages = () => {
 
     const { register: filterRegister, watch: filterWatch, reset: resetFilter } = useForm();
     const { register: selectRegister, watch: selectWatch, reset: resetSelect } = useForm({
-        defaultValues: { selectAllMessages: false, selectedCheckIds: [] }
+        defaultValues: { selectAllMessages: false, selectedMessages: [] }
     });
 
     const [updateStatus, { isLoading: isUpdating }] = useUpdateStatusMutation();
@@ -38,21 +41,21 @@ const Messages = () => {
         limit: itemsPerPage
     });
 
-    const selectMsgLength = selectWatch("selectedCheckIds").length;
+    const selectMsgLength = selectWatch("selectedMessages").length;
 
     const handleAllSelectMessages = () => {
         const allIds = fetchMessages?.data.msgList.map(m => m._id) || [];
 
         if(selectMsgLength === allIds.length) {
-            resetSelect({ selectedCheckIds: [] });         // Uncheck all
+            resetSelect({ selectedMessages: [], selectAllMessages: false });        // Uncheck all
         } else {
-            resetSelect({ selectedCheckIds: allIds });     // Check all
+            resetSelect({ selectedMessages: allIds, selectAllMessages: true });     // Check all
         }
     }
 
     const handleBulkMarkAsRead = async (isRead) => {
         try {
-            await updateStatus({ ids: selectWatch("selectedCheckIds"), isRead }).unwrap();
+            await updateStatus({ ids: selectWatch("selectedMessages"), isRead }).unwrap();
         } catch (error) {
             toast.error("Failed to update message status. Please try again.");
         }
@@ -79,7 +82,7 @@ const Messages = () => {
     const handleBulkDelete = async () => {
         if(window.confirm("Are you sure you want to delete the selected messages?")) {
             try {
-                await deleteMessage({ ids: selectWatch("selectedCheckIds") }).unwrap();
+                await deleteMessage({ ids: selectWatch("selectedMessages") }).unwrap();
             } catch (error) {
                 toast.error("Failed to delete messages. Please try again.");
             }
@@ -98,11 +101,11 @@ const Messages = () => {
         setCurrentPage(1);
     }, [urlStatus, resetFilter]);
 
-    // set selectedCheckIds to empty array when messages change
+    // set selectedMessages to empty array when messages change
     useEffect(() => {
         resetSelect({
             selectAllMessages: false,
-            selectedCheckIds: []
+            selectedMessages: []
         });
     }, [fetchMessages, resetSelect]);
 
@@ -221,80 +224,81 @@ const Messages = () => {
                                 <TiMessages className="sectionIcon" />
                                 <h2>Messages</h2>
                             </div>
-                            <div className={styles.selectAllContainer}>
-                                <span>Select All</span>
-                                <input type="checkbox"
-                                    className={styles.selectAllCheckbox}
-                                    {...selectRegister("selectAllMessages", {
-                                        onChange: handleAllSelectMessages
-                                    })}
-                                />
-                            </div>
+                            <CheckboxInput
+                                id="selectAllMessages"
+                                label="Select All"
+                                name="selectAllMessages"
+                                register={selectRegister}
+                                onChange={handleAllSelectMessages}
+                                title="select all messages"
+                            />
                         </div>
 
                         {/* Messages */}
-                        {fetchMessages?.data.msgList.map((message) => (
-                            <div key={message._id} className={styles.messageContainer}>
-                                <div className="relative d-flex a-start">
-                                    {/* Message Content */}
-                                    <div className={styles.singleMessage}>
-                                        <div className={styles.messageMeta}>
-                                            <div className="d-flex a-center gap-2">
-                                                <h3>{message.name}</h3>
-                                                <span className={`${styles.statusBadge}
-                                                ${!message.isRead && styles.unread}`}
-                                                >
-                                                    {message.isRead ? 'Read' : 'Unread'}
-                                                </span>
-                                            </div>
-                                            {/* Select Checkbox */}
-                                            <input type="checkbox" value={message._id}
-                                                className={styles.messageCheckbox}
-                                                {...selectRegister("selectedCheckIds")}
-                                            />
-                                        </div>
-                                        <div className={styles.messageMeta}>
-                                            <p className={styles.senderEmail}>{message.email}</p>
-                                            <span className={styles.receiveTime}>
-                                                {format(new Date(message.createdAt),
-                                                    'h:mm a')}
+                        <div className="p-4">
+                            {fetchMessages?.data.msgList.map((message) => (
+                                <Link to={`../messageView/${message._id}`}
+                                    key={message._id}
+                                    className={styles.messageRow} title="view"
+                                >
+                                    <div className={styles.messageMeta}
+                                        onClick={e => e.stopPropagation()}
+                                    >
+                                        <div className="d-flex a-center gap-2">
+                                            <h3>{message.name}</h3>
+                                            <span className={`${styles.statusBadge}
+                                                    ${!message.isRead && styles.unread}`}
+                                            >
+                                                {message.isRead ? 'Read' : 'Unread'}
                                             </span>
                                         </div>
-                                        <div className={styles.messageMeta}>
-                                            <p className={styles.messageSnippet}>
-                                                {createSnippet(message.message, 100)}
-                                            </p>
-                                            <span className={styles.receiveDate}>
-                                                {format(new Date(message.createdAt),
-                                                    'MMM dd, yyyy')}
-                                            </span>
-                                        </div>
-
-                                        {/* Action buttons */}
-                                        <div className={styles.messageActionBtn}>
-                                            <Link to={`../messageView/${message._id}`}
-                                                className={styles.messageView}
-                                            >
-                                                View
-                                            </Link>
-
-                                            <button className={styles.messageReadBtn}
-                                                onClick={() =>
-                                                    handleMarkAsRead(message._id, !message.isRead)}
-                                            >
-                                                {message.isRead ? "Mark as Unread" : "Mark as Read"}
-                                            </button>
-
-                                            <button className={styles.messageDeleteBtn}
-                                                onClick={() => handleDeleteMessage(message._id)}
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
+                                        {/* Select Checkbox */}
+                                        <CheckboxInput
+                                            size="sm"
+                                            id={`selectItem_${message._id}`}
+                                            value={message._id}
+                                            name="selectedMessages"
+                                            register={selectRegister}
+                                            title={`select message from ${message.name}`}
+                                        />
                                     </div>
-                                </div>
-                            </div>
-                        ))}
+                                    <div className={styles.messageMeta}>
+                                        <p className={styles.senderEmail}>{message.email}</p>
+                                        <span className={styles.receiveTime}>
+                                            {format(new Date(message.createdAt), 'p')}
+                                        </span>
+                                    </div>
+                                    <div className={styles.messageMeta}>
+                                        <p className={styles.messageSnippet}>
+                                            {createSnippet(message.message, 100)}
+                                        </p>
+                                        <span className={styles.receiveDate}>
+                                            {format(new Date(message.createdAt), 'PP')}
+                                        </span>
+                                    </div>
+
+                                    {/* Action buttons */}
+                                    <div className={styles.messageActionBtn}
+                                        onClick={e => e.preventDefault()}
+                                    >
+                                        <button className={styles.messageReadBtn}
+                                            onClick={() =>
+                                                handleMarkAsRead(message._id, !message.isRead)}
+                                            disabled={isUpdating}
+                                        >
+                                            {message.isRead ? "Mark as Unread" : "Mark as Read"}
+                                        </button>
+
+                                        <button className={styles.messageDeleteBtn}
+                                            onClick={() => handleDeleteMessage(message._id)}
+                                            disabled={isDeleting}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
                     </>
                 )}
             </section>

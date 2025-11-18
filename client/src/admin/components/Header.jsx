@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { motion } from 'framer-motion';
 import { GoProjectRoadmap } from "react-icons/go";
+import { MdOutlineBackup, MdOutlineReviews } from "react-icons/md";
 import { GrContactInfo, GrGallery, GrMultimedia } from "react-icons/gr";
 import { LuMessageSquareMore, LuPanelsLeftBottom, LuUserRound } from "react-icons/lu";
 import { useAdminLogoutMutation } from "../../../store/api/adminApiSlice";
@@ -19,6 +20,8 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
         { name: 'Contact Info', path: '/admin/contactInfo', icon: <GrContactInfo /> },
         { name: 'Gallery', path: '/admin/gallery', icon: <GrGallery /> },
         { name: 'Hero Banner', path: '/admin/heroBanner', icon: <GrMultimedia /> },
+        { name: 'Review', path: '/admin/review', icon: <MdOutlineReviews /> },
+        { name: 'Backup', path: '/admin/backup', icon: <MdOutlineBackup /> },
     ];
 
     return (

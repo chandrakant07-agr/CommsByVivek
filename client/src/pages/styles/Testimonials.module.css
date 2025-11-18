@@ -1,0 +1,240 @@
+/* Summary Section */
+.summarySection {
+    padding: 2rem 1.5rem 0.75rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.summaryCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    row-gap: 0.7rem;
+    padding: 2rem 2rem;
+    background-color: var(--card-primary-bg);
+    border: 2px solid var(--accent-color);
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.summaryIcon {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: #111111;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+}
+
+.summaryContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.overallRating {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary-color);
+    margin: 0;
+}
+
+.totalReviews {
+    font-size: 1rem;
+    color: var(--text-secondary-color);
+    margin: 0;
+}
+
+/* Filters Section */
+.filtersContainer {
+    max-width: 1200px;
+    margin: 2rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.searchBox {
+    position: relative;
+    /* max-width: 200px; */
+}
+
+.searchIcon {
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: var(--text-secondary-color);
+}
+
+.searchInput {
+    width: 100%;
+    padding: 0.5rem 0.5rem 0.5rem 2rem;
+    font-size: 0.85rem;
+    color: var(--text-primary-color);
+    background-color: var(--input-bg-color, var(--card-secondary-bg));
+    border: 1px solid var(--border-secondary-color);
+    border-radius: 0.5rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 1px var(--accent-color);
+}
+
+.filterSelect {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    color: var(--text-primary-color);
+    background-color: var(--card-primary-bg);
+    border: 2px solid var(--border-primary-color);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filterSelect:hover {
+    border-color: var(--accent-color);
+}
+
+.filterSelect:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+/* Testimonials Section */
+.testimonialsSection {
+    padding: 2rem 1.5rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.testimonialsGrid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 360px));
+    justify-content: center;
+    gap: 1.25rem;
+    row-gap: 1.5rem;
+}
+
+/* Testimonial Card */
+.testimonialCard {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.testimonialCard:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+}
+
+/* Card Rating */
+.cardRating {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.ratingNumber {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+/* Testimonial Text */
+.testimonialText {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-primary-color);
+    font-style: italic;
+    flex-grow: 1;
+}
+
+/* Client Info */
+.clientName {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary-color);
+    margin: 0;
+}
+
+.clientCompany {
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    margin: 0;
+}
+
+/* Project Info */
+.projectInfo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.projectName {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary-color);
+    background-color: var(--bg-secondary-color);
+    border-radius: 0.25rem;
+}
+
+.projectCategory {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #111111;
+    padding: 0.4rem 0.8rem;
+    background-color: var(--accent-color);
+    border-radius: 0.25rem;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive Design */
+@media (min-width: 480px) {
+    .summaryCard {
+        flex-direction: row;
+        justify-content: center;
+        padding: 2.75rem 2rem;
+    }
+
+    .overallRating {
+        font-size: 2.75rem;
+    }
+
+    .filtersContainer {
+        flex-direction: row;
+    }
+}
+
+@media (min-width: 640px) {
+    .testimonialsGrid {
+        grid-template-columns: repeat(2, minmax(0, 360px));
+    }
+}
+
+@media (min-width: 1024px) {
+    .testimonialsGrid {
+        grid-template-columns: repeat(3, minmax(0, 360px));
+    }
+}
