@@ -510,6 +510,8 @@ This project was built with the support of the incredible open-source community.
 - **Express.js Contributors** - For the minimalist web framework
 - **All NPM Package Maintainers** - For the tools that make modern web development possible
 
+Developed as a custom solution for CommsByVivek
+
 A heartfelt thank you to the open-source community for making projects like this achievable. 🙏
 
 ---
